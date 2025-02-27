@@ -1,12 +1,11 @@
-import Home from '@/components/Home'
-import React from 'react'
+import Home from "@/components/Home";
 
 const HomePage = () => {
   return (
-    <div>
-        <Home/>
+    <div className="flex grow items-center justify-center p-5">
+      <Home />
     </div>
-  )
-}
+  );
+};
 
-export default HomePage
+export default HomePage;
