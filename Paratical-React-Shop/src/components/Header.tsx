@@ -53,7 +53,7 @@ const Header = () => {
 
         <div className="lg:hidden flex">
           <ul
-            className={`text-white fixed top-0 right-0 inset-0 flex flex-col justify-center items-center gap-5 bg-cyan-200 transform duration-300 transition-transform ease-in-out z-10 opacity-90 text-2xl ${
+            className={`text-white fixed top-0 right-0 inset-0 flex flex-col justify-center items-center gap-5 bg-cyan-600 transform duration-300 transition-transform ease-in-out z-10 opacity-90 text-2xl ${
               isOpen ? " translate-x-0" : "translate-x-full"
             }`}
           >
