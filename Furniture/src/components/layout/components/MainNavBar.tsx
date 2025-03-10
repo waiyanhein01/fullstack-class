@@ -51,7 +51,11 @@ const MainNavBar = ({ items }: MainNavBarProps) => {
                     </li>
                     <div className="">
                       {items[0].card.map((item) => (
-                        <ListItem key={item.title} href={item.href} title={item.title}>
+                        <ListItem
+                          key={item.title}
+                          href={item.href}
+                          title={item.title}
+                        >
                           {item.description}
                         </ListItem>
                       ))}
