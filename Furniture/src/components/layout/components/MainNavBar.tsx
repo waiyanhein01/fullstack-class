@@ -51,7 +51,7 @@ const MainNavBar = ({ items }: MainNavBarProps) => {
                     </li>
                     <div className="">
                       {items[0].card.map((item) => (
-                        <ListItem href={item.href} title={item.title}>
+                        <ListItem key={item.title} href={item.href} title={item.title}>
                           {item.description}
                         </ListItem>
                       ))}
@@ -63,7 +63,7 @@ const MainNavBar = ({ items }: MainNavBarProps) => {
             <div className="flex items-center gap-5">
               {items?.[0]?.menu &&
                 items?.[0]?.menu.map((item) => (
-                  <NavigationMenuItem>
+                  <NavigationMenuItem key={item.title}>
                     <Link to={String(item.href)}>
                       <NavigationMenuLink
                         className={navigationMenuTriggerStyle()}
