@@ -1,7 +1,7 @@
-import MainNavBar from "./MainNavBar"
-import { siteConfig } from "@/configs/site"
-import MobileNavBar from "./MobileNavBar"
-import { ModeToggle } from "@/components/mode-toggle"
+import MainNavBar from "./MainNavBar";
+import { siteConfig } from "@/configs/site";
+import MobileNavBar from "./MobileNavBar";
+import { ModeToggle } from "@/components/mode-toggle";
 
 const Header = () => {
   return (
@@ -10,10 +10,10 @@ const Header = () => {
       <MobileNavBar items={siteConfig.mainNav} />
 
       <div className=" pe-8">
-        <ModeToggle/>
+        <ModeToggle />
       </div>
     </header>
-  )
-}
+  );
+};
 
-export default Header
+export default Header;
