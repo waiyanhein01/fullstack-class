@@ -5,12 +5,16 @@ import { ModeToggle } from "@/components/mode-toggle";
 
 const Header = () => {
   return (
-    <header className="flex items-center border-b border-b-slate-300 h-16 bg-red-300">
-      <MainNavBar items={siteConfig.mainNav} />
-      <MobileNavBar items={siteConfig.mainNav} />
+    <header className=" border-b border-b-slate-300 h-16 flex items-center">
+      <div className="flex items-center justify-between gap-6 container mx-auto">
+        <div className="">
+          <MainNavBar items={siteConfig.mainNav} />
+          <MobileNavBar items={siteConfig.mainNav} />
+        </div>
 
-      <div className=" bg-amber-300 flex flex-1 justify-end pe-8">
-        <ModeToggle />
+        <div className="pe-4 lg:pe-0">
+          <ModeToggle />
+        </div>
       </div>
     </header>
   );

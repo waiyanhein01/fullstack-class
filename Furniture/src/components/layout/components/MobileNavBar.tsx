@@ -26,7 +26,7 @@ interface MobileNavBarProps {
 const MobileNavBar = ({ items }: MobileNavBarProps) => {
   return (
     <Sheet>
-      <SheetTrigger asChild className="lg:hidden mx-4">
+      <SheetTrigger asChild className="lg:hidden">
         <Button variant="ghost" size={"icon"}>
           <Icons.MobileMenuIcon className="size-5" />
         </Button>

@@ -19,10 +19,10 @@ interface MainNavBarProps {
 }
 const MainNavBar = ({ items }: MainNavBarProps) => {
   return (
-    <header className="items-center border-b border-b-slate-300 h-16 container mx-auto hidden lg:flex">
+    <header className="items-center hidden lg:flex gap-2">
       <Link to="/" className="flex items-center space-x-2">
         <Icons.NavIcon className="size-7" aria-hidden="true" />
-        <span className="inline-block font-bold">{siteConfig.name}</span>
+        <span className="inline-block font-semibold">{siteConfig.name}</span>
         <span className="sr-only">Home</span>
       </Link>
       <div className="">
