@@ -20,9 +20,9 @@ interface MainNavBarProps {
 const MainNavBar = ({ items }: MainNavBarProps) => {
   return (
     <header className="items-center hidden lg:flex gap-2">
-      <Link to="/" className="flex items-center space-x-2">
+      <Link to="/" className="flex items-center gap-3">
         <Icons.NavIcon className="size-7" aria-hidden="true" />
-        <span className="inline-block font-semibold">{siteConfig.name}</span>
+        <h1 className="inline-block font-semibold">{siteConfig.name}</h1>
         <span className="sr-only">Home</span>
       </Link>
       <div className="">
@@ -36,12 +36,14 @@ const MainNavBar = ({ items }: MainNavBarProps) => {
                     <li className="row-span-3">
                       <NavigationMenuLink asChild>
                         <Link
-                          className="flex h-full w-full select-none flex-col justify-end rounded-md bg-gradient-to-b from-muted/50 to-muted p-6 no-underline outline-none focus:shadow-md"
+                          className="flex size-full select-none flex-col justify-start rounded-md bg-gradient-to-b from-muted/50 to-muted p-5 no-underline outline-none focus:shadow-md"
                           to="/"
                         >
+                          <div className=" flex justify-baseline items-center gap-3 mb-2">
                           <Icons.NavIcon className="size-6" />
-                          <div className="mb-2 mt-4 text-lg font-medium">
+                          <div className=" font-medium">
                             {siteConfig.name}
+                          </div>
                           </div>
                           <p className="text-sm leading-tight text-muted-foreground">
                             {siteConfig.description}
