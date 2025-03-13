@@ -19,7 +19,7 @@ interface MainNavBarProps {
 }
 const MainNavBar = ({ items }: MainNavBarProps) => {
   return (
-    <header className="items-center hidden lg:flex gap-2">
+    <header className="hidden lg:flex gap-24 lg:gap-10 lg:items-center">
       <Link to="/" className="flex items-center gap-3">
         <Icons.NavIcon className="size-7" aria-hidden="true" />
         <h1 className="inline-block font-semibold">{siteConfig.name}</h1>

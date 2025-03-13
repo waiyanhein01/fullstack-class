@@ -28,11 +28,11 @@ const MobileNavBar = ({ items }: MobileNavBarProps) => {
     <Sheet>
       <SheetTrigger asChild className="lg:hidden">
         <Button variant="ghost" size={"icon"}>
-          <Icons.MobileMenuIcon className="size-5" />
+          <Icons.MobileMenuIcon className="size-5" aria-hidden="true" />
         </Button>
       </SheetTrigger>
       <SheetContent side="left">
-        <ScrollArea className="mx-4">
+        <ScrollArea className="mx-5">
           <SheetHeader>
             <SheetClose asChild>
               <Link to="/" className="flex items-center space-x-2 pt-6">
