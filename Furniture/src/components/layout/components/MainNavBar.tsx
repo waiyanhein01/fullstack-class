@@ -19,7 +19,7 @@ interface MainNavBarProps {
 }
 const MainNavBar = ({ items }: MainNavBarProps) => {
   return (
-    <header className="hidden lg:flex gap-24 lg:gap-10 lg:items-center">
+    <header className="hidden gap-24 lg:flex lg:items-center lg:gap-10">
       <Link to="/" className="flex items-center gap-3">
         <Icons.NavIcon className="size-7" aria-hidden="true" />
         <h1 className="inline-block font-semibold">{siteConfig.name}</h1>
@@ -36,16 +36,14 @@ const MainNavBar = ({ items }: MainNavBarProps) => {
                     <li className="row-span-3">
                       <NavigationMenuLink asChild>
                         <Link
-                          className="flex size-full select-none flex-col justify-start rounded-md bg-gradient-to-b from-muted/50 to-muted p-5 no-underline outline-none focus:shadow-md"
+                          className="from-muted/50 to-muted flex size-full flex-col justify-start rounded-md bg-gradient-to-b p-5 no-underline outline-none select-none focus:shadow-md"
                           to="/"
                         >
-                          <div className=" flex justify-baseline items-center gap-3 mb-2">
-                          <Icons.NavIcon className="size-6" />
-                          <div className=" font-medium">
-                            {siteConfig.name}
+                          <div className="mb-2 flex items-center justify-baseline gap-3">
+                            <Icons.NavIcon className="size-6" />
+                            <div className="font-medium">{siteConfig.name}</div>
                           </div>
-                          </div>
-                          <p className="text-sm leading-tight text-muted-foreground">
+                          <p className="text-muted-foreground text-sm leading-tight">
                             {siteConfig.description}
                           </p>
                         </Link>
@@ -98,13 +96,13 @@ const ListItem = React.forwardRef<
           ref={ref}
           to={String(href)}
           className={cn(
-            "block select-none space-y-1 rounded-md p-3 leading-none no-underline outline-none transition-colors hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground",
-            className
+            "hover:bg-accent hover:text-accent-foreground focus:bg-accent focus:text-accent-foreground block space-y-1 rounded-md p-3 leading-none no-underline transition-colors outline-none select-none",
+            className,
           )}
           {...props}
         >
-          <div className="text-sm font-medium leading-none">{title}</div>
-          <p className="line-clamp-2 text-sm leading-snug text-muted-foreground">
+          <div className="text-sm leading-none font-medium">{title}</div>
+          <p className="text-muted-foreground line-clamp-2 text-sm leading-snug">
             {children}
           </p>
         </Link>

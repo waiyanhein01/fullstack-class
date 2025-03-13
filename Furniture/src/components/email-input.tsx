@@ -40,16 +40,20 @@ const EmailInput = () => {
           control={form.control}
           name="email"
           render={({ field }) => (
-            <FormItem >
-              <div className="border border-slate-300 rounded-md flex p-1">
-              <FormLabel className="sr-only">Username</FormLabel>
-              <FormControl className="">
-                <Input placeholder="example@gmail.com" {...field} className="" />
-              </FormControl>
+            <FormItem>
+              <div className="flex rounded-md border border-slate-300 p-1">
+                <FormLabel className="sr-only">Username</FormLabel>
+                <FormControl className="">
+                  <Input
+                    placeholder="example@gmail.com"
+                    {...field}
+                    className=""
+                  />
+                </FormControl>
 
-              <Button size={"icon"} className="" aria-hidden="true">
-                <Icons.SendIcon aria-hidden="true"/>
-              </Button>
+                <Button size={"icon"} className="" aria-hidden="true">
+                  <Icons.SendIcon aria-hidden="true" />
+                </Button>
               </div>
               <FormMessage />
             </FormItem>

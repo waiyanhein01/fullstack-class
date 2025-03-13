@@ -69,7 +69,7 @@ const MobileNavBar = ({ items }: MobileNavBarProps) => {
                     <AccordionContent key={item.title}>
                       <Link
                         to={String(item.href)}
-                        className="ml-4 text-foreground/70 text-sm font-medium"
+                        className="text-foreground/70 ml-4 text-sm font-medium"
                       >
                         {item.title}
                       </Link>
@@ -78,7 +78,7 @@ const MobileNavBar = ({ items }: MobileNavBarProps) => {
               </AccordionItem>
             </Accordion>
 
-            <div className="flex flex-col gap-4 items-start text-sm font-medium">
+            <div className="flex flex-col items-start gap-4 text-sm font-medium">
               {items?.[0]?.menu &&
                 items[0].menu.map((item) => (
                   <SheetClose key={item.title} asChild>
