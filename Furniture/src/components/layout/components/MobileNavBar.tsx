@@ -18,12 +18,31 @@ import {
 import { MainNavItems } from "@/types";
 import { siteConfig } from "@/configs/site";
 import { Link } from "react-router";
+import { useEffect, useState } from "react";
 
 interface MobileNavBarProps {
   items: MainNavItems[];
 }
 
 const MobileNavBar = ({ items }: MobileNavBarProps) => {
+  const [isCloseDesktop, setIsCloseDesktop] = useState(false);
+  const query = "(min-width: 1024px)";
+
+  useEffect(() => {
+    const onChange = (events: MediaQueryListEvent) => {
+      setIsCloseDesktop(events.matches);
+    };
+    const result = matchMedia(query);
+    result.addEventListener("change", onChange);
+    return () => {
+      result.removeEventListener("change", onChange);
+    };
+  }, [query]);
+
+  if (isCloseDesktop) {
+    return null;
+  }
+
   return (
     <Sheet>
       <SheetTrigger asChild className="lg:hidden">
