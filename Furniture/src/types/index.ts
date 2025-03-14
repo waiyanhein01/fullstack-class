@@ -16,7 +16,7 @@ export type MainNavItems = NavItemWithChildren;
 //   path: string;
 // };
 
-export type product = {
+export type Product = {
   id: string;
   name: string;
   description: string;
@@ -28,3 +28,14 @@ export type product = {
   inventory: number;
   status: string;
 };
+
+export type Post = {
+  id: string;
+  author: string;
+  title: string;
+  content:string;
+  image: string;
+  body: string;
+  updated_at: string;
+  tags: string[];
+}
