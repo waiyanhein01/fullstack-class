@@ -7,6 +7,7 @@ import AboutUs from "@/features/about-us/components/AboutUs";
 import BlogDetailPage from "@/features/blog/pages/BlogDetailPage";
 import MainBlogLayoutPage from "@/features/blog/pages/MainBlogLayoutPage";
 import NotFoundPage from "@/features/not-found/pages/NotFoundPage";
+import ProductsPage from "@/features/products/pages/ProductsPage";
 
 const router = createBrowserRouter([
   {
@@ -17,6 +18,10 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <HomePage />,
+      },
+      {
+        path: "products",
+        element: <ProductsPage />,
       },
       {
         path: "services",

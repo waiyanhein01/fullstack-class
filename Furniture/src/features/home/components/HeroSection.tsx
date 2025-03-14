@@ -14,14 +14,14 @@ const HeroSection = () => {
         </p>
         <div className="space-x-5">
           <Button
-            className="rounded-full border bg-orange-300 px-8 py-6 font-bold hover:bg-orange-400"
+            className="rounded-full border bg-orange-300 px-8 py-5 font-bold hover:bg-orange-400"
             asChild
           >
             <Link to={""}>Shop Now</Link>
           </Button>
 
           <Button
-            className="bg-background hover:bg-accent text-primary rounded-full border px-8 py-6 font-bold"
+            className="bg-background hover:bg-accent text-primary rounded-full border px-8 py-5 font-bold"
             asChild
           >
             <Link to={""}>Explore</Link>

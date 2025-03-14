@@ -5,9 +5,15 @@ import {
   CarouselNext,
   CarouselPrevious,
 } from "@/components/ui/carousel";
+import { product } from "@/types";
 import Autoplay from "embla-carousel-autoplay";
+import { Link } from "react-router";
 
-const ProductCarouselSection = () => {
+interface ProductProps {
+  products: product[];
+}
+
+const ProductCarouselSection = ({ products }: ProductProps) => {
   return (
     <section>
       <Carousel
@@ -23,14 +29,30 @@ const ProductCarouselSection = () => {
         className="w-full"
       >
         <CarouselContent>
-          {Array.from({ length: 5 }).map((_, index) => (
-            <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
-              <div className="border p-1">Product card {index + 1}</div>
+          {products.map((product) => (
+            <CarouselItem
+              key={product.id}
+              className="md:basis-1/2 lg:basis-1/3"
+            >
+              <div className=" flex justify-between gap-5">
+                <img
+                  src={product.images[0]}
+                  className="size-28 rounded-md"
+                  alt={product.name}
+                />
+                <div className="space-y-2">
+                  <h1 className="text-base font-semibold">{product.name}</h1>
+                  <p className="text-muted-foreground text-sm line-clamp-2">
+                    {product.description}
+                  </p>
+                  <Link to={`/product/${product.id}`} className="text-primary text-sm hover:underline">Read More</Link>
+                </div>
+              </div>
             </CarouselItem>
           ))}
         </CarouselContent>
-        <CarouselPrevious />
-        <CarouselNext />
+        {/* <CarouselPrevious />
+        <CarouselNext /> */}
       </Carousel>
     </section>
   );
