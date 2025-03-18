@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Post } from "@/types";
 import SanitizedComponent from "./SanitizedComponent";
-import { Link } from "react-router";
+import { NavLink } from "react-router";
 import { Icons } from "@/components/Icons";
 
 interface DetailPostProps {
@@ -45,7 +45,8 @@ const BlogDetailCard = ({ currentId, posts }: DetailPostProps) => {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1">
           {posts.map((post) => (
-            <Link key={post.id} to={`/blogs/${post.id}`} className="">
+            // className={({isActive}) => {isActive ? " bg-slate-400" : "" }}
+            <NavLink key={post.id} to={`/blogs/${post.id}`}>
               <div className="mb-5 flex gap-3">
                 <img
                   src={post.image}
@@ -57,7 +58,7 @@ const BlogDetailCard = ({ currentId, posts }: DetailPostProps) => {
                   <i>... see more</i>
                 </div>
               </div>
-            </Link>
+            </NavLink>
           ))}
         </div>
       </div>
