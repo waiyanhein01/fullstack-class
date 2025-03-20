@@ -34,7 +34,7 @@ const BlogDetailCard = ({ currentId, posts }: DetailPostProps) => {
 
         <div className="flex items-center gap-4">
           {currentId?.tags.map((tag) => (
-            <Button key={tag}>{tag}</Button>
+            <button className="bg-[#3b5d50] py-1 px-4 rounded text-slate-100" key={tag}>{tag}</button>
           ))}
         </div>
       </div>
