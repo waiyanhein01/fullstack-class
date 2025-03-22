@@ -43,7 +43,7 @@ const BlogDetailCard = ({ currentId, posts }: DetailPostProps) => {
       <div className="w-full lg:w-1/3 2xl:w-1/4">
         <div className="sticky top-20">
           <div className="mb-5 flex items-center gap-1">
-            <Icons.SquareBlog className="size-5" />
+            <Icons.SquareBlogIcon className="size-5" />
             <h1 className="text-base font-semibold">Other Blog Posts</h1>
           </div>
 

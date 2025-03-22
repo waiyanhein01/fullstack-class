@@ -7,7 +7,7 @@ import Container from "@/components/layout/components/Container";
 import ProductCardSection from "./ProductCardSection";
 
 const blogSLiceCard = posts.slice(0, 3);
-const productSlice = products.slice(0, 3);
+const productSlice = products.slice(0, 4);
 
 const Home = () => {
   return (
