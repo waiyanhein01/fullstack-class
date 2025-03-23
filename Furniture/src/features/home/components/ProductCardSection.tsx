@@ -29,7 +29,14 @@ const ProductCardSection = ({ products }: ProductsProps) => {
                 <h1 className="my-2 ml-4 line-clamp-1 text-base font-semibold">
                   {product.name}
                 </h1>
-                <h2 className="ml-4 text-sm">${product.price}</h2>
+                <div className="flex items-center">
+                  {product.discount > 0 && (
+                    <h2 className="ml-4 text-sm font-semibold line-through">
+                      ${product.discount}
+                    </h2>
+                  )}
+                  <h2 className="ml-4 text-sm font-semibold">${product.price}</h2>
+                </div>
               </Link>
             </CardContent>
             <CardFooter className="w-full">
