@@ -13,45 +13,25 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { Category } from "@/types";
 
-const items = [
-  {
-    id: "recents",
-    label: "Recents",
-  },
-  {
-    id: "home",
-    label: "Home",
-  },
-  {
-    id: "applications",
-    label: "Applications",
-  },
-  {
-    id: "desktop",
-    label: "Desktop",
-  },
-  {
-    id: "downloads",
-    label: "Downloads",
-  },
-  {
-    id: "documents",
-    label: "Documents",
-  },
-] as const;
-
+interface ProductFilterProps {
+  categories: Category[];
+  types: Category[];
+}
 const FormSchema = z.object({
-  items: z.array(z.string()).refine((value) => value.some((item) => item), {
+  types: z.array(z.string()).refine((value) => value.some((item) => item), {
     message: "You have to select at least one item.",
   }),
 });
 
-export function ProductFilter() {
+// categories,
+
+export function ProductFilter({ types }: ProductFilterProps) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      items: ["recents", "home"],
+      types: [],
     },
   });
 
@@ -64,7 +44,7 @@ export function ProductFilter() {
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
         <FormField
           control={form.control}
-          name="items"
+          name="types"
           render={() => (
             <FormItem>
               <div className="mb-4">
@@ -73,33 +53,33 @@ export function ProductFilter() {
                   Select the items you want to filter.
                 </FormDescription>
               </div>
-              {items.map((item) => (
+              {types.map((type) => (
                 <FormField
-                  key={item.id}
+                  key={type.id}
                   control={form.control}
-                  name="items"
+                  name="types"
                   render={({ field }) => {
                     return (
                       <FormItem
-                        key={item.id}
+                        key={type.id}
                         className="flex flex-row items-start space-y-0 space-x-3"
                       >
                         <FormControl>
                           <Checkbox
-                            checked={field.value?.includes(item.id)}
+                            checked={field.value?.includes(type.id)}
                             onCheckedChange={(checked) => {
                               return checked
-                                ? field.onChange([...field.value, item.id])
+                                ? field.onChange([...field.value, type.id])
                                 : field.onChange(
                                     field.value?.filter(
-                                      (value) => value !== item.id,
+                                      (value) => value !== type.id,
                                     ),
                                   );
                             }}
                           />
                         </FormControl>
                         <FormLabel className="text-sm font-normal">
-                          {item.label}
+                          {type.label}
                         </FormLabel>
                       </FormItem>
                     );

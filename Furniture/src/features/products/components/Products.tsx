@@ -4,6 +4,7 @@ import { products } from "@/data/products";
 import ProductsCard from "./ProductsCard";
 import { ProductsPagination } from "./ProductsPagination";
 import { ProductFilter } from "./ProductFilter";
+import { filterList } from "@/data/products";
 
 const Products = () => {
   return (
@@ -15,7 +16,7 @@ const Products = () => {
           <section className="w-full md:w-1/5">
             <div className="sticky top-20">
               <h1 className="">
-                <ProductFilter />
+                <ProductFilter categories={filterList.categories} types={filterList.types} />
               </h1>
             </div>
           </section>
