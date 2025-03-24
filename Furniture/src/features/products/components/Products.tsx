@@ -3,6 +3,7 @@ import Container from "@/components/layout/components/Container";
 import { products } from "@/data/products";
 import ProductsCard from "./ProductsCard";
 import { ProductsPagination } from "./ProductsPagination";
+import { ProductFilter } from "./ProductFilter";
 
 const Products = () => {
   return (
@@ -13,7 +14,9 @@ const Products = () => {
         <div className="flex w-full flex-col md:flex-row">
           <section className="w-full md:w-1/5">
             <div className="sticky top-20">
-              <h1 className="">Filter</h1>
+              <h1 className="">
+                <ProductFilter />
+              </h1>
             </div>
           </section>
           <section className="w-full md:w-4/5">
