@@ -4,6 +4,7 @@ import { Link } from "react-router";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Icons } from "@/components/Icons";
+import { formatPrice } from "@/lib/utils";
 interface ProductsProps {
   products: Product[];
 }
@@ -24,6 +25,7 @@ const ProductCardSection = ({ products }: ProductsProps) => {
                 <img
                   src={product.images[0]}
                   alt="Blog Image"
+                  loading="lazy"
                   className="aspect-square w-full object-cover"
                 />
                 <h1 className="my-2 ml-4 line-clamp-1 text-base font-semibold">
@@ -32,10 +34,10 @@ const ProductCardSection = ({ products }: ProductsProps) => {
                 <div className="flex items-center">
                   {product.discount > 0 && (
                     <h2 className="ml-4 text-sm font-semibold line-through">
-                      ${product.discount}
+                      {formatPrice(product.discount)}
                     </h2>
                   )}
-                  <h2 className="ml-4 text-sm font-semibold">${product.price}</h2>
+                  <h2 className="ml-4 text-sm font-semibold">{formatPrice(product.price)}</h2>
                 </div>
               </Link>
             </CardContent>

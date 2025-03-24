@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Post } from "@/types";
 import SanitizedComponent from "./SanitizedComponent";
 import { NavLink } from "react-router";
