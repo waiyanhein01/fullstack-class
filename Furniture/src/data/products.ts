@@ -7,7 +7,7 @@ import p6 from "/images/p-6.webp";
 import p7 from "/images/p-7.webp";
 import p8 from "/images/p-8.webp";
 
-export const filterList = {
+export const filterLists = {
   types: [
     { id: "uuid1", label: "seating" },
     { id: "uuid2", label: "lying" },
