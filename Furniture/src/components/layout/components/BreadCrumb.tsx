@@ -8,7 +8,17 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Link } from "react-router";
 
-export function BreadCrumb({ currentPage, links }: any) {
+interface Link {
+  path: string;
+  title: string;
+}
+
+interface BreadCrumbProps {
+  currentPage: string;
+  links: Link[];
+}
+
+export function BreadCrumb({ currentPage, links }: BreadCrumbProps) {
   return (
     <Breadcrumb>
       <BreadcrumbList>
@@ -19,7 +29,7 @@ export function BreadCrumb({ currentPage, links }: any) {
         </BreadcrumbItem>
         <BreadcrumbSeparator />
         {links &&
-          links.map((link: any) => (
+          links.map((link: Link) => (
             <BreadcrumbItem>
               <BreadcrumbLink>
                 <Link key={link.path} to={link.path}>

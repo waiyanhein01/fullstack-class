@@ -1,4 +1,3 @@
-import { Plus } from "lucide-react";
 
 export type IconsProps = React.HtmlHTMLAttributes<SVGElement>;
 
