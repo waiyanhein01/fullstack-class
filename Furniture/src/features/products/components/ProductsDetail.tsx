@@ -3,6 +3,7 @@ import Container from "@/components/layout/components/Container";
 import { products } from "@/data/products";
 import ProductsCard from "./ProductsCard";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { ProductsCarousel } from "./ProductsCarousel";
 
 const ProductsDetail = () => {
   return (
@@ -12,9 +13,14 @@ const ProductsDetail = () => {
           currentPage="ProductsDetail"
           links={[{ path: "/products", title: "Products" }]}
         />
-        <div className="">For products Details</div>
+        <div className=" flex flex-col md:flex-row gap-8 w-full">
+          <div className="md:w-1/2 w-full">
+            <ProductsCarousel/>
+          </div>
+          <div className="md:w-1/2 w-full">Hello</div>
+        </div>
         <div className="mt-8">
-          <h1 className="pb-4 text-xl font-bold 2xl:text-2xl">
+          <h1 className="pb-4 md:text-xl text-lg font-bold 2xl:text-2xl">
             More Products from Furniture Shop
           </h1>
           <ScrollArea className="w-96 rounded-md whitespace-nowrap lg:w-full">
