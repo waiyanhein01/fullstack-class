@@ -11,10 +11,10 @@ export interface NavItemWithChildren extends NavItems {
 
 export type MainNavItems = NavItemWithChildren;
 
-// export type Image = {
-//   id: number;
-//   path: string;
-// };
+export type Image = {
+  id: number;
+  path: string;
+};
 
 export type Product = {
   id: string;

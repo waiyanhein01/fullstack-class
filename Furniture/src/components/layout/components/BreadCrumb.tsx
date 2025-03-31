@@ -15,7 +15,7 @@ interface Link {
 
 interface BreadCrumbProps {
   currentPage: string;
-  links: Link[];
+  links?: Link[];
 }
 
 export function BreadCrumb({ currentPage, links }: BreadCrumbProps) {

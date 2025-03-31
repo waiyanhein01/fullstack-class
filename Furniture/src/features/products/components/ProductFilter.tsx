@@ -146,7 +146,9 @@ export function ProductFilter({ filterLists }: ProductFilterProps) {
             </FormItem>
           )}
         />
-        <Button type="submit" className="cursor-pointer mb-3 lg:mb-0">Filter</Button>
+        <Button type="submit" className="mb-3 cursor-pointer lg:mb-0">
+          Filter
+        </Button>
       </form>
     </Form>
   );
