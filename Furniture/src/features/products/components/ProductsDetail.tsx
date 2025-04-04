@@ -14,7 +14,14 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 import Autoplay from "embla-carousel-autoplay";
+import { AddToCartForm } from "./AddToCardForm";
 
 const ProductsDetail = () => {
   const { productId } = useParams();
@@ -57,19 +64,39 @@ const ProductsDetail = () => {
             <h2 className="mt-3 font-semibold">
               {formatPrice(currentProduct?.price ?? 0)}
             </h2>
-            <Separator className="my-4" />
+
+            <Separator className="my-5" />
 
             <h3 className="my-4 font-semibold">
               {currentProduct?.inventory} in stock
             </h3>
 
-            <div className="mt-4 flex items-center justify-between">
+            <div className="mt-5 flex items-center justify-between">
               <ProductRatingStar rating={Number(currentProduct?.rating)} />
               <span className="">
                 <Button variant="outline">
                   <Icons.HeartIcon />
                 </Button>
               </span>
+            </div>
+
+            <div className="mt-5">
+              <AddToCartForm
+                buyNowDisabled={currentProduct?.status !== "active"}
+              />
+            </div>
+
+            <Separator className="mt-5" />
+
+            <div className="">
+              <Accordion type="single" collapsible className="w-full">
+                <AccordionItem value="item-1">
+                  <AccordionTrigger>Description</AccordionTrigger>
+                  <AccordionContent>
+                    {currentProduct?.description}
+                  </AccordionContent>
+                </AccordionItem>
+              </Accordion>
             </div>
           </div>
         </div>
