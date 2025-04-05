@@ -2,6 +2,8 @@ import MainNavBar from "./MainNavBar";
 import { siteConfig } from "@/configs/site";
 import MobileNavBar from "./MobileNavBar";
 import { ModeToggle } from "@/components/mode-toggle";
+import { DropdownProfile } from "./DropDownProfile";
+import { User } from "@/data/users";
 
 const Header = () => {
   return (
@@ -13,8 +15,9 @@ const Header = () => {
             <MobileNavBar items={siteConfig.mainNav} />
           </div>
 
-          <div className="">
+          <div className="flex items-center gap-4">
             <ModeToggle />
+            <DropdownProfile user={User} />
           </div>
         </div>
       </section>
