@@ -24,9 +24,12 @@ const FormSchema = z.object({
   password: z.string().min(8, {
     message: "Password must be at least 8 characters.",
   }),
+  confirmPassword: z.string().min(8, {
+    message: "Password must be at least 8 characters.",
+  }),
 });
 
-export function LoginForm({
+export function RegisterForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"form">) {
@@ -36,12 +39,13 @@ export function LoginForm({
     defaultValues: {
       email: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
     console.log(data);
-    nav("/");
+    nav("/login");
   }
   return (
     <>
@@ -52,7 +56,7 @@ export function LoginForm({
           {...props}
         >
           <div className="flex flex-col items-center gap-2 text-center">
-            <h1 className="text-2xl font-bold">Sign In to your account</h1>
+            <h1 className="text-2xl font-bold">Sign Up to your account</h1>
           </div>
           <div className="grid gap-6">
             <div className="grid gap-2">
@@ -97,7 +101,28 @@ export function LoginForm({
               />
             </div>
 
-            <Button type="submit">Sign In</Button>
+            <div className="grid gap-2">
+              <FormField
+                control={form.control}
+                name="confirmPassword"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Confirm Password</FormLabel>
+                    <FormControl>
+                      <Input
+                        type="password"
+                        className="rounded-md border"
+                        placeholder="Enter your confirm password"
+                        {...field}
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            </div>
+
+            <Button type="submit">Sign Up</Button>
             <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
               <span className="bg-background text-muted-foreground relative z-10 px-2">
                 Or continue with
@@ -114,9 +139,9 @@ export function LoginForm({
             </Button>
           </div>
           <div className="text-center text-sm">
-            You don&apos;t have an account?
-            <Link to={"/signup"} className="underline underline-offset-4">
-              Sign Up
+            You have an account?
+            <Link to={"/login"} className="underline underline-offset-4">
+              Sign In
             </Link>
           </div>
         </form>
