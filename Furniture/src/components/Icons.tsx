@@ -1,4 +1,4 @@
-import { CreditCard, LayoutDashboard, LogOut, Settings } from "lucide-react";
+import { CreditCard, LayoutDashboard, LogOut, Settings, ShoppingCart, Trash2 } from "lucide-react";
 
 export type IconsProps = React.HtmlHTMLAttributes<SVGElement>;
 
@@ -182,4 +182,6 @@ export const Icons = {
   SettingsIcon: Settings,
   BillIcon: CreditCard,
   LogoutIcon: LogOut,
+  CartIcon: ShoppingCart,
+  TrashIcon: Trash2,
 };

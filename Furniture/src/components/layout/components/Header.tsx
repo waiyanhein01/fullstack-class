@@ -4,6 +4,7 @@ import MobileNavBar from "./MobileNavBar";
 import { ModeToggle } from "@/components/mode-toggle";
 import { DropdownProfile } from "./DropDownProfile";
 import { User } from "@/data/users";
+import Cart from "./Cart";
 
 const Header = () => {
   return (
@@ -16,6 +17,7 @@ const Header = () => {
           </div>
 
           <div className="flex items-center gap-4">
+            <Cart/>
             <ModeToggle />
             <DropdownProfile user={User} />
           </div>
