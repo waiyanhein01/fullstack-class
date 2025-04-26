@@ -1,4 +1,4 @@
-import express, { Request, Response } from "express";
+import express, { NextFunction, Request, Response } from "express";
 import morgan from "morgan";
 import cors from "cors";
 import helmet from "helmet";
@@ -25,4 +25,8 @@ app.get("/health", check, (req: userIdRequest, res: Response) => {
   res
     .status(200)
     .json({ message: "Server response is running", userId: req.userId });
+});
+
+app.use((error: any, req: Request, res: Response, next: NextFunction) => {
+  res.status(error.status || 500).json({ message: error.message });
 });

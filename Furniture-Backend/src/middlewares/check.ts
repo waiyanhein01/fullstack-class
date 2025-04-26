@@ -9,6 +9,11 @@ export const check = (
   res: Response,
   next: NextFunction
 ) => {
+  const error: any = new Error("Token has expired or is invalid");
+  error.status = 401;
+  error.errorCode = "TokenExpiredOrInvalid";
+  return next(error);
+
   req.userId = 1234;
   next();
 };
