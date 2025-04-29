@@ -5,7 +5,7 @@ import helmet from "helmet";
 import compression from "compression";
 
 import { limiter } from "./middlewares/rateLimiter";
-import healthController from "./controllers/healthController";
+import healthRoutes from "./routes/v1/health";
 
 export const app = express();
 
@@ -17,7 +17,7 @@ app.use(helmet()); // this adds security headers to the response
 app.use(compression()); // this compresses the response body for all requests
 app.use(limiter); // this limits the number of requests to the server
 
-app.use("api/v1", healthController);
+app.use("/api/v1", healthRoutes);
 
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
   res.status(error.status || 500).json({ message: error.message });
