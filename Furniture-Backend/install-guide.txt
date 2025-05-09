@@ -17,3 +17,34 @@ bullMQ , Redis , ioredis
 App ---> job ( Image Optimization Task ) ---> Queue ---> Redis <--- Worker**
 
 Boss ---> (buy me a coffee) ---> Manager ---> Bill board <--- Staff**
+
+
+***
+Prisma commend
+
+*create Table in database*
+=>npx prisma migrate dev
+
+*reset Table in database*
+=>npx prisma migrate reset
+
+*seed database*
+=>npx prisma db "your folder seedName"
+
+*exiting database pull in your local file*
+=>npx prisma db pull
+
+*if you want to connect plain database with prisma,you can type this*
+=>npx prisma migrate diff \
+  --from-url "$DATABASE_URL_PROD" or --from-empty \
+  --to-schema-datamodel prisma/schema.prisma \
+  --script > prisma/migrations/0_init/migration.sql
+
+  and then 
+
+*you must be resolve this two difference history local prisma and exiting database with this*
+=>npx prisma migrate resolve --applied "folderName(0_init)"
+
+*deploy to production database*
+=>npx prisma migrate deploy
+
