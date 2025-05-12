@@ -6,6 +6,7 @@ import compression from "compression";
 
 import { limiter } from "./middlewares/rateLimiter";
 import healthRoutes from "./routes/v1/health";
+import authRoutes from "./routes/v1/auth";
 
 export const app = express();
 
@@ -18,6 +19,7 @@ app.use(compression()); // this compresses the response body for all requests
 app.use(limiter); // this limits the number of requests to the server
 
 app.use("/api/v1", healthRoutes);
+app.use("/api/v1", authRoutes);
 
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
   res.status(error.status || 500).json({ message: error.message });
