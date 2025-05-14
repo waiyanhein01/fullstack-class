@@ -22,5 +22,8 @@ app.use("/api/v1", healthRoutes);
 app.use("/api/v1", authRoutes);
 
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
-  res.status(error.status || 500).json({ message: error.message });
+  const status = error.status || 500;
+  const message = error.message || "Sever Error";
+  const errorCode = error.code || "Error_Invalid";
+  res.status(status).json({ message, error: errorCode });
 });
