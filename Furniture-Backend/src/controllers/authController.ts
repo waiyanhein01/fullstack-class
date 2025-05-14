@@ -1,7 +1,9 @@
 import { Request, Response, NextFunction } from "express";
 import { body, validationResult } from "express-validator";
-import { getUserByPhone } from "../services/authService";
+import { createOtp, getUserByPhone } from "../services/authService";
 import { checkUserExist } from "../utils/authUtils";
+import { generateOtp, generateRememberToken } from "../utils/generateOtpUtils";
+import { count } from "console";
 
 export const register = [
   body("phone", "Invalid phone number")
@@ -27,7 +29,24 @@ export const register = [
     const user = await getUserByPhone(phone);
     checkUserExist(user);
 
-    res.status(200).json({ message: phone });
+    // generate otp and token
+    const otp = generateOtp();
+    const token = generateRememberToken();
+
+    // send otp data to database
+    const otpData = {
+      phone,
+      otp: otp.toString(),
+      rememberToken: token,
+      count: 1,
+    };
+    const result = await createOtp(otpData);
+
+    res.status(200).json({
+      message: `Otp has been sent successfully to your phone 09${result.phone}`,
+      phone: result.phone,
+      token: result.rememberToken,
+    });
   },
 ];
 
