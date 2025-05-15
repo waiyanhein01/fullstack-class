@@ -1,0 +1,12 @@
+##Noted OTP process
+1.Generate OTP
+2.hash OTP in database(hash means can't read easily)
+3.Store and create OTP to OTP Table in database
+4.OTP limit and error process
+  -check OTP in database whether have request or not by phone
+  -if not create OTP in database 
+  -else check request OTP last date with updatedUp in table OTP and today date 
+    -if not same date allow to request OTP with update(id) function
+    -else check error count in database isSameDate
+      -if same data limit 3 time throw error
+      -else update otp

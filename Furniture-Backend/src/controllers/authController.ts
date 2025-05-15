@@ -1,9 +1,16 @@
+import { checkOtpErrorIfSameDate } from "./../utils/authUtils";
 import { Request, Response, NextFunction } from "express";
 import { body, validationResult } from "express-validator";
-import { createOtp, getUserByPhone } from "../services/authService";
+import {
+  createOtp,
+  getOtpByPhone,
+  getUserByPhone,
+  updateOtp,
+} from "../services/authService";
 import { checkUserExist } from "../utils/authUtils";
 import { generateOtp, generateRememberToken } from "../utils/generateOtpUtils";
-import { count } from "console";
+import bcrypt from "bcrypt";
+import { exit } from "process";
 
 export const register = [
   body("phone", "Invalid phone number")
@@ -33,14 +40,58 @@ export const register = [
     const otp = generateOtp();
     const token = generateRememberToken();
 
-    // send otp data to database
-    const otpData = {
-      phone,
-      otp: otp.toString(),
-      rememberToken: token,
-      count: 1,
-    };
-    const result = await createOtp(otpData);
+    // hash otp
+    const salt = await bcrypt.genSalt(10);
+    const hashedOtp = await bcrypt.hash(otp.toString(), salt);
+
+    //check otp exist is not by phone
+    const isExistOtp = await getOtpByPhone(phone);
+    let result;
+    if (!isExistOtp) {
+      // send otp data to database
+      const otpData = {
+        phone,
+        otp: hashedOtp,
+        rememberToken: token,
+        count: 1,
+      };
+
+      // create otpTable in database process
+      result = await createOtp(otpData);
+    } else {
+      const lastRequestDate = new Date(
+        isExistOtp.updatedAt
+      ).toLocaleDateString();
+      const todayDate = new Date().toLocaleDateString();
+      const isSameDate = lastRequestDate === todayDate;
+      checkOtpErrorIfSameDate(isSameDate, isExistOtp.error);
+      if (!isSameDate) {
+        const otpData = {
+          phone,
+          otp: hashedOtp,
+          rememberToken: token,
+          count: 1,
+        };
+        result = await updateOtp(isExistOtp.id, otpData);
+      } else {
+        if (isExistOtp.count === 3) {
+          const error: any = new Error("OTP limit has been exceeded");
+          error.status = 405;
+          error.errorCode = "Error_LimitExceeded";
+          return next(error);
+        } else {
+          const otpData = {
+            phone,
+            otp: hashedOtp,
+            rememberToken: token,
+            count: {
+              increment: 1,
+            },
+          };
+          result = await updateOtp(isExistOtp.id, otpData);
+        }
+      }
+    }
 
     res.status(200).json({
       message: `Otp has been sent successfully to your phone 09${result.phone}`,
