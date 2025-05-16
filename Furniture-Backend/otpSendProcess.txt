@@ -1,8 +1,11 @@
-##Noted OTP process
-1.Generate OTP
-2.hash OTP in database(hash means can't read easily)
-3.Store and create OTP to OTP Table in database
-4.OTP limit and error process
+##Noted Request OTP process
+1.Get value form req body
+2.Remove 09 form user input phone number
+3.Check phone whether exist or not in database
+4.Generate OTP
+5.hash OTP in database(hash means can't read easily)
+6.Store and create OTP to OTP-Table in database
+7.OTP limit and error process
   -check OTP in database whether have request or not by phone
   -if not create OTP in database 
   -else check request OTP last date with updatedUp in table OTP and today date 
@@ -10,3 +13,12 @@
     -else check error count in database isSameDate
       -if same data limit 3 time throw error
       -else update otp
+
+
+##Noted Verify OTP process
+1.Get value from req body
+2.Check user whether exist or not in database with this phone
+3.Check request verity OTP phone is same that exist in database
+4.Check last verify OTP date with today date
+5.Check otp remember token and user input token is same or not
+  -if not same token throw error and not allow to verify OTP today in database with update(id) function

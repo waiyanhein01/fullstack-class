@@ -37,7 +37,8 @@ export const register = [
     checkUserExist(user);
 
     // generate otp and token
-    const otp = generateOtp();
+    const otp = "123456"; // For development
+    // const otp = generateOtp(); For production
     const token = generateRememberToken();
 
     // hash otp
@@ -101,9 +102,29 @@ export const register = [
   },
 ];
 
-export const verifyOtp = (req: Request, res: Response, next: NextFunction) => {
-  res.status(200).json({ message: "verify-otp" });
-};
+export const verifyOtp = [
+  body("phone", "Invalid phone number")
+    .trim()
+    .notEmpty()
+    .matches("^[0-9]+$")
+    .isLength({ min: 5, max: 12 }),
+  body("otp", "Invalid otp")
+    .trim()
+    .notEmpty()
+    .matches("^[0-9]+$")
+    .isLength({ min: 6, max: 6 }),
+  body("token", "Invalid token").trim().notEmpty().escape(),
+  (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req).array({ onlyFirstError: true });
+    if (errors.length > 0) {
+      const error: any = new Error(errors[0].msg);
+      error.status = 400;
+      error.errorCode = "Error_Invalid";
+      return next(error);
+    }
+    res.status(200).json({ message: "Verify otp successful" });
+  },
+];
 
 export const confirmPassword = (
   req: Request,
