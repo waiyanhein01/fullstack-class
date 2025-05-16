@@ -20,3 +20,12 @@ export const checkOtpErrorIfSameDate = (
     throw error;
   }
 };
+
+export const checkOtpExistRow = (isExistOtpRow: any) => {
+  if (!isExistOtpRow) {
+    const error: any = new Error("Phone number is incorrect");
+    error.status = 401;
+    error.errorCode = "Error_Invalid";
+    throw error;
+  }
+};

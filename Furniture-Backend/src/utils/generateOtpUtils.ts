@@ -4,6 +4,6 @@ export const generateOtp = () => {
   return (parseInt(randomBytes(3).toString("hex"), 16) % 900000) + 100000;
 };
 
-export const generateRememberToken = () => {
+export const generateToken = () => {
   return randomBytes(32).toString("hex");
 };

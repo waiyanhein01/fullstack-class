@@ -1,4 +1,4 @@
-##Noted Request OTP process
+##Noted Register Request OTP process with phone
 1.Get value form req body
 2.Remove 09 form user input phone number
 3.Check phone whether exist or not in database
@@ -15,10 +15,18 @@
       -else update otp
 
 
-##Noted Verify OTP process
+##Noted Verify OTP process with phone
 1.Get value from req body
 2.Check user whether exist or not in database with this phone
 3.Check request verity OTP phone is same that exist in database
 4.Check last verify OTP date with today date
 5.Check otp remember token and user input token is same or not
   -if not same token throw error and not allow to verify OTP today in database with update(id) function
+6.Check OTP is expired or not
+  -compare with date.now and updatedAt in database
+  -if expired throw error
+7.OTP is correct or not
+  -if correct allow to record verify-OTP,verify-token,error-count-reset and count-reset in database with update(id) function and return success
+  -else check not correct 
+    -if isSameDate increase error count in database with update(id) function
+    -else error count start from 1 in database with update(id) function
