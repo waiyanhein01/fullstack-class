@@ -30,3 +30,22 @@
   -else check not correct 
     -if isSameDate increase error count in database with update(id) function
     -else error count start from 1 in database with update(id) function
+
+##Noted Confirm-password process with phone
+1.Get value from req body
+2.Check user whether exist or not in database user table with this phone
+3.Check otp data whether exist or not in database otp table with this phone
+4.Check error count in database isSameDate (this may be attack from hacker because of normal user can't reach this process through without verify-OTP)
+  -if not same throw error
+5.Check otp verify-token and user input token is same or not(this may be attack from hacker and normal user don't wrong token because of token will give from server system)
+  -if not same token throw error and not allow to verify OTP today in database with update(id) function
+6.Check user request is expired or not
+  -if expired throw error
+7.After this step we will create acc in database for user with phone,password,refresh-token
+  -create acc in database with create(id) function
+  ###Noted jwt token process
+  1.jwt.sign(that mean create new token and that accept 4 argument 1/payload 2/secretKey 3/option 4/callback)
+  2.jwt.verify(that mean check token)
+  3.accept token will go res body
+  4.refresh token will go in database and res body
+  -update refresh-token in database user table with update(id) function
