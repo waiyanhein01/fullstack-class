@@ -281,7 +281,7 @@ export const confirmPassword = [
     const userData = {
       phone,
       password: hashedPassword,
-      randToken: "this will be replaced later",
+      randToken: "This will be replaced later",
     };
 
     const newUser = await createUser(userData);
