@@ -1,4 +1,9 @@
-import { checkOtpErrorIfSameDate, checkOtpExistRow } from "../utils/authUtil";
+import { userData } from "./../../prisma/seed";
+import {
+  checkOtpErrorIfSameDate,
+  checkOtpExistRow,
+  checkUserIfNotExist,
+} from "../utils/authUtil";
 import { Request, Response, NextFunction } from "express";
 import { body, validationResult } from "express-validator";
 import {
@@ -336,6 +341,121 @@ export const confirmPassword = [
   },
 ];
 
-export const login = (req: Request, res: Response, next: NextFunction) => {
-  res.status(200).json({ message: "login" });
-};
+export const login = [
+  body("phone", "Invalid phone number")
+    .trim()
+    .notEmpty()
+    .matches("^[0-9]+$")
+    .isLength({ min: 5, max: 12 }),
+  body("password", "Password must be 8 digits")
+    .trim()
+    .notEmpty()
+    .matches("^[0-9]+$")
+    .isLength({ min: 8, max: 8 }),
+  async (req: Request, res: Response, next: NextFunction) => {
+    const errors = validationResult(req).array({ onlyFirstError: true });
+    if (errors.length > 0) {
+      const error: any = new Error(errors[0].msg);
+      error.status = 400;
+      error.errorCode = "Error_Invalid";
+      return next(error);
+    }
+    const password = req.body.password;
+    let phone = req.body.phone;
+
+    if (phone.slice(0, 2) === "09") {
+      phone = phone.substring(2, phone.length);
+    }
+
+    // check user not exist
+    const user = await getUserByPhone(phone);
+    checkUserIfNotExist(user);
+
+    // check status is freeze
+    if (user?.status === "FREEZE") {
+      const error: any = new Error(
+        "Your account is freeze. Please contact to us."
+      );
+      error.status = 403;
+      error.errorCode = "Error_AccountFreeze";
+      return next(error);
+    }
+
+    // check incorrect password
+    const isMatchPassword = await bcrypt.compare(password, user!.password);
+    if (!isMatchPassword) {
+      const lastRequestDate = new Date(user!.updatedAt).toLocaleDateString();
+      const loginSameDate = lastRequestDate === new Date().toLocaleDateString();
+      if (!loginSameDate) {
+        const userData = {
+          errorLoginCount: 1,
+        };
+        await updateUser(user!.id, userData);
+      } else {
+        if (user!.errorLoginCount >= 2) {
+          const userData = {
+            status: "FREEZE",
+          };
+          await updateUser(user!.id, userData);
+        } else {
+          const userData = {
+            errorLoginCount: {
+              increment: 1,
+            },
+          };
+          await updateUser(user!.id, userData);
+        }
+      }
+      const error: any = new Error("Password is incorrect.");
+      error.status = 400;
+      error.errorCode = "Error_InvalidPassword";
+      return next(error);
+    }
+
+    // all are ok
+    const acceptTokenPayload = {
+      userId: user!.id,
+    };
+
+    const refreshTokenPayload = {
+      phone: user!.phone,
+      userId: user!.id,
+    };
+
+    const acceptToken = jwt.sign(
+      acceptTokenPayload,
+      process.env.ACCESS_TOKEN_SECRETS!,
+      {
+        expiresIn: 60 * 15,
+      }
+    );
+
+    const refreshToken = jwt.sign(
+      refreshTokenPayload,
+      process.env.REFRESH_TOKEN_SECRETS!,
+      {
+        expiresIn: "30d",
+      }
+    );
+
+    await updateUser(user!.id, {
+      errorLoginCount: 0,
+      randToken: refreshToken,
+    });
+    res
+      .cookie("accessToken", acceptToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+        maxAge: 15 * 60 * 1000, // 15 minutes
+      })
+      .cookie("refreshToken", refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+      });
+
+    res.status(200).json({ message: "Login successfully.", userId: user!.id });
+  },
+];

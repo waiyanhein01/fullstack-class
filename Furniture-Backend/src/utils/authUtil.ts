@@ -29,3 +29,12 @@ export const checkOtpExistRow = (isExistOtpRow: any) => {
     throw error;
   }
 };
+
+export const checkUserIfNotExist = (user: any) => {
+  if (!user) {
+    const error: any = new Error("You have not registered yet");
+    error.status = 401;
+    error.errorCode = "Error_NotFound";
+    throw error;
+  }
+};

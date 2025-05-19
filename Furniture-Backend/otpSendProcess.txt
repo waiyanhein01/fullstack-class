@@ -14,7 +14,6 @@
       -if same data limit 3 time throw error
       -else update otp
 
-
 ##Noted Verify OTP process with phone
 1.Get value from req body
 2.Check user whether exist or not in database with this phone
@@ -49,3 +48,16 @@
   3.accept token will go res body
   4.refresh token will go in database and res body
   -update refresh-token in database user table with update(id) function
+
+##Noted Login process with phone
+1.Get value from req body
+2.remove 09 form user input phone number
+3.Check user not exit in database user table with this phone
+  -if not exit throw error
+4.Throw error login count more than over 3 time in user table with status "FREEZE" 
+5.Check match password and incorrect password last login date with today date 
+  -if incorrect password over 3times not same date increase errorLoginCount +1 in database with update(id) function
+  -else 
+    -if same date over 3times change status to "FREEZE" in database with update(id) function
+    -else same date over 1times increase errorLoginCount +1 in database with update(id) function
+6.This step will create refresh-token in database user table with create(id) function and response to client
