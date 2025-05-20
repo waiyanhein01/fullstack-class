@@ -7,6 +7,16 @@ interface UserIdRequest extends Request {
 }
 
 export const auth = (req: UserIdRequest, res: Response, next: NextFunction) => {
+  //if mobile request, use headers
+  // const platform = req.headers["x-platform"];
+  // if (platform === "mobile") {
+  //   const accessTokenMobile = req.headers.authorization?.split(" ")[1];
+  //   console.log("accessTokenMobile", accessTokenMobile);
+  // } else {
+  //   //if web request, use cookies
+  //   console.log("from web");
+  // }
+
   const accessToken = req.cookies ? req.cookies.accessToken : null;
   const refreshToken = req.cookies ? req.cookies.refreshToken : null;
 
