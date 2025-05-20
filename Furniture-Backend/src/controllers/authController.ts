@@ -20,9 +20,10 @@ import { generateOtp, generateToken } from "../utils/generateOtpUtil";
 import bcrypt from "bcrypt";
 import moment from "moment";
 import jwt from "jsonwebtoken";
+import { errorCode } from "../../config/errorCode";
 
 export const register = [
-  body("phone", "Invalid phone number")
+  body("phone", "Invalid phone number.")
     .trim()
     .notEmpty()
     .matches("^[0-9]+$")
@@ -33,7 +34,7 @@ export const register = [
     if (errors.length > 0) {
       const error: any = new Error(errors[0].msg);
       error.status = 400;
-      error.errorCode = "Error_Invalid";
+      error.errorCode = errorCode.invalid;
       return next(error);
     }
     // slice user input phone 09
@@ -87,7 +88,7 @@ export const register = [
         if (isExistOtpRow.count === 3) {
           const error: any = new Error("OTP limit has been exceeded");
           error.status = 405;
-          error.errorCode = "Error_LimitExceeded";
+          error.errorCode = errorCode.overLimit;
           return next(error);
         } else {
           const otpData = {
@@ -112,23 +113,23 @@ export const register = [
 ];
 
 export const verifyOtp = [
-  body("phone", "Invalid phone number")
+  body("phone", "Invalid phone number.")
     .trim()
     .notEmpty()
     .matches("^[0-9]+$")
     .isLength({ min: 5, max: 12 }),
-  body("otp", "Invalid otp")
+  body("otp", "Invalid otp.")
     .trim()
     .notEmpty()
     .matches("^[0-9]+$")
     .isLength({ min: 6, max: 6 }),
-  body("token", "Invalid token").trim().notEmpty().escape(),
+  body("token", "Invalid token.").trim().notEmpty().escape(),
   async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req).array({ onlyFirstError: true });
     if (errors.length > 0) {
       const error: any = new Error(errors[0].msg);
       error.status = 400;
-      error.errorCode = "Error_Invalid";
+      error.errorCode = errorCode.invalid;
       return next(error);
     }
 
@@ -161,7 +162,7 @@ export const verifyOtp = [
 
       const error: any = new Error("Invalid token.");
       error.status = 400;
-      error.errorCode = "Error_InvalidToken";
+      error.errorCode = errorCode.invalid;
       return next(error);
     }
 
@@ -172,7 +173,7 @@ export const verifyOtp = [
     if (isExpired) {
       const error: any = new Error("OTP is expired.");
       error.status = 403;
-      error.errorCode = "Error_Expired";
+      error.errorCode = errorCode.otpExpired;
       return next(error);
     }
 
@@ -196,7 +197,7 @@ export const verifyOtp = [
       }
       const error: any = new Error("OTP is incorrect.");
       error.status = 400;
-      error.errorCode = "Error_InvalidOtp";
+      error.errorCode = errorCode.invalid;
       return next(error);
     }
 
@@ -218,23 +219,23 @@ export const verifyOtp = [
 ];
 
 export const confirmPassword = [
-  body("phone", "Invalid phone number")
+  body("phone", "Invalid phone number.")
     .trim()
     .notEmpty()
     .matches("^[0-9]+$")
     .isLength({ min: 5, max: 12 }),
-  body("password", "Invalid password")
+  body("password", "Invalid password.")
     .trim()
     .notEmpty()
     .matches("^[0-9]+$")
     .isLength({ min: 8, max: 8 }),
-  body("token", "Invalid token").trim().notEmpty().escape(),
+  body("token", "Invalid token.").trim().notEmpty().escape(),
   async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req).array({ onlyFirstError: true });
     if (errors.length > 0) {
       const error: any = new Error(errors[0].msg);
       error.status = 400;
-      error.errorCode = "Error_Invalid";
+      error.errorCode = errorCode.invalid;
       return next(error);
     }
 
@@ -250,9 +251,9 @@ export const confirmPassword = [
 
     //check otp error count is over limit
     if (isExistOtpRow?.error === 5) {
-      const error: any = new Error("This request is invalid.");
+      const error: any = new Error("This request is over limit.");
       error.status = 400;
-      error.errorCode = "Error_RequestInvalid";
+      error.errorCode = errorCode.overLimit;
       return next(error);
     }
 
@@ -266,7 +267,7 @@ export const confirmPassword = [
 
       const error: any = new Error("Invalid token.");
       error.status = 400;
-      error.errorCode = "Error_InvalidToken";
+      error.errorCode = errorCode.invalid;
       return next(error);
     }
 
@@ -274,9 +275,11 @@ export const confirmPassword = [
     const isUserRequestExpired =
       moment().diff(isExistOtpRow!.updatedAt, "minutes") > 10;
     if (isUserRequestExpired) {
-      const error: any = new Error("Your request is expired.Please try again.");
+      const error: any = new Error(
+        "Your request is expired. Please try again."
+      );
       error.status = 403;
-      error.errorCode = "Error_Expired";
+      error.errorCode = errorCode.requestExpired;
       return next(error);
     }
 
@@ -343,12 +346,12 @@ export const confirmPassword = [
 ];
 
 export const login = [
-  body("phone", "Invalid phone number")
+  body("phone", "Invalid phone number.")
     .trim()
     .notEmpty()
     .matches("^[0-9]+$")
     .isLength({ min: 5, max: 12 }),
-  body("password", "Password must be 8 digits")
+  body("password", "Password must be 8 digits.")
     .trim()
     .notEmpty()
     .matches("^[0-9]+$")
@@ -358,7 +361,7 @@ export const login = [
     if (errors.length > 0) {
       const error: any = new Error(errors[0].msg);
       error.status = 400;
-      error.errorCode = "Error_Invalid";
+      error.errorCode = errorCode.invalid;
       return next(error);
     }
     const password = req.body.password;
@@ -378,7 +381,7 @@ export const login = [
         "Your account is freeze. Please contact to us."
       );
       error.status = 403;
-      error.errorCode = "Error_AccountFreeze";
+      error.errorCode = errorCode.accountFreeze;
       return next(error);
     }
 
@@ -409,7 +412,7 @@ export const login = [
       }
       const error: any = new Error("Password is incorrect.");
       error.status = 400;
-      error.errorCode = "Error_InvalidPassword";
+      error.errorCode = errorCode.invalid;
       return next(error);
     }
 
@@ -469,9 +472,9 @@ export const logout = async (
   // get refresh token
   const refreshToken = req.cookies ? req.cookies.refreshToken : null;
   if (!refreshToken) {
-    const error: any = new Error("You are not authenticated.");
+    const error: any = new Error("You are not authenticated user.");
     error.status = 401;
-    error.errorCode = "Error_Unauthenticated";
+    error.errorCode = errorCode.unauthenticated;
     return next(error);
   }
 
@@ -486,9 +489,9 @@ export const logout = async (
       phone: string;
     };
   } catch (error) {
-    const err: any = new Error("Invalid token.");
+    const err: any = new Error("You are not authenticated user.");
     err.status = 401;
-    err.errorCode = "Error_InvalidToken";
+    err.errorCode = errorCode.unauthenticated;
     return next(err);
   }
 
@@ -498,9 +501,9 @@ export const logout = async (
 
   // check phone
   if (user!.phone !== decodedToken.phone) {
-    const error: any = new Error("Invalid token.");
+    const error: any = new Error("You are not authenticated user.");
     error.status = 401;
-    error.errorCode = "Error_InvalidToken";
+    error.errorCode = errorCode.unauthenticated;
     return next(error);
   }
 
@@ -512,8 +515,16 @@ export const logout = async (
   await updateUser(user!.id, userData);
 
   // clear cookie
-  res.clearCookie("accessToken");
-  res.clearCookie("refreshToken");
+  res.clearCookie("accessToken", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+  });
+  res.clearCookie("refreshToken", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
+  });
 
   res.status(200).json({ message: "Logout successfully." });
 };

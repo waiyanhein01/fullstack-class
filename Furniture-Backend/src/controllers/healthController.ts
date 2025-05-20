@@ -11,5 +11,5 @@ export const healthController = (
 ) => {
   res
     .status(200)
-    .json({ message: "Server response is running", userId: req.userId });
+    .json({ message: "Server response is running.", userId: req.userId });
 };

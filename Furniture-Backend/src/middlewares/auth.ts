@@ -1,5 +1,6 @@
 import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
+import { errorCode } from "../../config/errorCode";
 
 interface UserIdRequest extends Request {
   userId?: number;
@@ -10,17 +11,16 @@ export const auth = (req: UserIdRequest, res: Response, next: NextFunction) => {
   const refreshToken = req.cookies ? req.cookies.refreshToken : null;
 
   if (!refreshToken) {
-    const error: any = new Error("You are unauthenticated user");
+    const error: any = new Error("You are unauthenticated user.");
     error.status = 401;
-    error.errorCode = "Error_Unauthenticated";
+    error.errorCode = errorCode.unauthenticated;
     return next(error);
   }
 
   if (!accessToken) {
-    const error: any = new Error("Token has expired");
-    error.message = "Token has expired";
+    const error: any = new Error("Token has expired.");
     error.status = 401;
-    error.errorCode = "Error_TokenExpired";
+    error.errorCode = errorCode.accessTokenExpired;
     return next(error);
   }
 
@@ -34,13 +34,13 @@ export const auth = (req: UserIdRequest, res: Response, next: NextFunction) => {
     };
   } catch (error: any) {
     if (error.name === "TokenExpiredError") {
-      error.message = "Token has expired";
+      error.message = "Token has expired.";
       error.status = 401;
-      error.errorCode = "Error_TokenExpired";
+      error.errorCode = errorCode.accessTokenExpired;
     } else {
-      error.message = "Token is invalid";
+      error.message = "Token is invalid.";
       error.status = 400;
-      error.errorCode = "Error_Attack";
+      error.errorCode = errorCode.attack;
     }
     return next(error);
   }
