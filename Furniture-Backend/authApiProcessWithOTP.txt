@@ -61,3 +61,15 @@
     -if same date over 3times change status to "FREEZE" in database with update(id) function
     -else same date over 1times increase errorLoginCount +1 in database with update(id) function
 6.This step will create refresh-token in database user table with create(id) function and response to client
+
+##Noted logout process with phone
+1.Get token from cookies
+  -if not have token throw error
+2.check refresh-token and decoded same or not
+  -if not same throw error
+3.Check decoded user id and user table id in database user table exist or not
+  -if not exist throw error
+4.Check decoded phone and user table phone in database user table same or not
+  -if not exist throw error
+5.Update refresh-token value replace with Generate token(just create new token) in database user table with update(id) function
+6.clear cookies access-token and refresh-token and then send response to client

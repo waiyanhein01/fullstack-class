@@ -6,8 +6,8 @@ import compression from "compression";
 
 import { limiter } from "./middlewares/rateLimiter";
 import healthRoutes from "./routes/v1/health";
-import authRoutes from "./routes/v1/auth";
-import usersRoutes from "./routes/v1/admin/users";
+import authRoutes from "./routes/v1/authRoutes";
+import usersRoutes from "./routes/v1/admin/userRoutes";
 import cookieParser from "cookie-parser";
 import { auth } from "./middlewares/auth";
 

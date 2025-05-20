@@ -10,6 +10,7 @@ import {
   createOtp,
   createUser,
   getOtpByPhone,
+  getUserById,
   getUserByPhone,
   updateOtp,
   updateUser,
@@ -459,3 +460,60 @@ export const login = [
     res.status(200).json({ message: "Login successfully.", userId: user!.id });
   },
 ];
+
+export const logout = async (
+  req: Request,
+  res: Response,
+  next: NextFunction
+) => {
+  // get refresh token
+  const refreshToken = req.cookies ? req.cookies.refreshToken : null;
+  if (!refreshToken) {
+    const error: any = new Error("You are not authenticated.");
+    error.status = 401;
+    error.errorCode = "Error_Unauthenticated";
+    return next(error);
+  }
+
+  // verify refresh token
+  let decodedToken;
+  try {
+    decodedToken = jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET!
+    ) as {
+      id: number;
+      phone: string;
+    };
+  } catch (error) {
+    const err: any = new Error("Invalid token.");
+    err.status = 401;
+    err.errorCode = "Error_InvalidToken";
+    return next(err);
+  }
+
+  // check user
+  const user = await getUserById(decodedToken.id);
+  checkUserIfNotExist(user);
+
+  // check phone
+  if (user!.phone !== decodedToken.phone) {
+    const error: any = new Error("Invalid token.");
+    error.status = 401;
+    error.errorCode = "Error_InvalidToken";
+    return next(error);
+  }
+
+  // update rand token
+  const userData = {
+    randToken: generateToken(),
+  };
+
+  await updateUser(user!.id, userData);
+
+  // clear cookie
+  res.clearCookie("accessToken");
+  res.clearCookie("refreshToken");
+
+  res.status(200).json({ message: "Logout successfully." });
+};
