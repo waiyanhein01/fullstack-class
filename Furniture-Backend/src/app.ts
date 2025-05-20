@@ -9,6 +9,7 @@ import healthRoutes from "./routes/v1/health";
 import authRoutes from "./routes/v1/auth";
 import usersRoutes from "./routes/v1/admin/users";
 import cookieParser from "cookie-parser";
+import { auth } from "./middlewares/auth";
 
 export const app = express();
 
@@ -23,7 +24,7 @@ app.use(limiter); // this limits the number of requests to the server
 
 app.use("/api/v1", healthRoutes);
 app.use("/api/v1", authRoutes);
-app.use("/api/v1/admin", usersRoutes);
+app.use("/api/v1/admin", auth, usersRoutes);
 
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
   const status = error.status || 500;

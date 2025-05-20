@@ -293,17 +293,17 @@ export const confirmPassword = [
 
     //jwt token
     const acceptTokenPayload = {
-      userId: newUser.id,
+      id: newUser.id,
     };
 
     const refreshTokenPayload = {
       phone: newUser.phone,
-      userId: newUser.id,
+      id: newUser.id,
     };
 
     const acceptToken = jwt.sign(
       acceptTokenPayload,
-      process.env.ACCESS_TOKEN_SECRETS!,
+      process.env.ACCESS_TOKEN_SECRET!,
       {
         expiresIn: 60 * 15,
       }
@@ -311,7 +311,7 @@ export const confirmPassword = [
 
     const refreshToken = jwt.sign(
       refreshTokenPayload,
-      process.env.REFRESH_TOKEN_SECRETS!,
+      process.env.REFRESH_TOKEN_SECRET!,
       {
         expiresIn: "30d",
       }
@@ -372,7 +372,7 @@ export const login = [
     checkUserIfNotExist(user);
 
     // check status is freeze
-    if (user?.status === "FREEZE") {
+    if (user!.status === "FREEZE") {
       const error: any = new Error(
         "Your account is freeze. Please contact to us."
       );
@@ -413,18 +413,18 @@ export const login = [
     }
 
     // all are ok
-    const acceptTokenPayload = {
-      userId: user!.id,
+    const accessTokenPayload = {
+      id: user!.id,
     };
 
     const refreshTokenPayload = {
       phone: user!.phone,
-      userId: user!.id,
+      id: user!.id,
     };
 
-    const acceptToken = jwt.sign(
-      acceptTokenPayload,
-      process.env.ACCESS_TOKEN_SECRETS!,
+    const accessToken = jwt.sign(
+      accessTokenPayload,
+      process.env.ACCESS_TOKEN_SECRET!,
       {
         expiresIn: 60 * 15,
       }
@@ -432,7 +432,7 @@ export const login = [
 
     const refreshToken = jwt.sign(
       refreshTokenPayload,
-      process.env.REFRESH_TOKEN_SECRETS!,
+      process.env.REFRESH_TOKEN_SECRET!,
       {
         expiresIn: "30d",
       }
@@ -443,7 +443,7 @@ export const login = [
       randToken: refreshToken,
     });
     res
-      .cookie("accessToken", acceptToken, {
+      .cookie("accessToken", accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",

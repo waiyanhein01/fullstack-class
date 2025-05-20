@@ -28,7 +28,7 @@ export const auth = (req: UserIdRequest, res: Response, next: NextFunction) => {
   try {
     decodedToken = jwt.verify(
       accessToken,
-      process.env.ACCESS_TOKEN_SECRETS!
+      process.env.ACCESS_TOKEN_SECRET!
     ) as {
       id: number;
     };

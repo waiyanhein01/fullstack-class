@@ -10,7 +10,7 @@ export const getAllUsers = (
   next: NextFunction
 ) => {
   const id = req.userId;
-  console.log(id, "id");
+
   res.status(200).json({
     message: "List of users",
     currentUserId: id,
