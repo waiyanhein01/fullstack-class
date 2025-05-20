@@ -13,11 +13,28 @@ import { auth } from "./middlewares/auth";
 
 export const app = express();
 
+const whitelist = ["http://example1.com", "http://localhost:5173"];
+const corsOptions = {
+  origin: function (
+    origin: any,
+    callback: (err: Error | null, allow?: boolean) => void
+  ) {
+    if (!origin) return callback(null, true); // allow requests with no origin (like mobile apps or curl requests)
+    // allow requests with origin in the whitelist
+    if (whitelist.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true, // allow credentials (cookies, authorization headers, etc.)
+};
+
 app.use(morgan("dev")); // this logs all requests to the console
 app.use(express.urlencoded({ extended: true })); // this parses incoming requests with urlencoded payloads and is based on body-parser
 app.use(express.json()); // this parses incoming requests with JSON payloads and is based on body-parser
 app.use(cookieParser()); // this parses incoming requests with cookies
-app.use(cors()); // this enables CORS for all requests
+app.use(cors(corsOptions)); // this enables CORS for all requests
 app.use(helmet()); // this adds security headers to the response
 app.use(compression()); // this compresses the response body for all requests
 app.use(limiter); // this limits the number of requests to the server
