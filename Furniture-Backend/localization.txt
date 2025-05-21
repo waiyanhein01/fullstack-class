@@ -1,0 +1,14 @@
+#localization(internationalization)
+
+##Way 1
+title_mm : hello
+title_en : 
+title_cn : 
+
+##Way 2
+use library => i18next
+
+##Way 3
+translate api => openai
+
+i18next i18next-fs-backend i18next-http-middleware

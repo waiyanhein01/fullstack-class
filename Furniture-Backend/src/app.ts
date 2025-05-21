@@ -4,15 +4,21 @@ import cors from "cors";
 import helmet from "helmet";
 import compression from "compression";
 
-import { limiter } from "./middlewares/rateLimiter";
 import healthRoutes from "./routes/v1/health";
 import authRoutes from "./routes/v1/authRoutes";
 import usersRoutes from "./routes/v1/admin/userRoutes";
 import cookieParser from "cookie-parser";
+import i18next from "i18next";
+import i18nextMiddleware from "i18next-http-middleware";
+import Backend from "i18next-fs-backend";
+
 import { auth } from "./middlewares/auth";
+import { limiter } from "./middlewares/rateLimiter";
+import path from "path";
 
 export const app = express();
 
+//cross origin resource sharing (CORS) configuration
 const whitelist = ["http://example1.com", "http://localhost:5173"];
 const corsOptions = {
   origin: function (
@@ -29,6 +35,29 @@ const corsOptions = {
   },
   credentials: true, // allow credentials (cookies, authorization headers, etc.)
 };
+
+// i18next configuration for internationalization
+i18next
+  .use(Backend)
+  .use(i18nextMiddleware.LanguageDetector)
+  .init({
+    backend: {
+      loadPath: path.join(
+        process.cwd(),
+        "src/locals",
+        "{{lng}}",
+        "{{ns}}.json"
+      ),
+    },
+    detection: {
+      order: ["querystring", "cookie"],
+      caches: ["cookie"],
+    },
+    fallbackLng: "en",
+    preload: ["en", "mm"],
+  });
+
+app.use(i18nextMiddleware.handle(i18next));
 
 app.use(morgan("dev")); // this logs all requests to the console
 app.use(express.urlencoded({ extended: true })); // this parses incoming requests with urlencoded payloads and is based on body-parser
