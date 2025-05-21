@@ -73,3 +73,14 @@
   -if not exist throw error
 5.Update refresh-token value replace with Generate token(just create new token) in database user table with update(id) function
 6.clear cookies access-token and refresh-token and then send response to client
+
+##Noted refresh-token rotate process with phone
+1.Get token from cookies
+  -if not have token throw error
+2.Check user whether exist or not in database user table with this phone
+  -if not exist throw error
+3.Check user table phone and decoded phone same or not
+    -if not same throw error
+4.Check refresh-token and decoded same or not
+  -if not same throw error
+5.Generate new token and update refresh-token in database user table with update(id) function and then res.cookies to client

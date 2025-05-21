@@ -416,7 +416,7 @@ export const login = [
       return next(error);
     }
 
-    // all are ok
+    // authorization token
     const accessTokenPayload = {
       id: user!.id,
     };
@@ -442,10 +442,13 @@ export const login = [
       }
     );
 
-    await updateUser(user!.id, {
+    const userData = {
       errorLoginCount: 0,
       randToken: refreshToken,
-    });
+    };
+
+    await updateUser(user!.id, userData);
+
     res
       .cookie("accessToken", accessToken, {
         httpOnly: true,
@@ -479,9 +482,9 @@ export const logout = async (
   }
 
   // verify refresh token
-  let decodedToken;
+  let decodedRefreshToken;
   try {
-    decodedToken = jwt.verify(
+    decodedRefreshToken = jwt.verify(
       refreshToken,
       process.env.REFRESH_TOKEN_SECRET!
     ) as {
@@ -496,11 +499,17 @@ export const logout = async (
   }
 
   // check user
-  const user = await getUserById(decodedToken.id);
+  if (isNaN(decodedRefreshToken.id)) {
+    const error: any = new Error("You are not authenticated user.");
+    error.status = 401;
+    error.errorCode = errorCode.unauthenticated;
+    return next(error);
+  }
+  const user = await getUserById(decodedRefreshToken.id);
   checkUserIfNotExist(user);
 
   // check phone
-  if (user!.phone !== decodedToken.phone) {
+  if (user!.phone !== decodedRefreshToken.phone) {
     const error: any = new Error("You are not authenticated user.");
     error.status = 401;
     error.errorCode = errorCode.unauthenticated;
