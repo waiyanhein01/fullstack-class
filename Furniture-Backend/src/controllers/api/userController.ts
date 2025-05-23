@@ -51,6 +51,7 @@ export const testPermission = async (
   if (authorizeUser) {
     info.content = "This is content";
   }
+
   res.status(200).json({
     currentRole: user!.role,
     info,
