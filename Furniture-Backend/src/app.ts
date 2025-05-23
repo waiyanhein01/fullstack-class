@@ -73,7 +73,7 @@ app.use(limiter); // this limits the number of requests to the server
 
 app.use("/api/v1", healthRoutes);
 app.use("/api/v1", authRoutes);
-app.use("/api/v1/admin", auth, authorize, adminRoutes);
+app.use("/api/v1/admin", auth, authorize(true, "ADMIN"), adminRoutes);
 app.use("/api/v1", userRoutes);
 
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {

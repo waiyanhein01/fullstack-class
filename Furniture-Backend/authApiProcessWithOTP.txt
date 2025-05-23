@@ -1,3 +1,5 @@
+#Authentication (noted => after Authentication will come Authorization [Authentication => Authorization])
+
 ##Noted Register Request OTP process with phone
 1.Get value form req body
 2.Remove 09 form user input phone number

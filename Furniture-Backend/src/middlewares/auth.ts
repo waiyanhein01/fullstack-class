@@ -3,7 +3,6 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { errorCode } from "../../config/errorCode";
 import { getUserById, updateUser } from "../services/authService";
-import { de, ne } from "@faker-js/faker";
 
 interface UserIdRequest extends Request {
   userId?: number;
