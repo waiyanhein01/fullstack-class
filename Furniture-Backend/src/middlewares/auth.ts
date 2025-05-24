@@ -3,6 +3,7 @@ import { Request, Response, NextFunction } from "express";
 import jwt from "jsonwebtoken";
 import { errorCode } from "../../config/errorCode";
 import { getUserById, updateUser } from "../services/authService";
+import { createError } from "../utils/errorUtil";
 
 interface UserIdRequest extends Request {
   userId?: number;
@@ -23,10 +24,13 @@ export const auth = (req: UserIdRequest, res: Response, next: NextFunction) => {
   const refreshToken = req.cookies ? req.cookies.refreshToken : null;
 
   if (!refreshToken) {
-    const error: any = new Error("You are unauthenticated user.");
-    error.status = 401;
-    error.errorCode = errorCode.unauthenticated;
-    return next(error);
+    return next(
+      createError(
+        "You are unauthenticated user.",
+        401,
+        errorCode.unauthenticated
+      )
+    );
   }
 
   // Generate new access token and refresh token if access token is expired
@@ -41,40 +45,55 @@ export const auth = (req: UserIdRequest, res: Response, next: NextFunction) => {
         phone: string;
       };
     } catch (err) {
-      const error: any = new Error("You are unauthenticated user.");
-      error.status = 401;
-      error.errorCode = errorCode.unauthenticated;
-      return next(error);
+      return next(
+        createError(
+          "You are unauthenticated user.",
+          401,
+          errorCode.unauthenticated
+        )
+      );
     }
 
     if (isNaN(decodedRefreshToken.id)) {
-      const error: any = new Error("You are unauthenticated user.");
-      error.status = 401;
-      error.errorCode = errorCode.unauthenticated;
-      return next(error);
+      return next(
+        createError(
+          "You are unauthenticated user.",
+          401,
+          errorCode.unauthenticated
+        )
+      );
     }
 
     const user = await getUserById(decodedRefreshToken.id);
 
     if (!user) {
-      const error: any = new Error("You are unauthenticated user.");
-      error.status = 401;
-      error.errorCode = errorCode.unauthenticated;
-      return next(error);
+      return next(
+        createError(
+          "You are unauthenticated user.",
+          401,
+          errorCode.unauthenticated
+        )
+      );
     }
 
     if (user.phone !== decodedRefreshToken.phone) {
-      const error: any = new Error("You are unauthenticated user.");
-      error.status = 401;
-      error.errorCode = errorCode.unauthenticated;
-      return next(error);
+      return next(
+        createError(
+          "You are unauthenticated user.",
+          401,
+          errorCode.unauthenticated
+        )
+      );
     }
 
     if (user.randToken !== refreshToken) {
-      const error: any = new Error("You are unauthenticated user.");
-      error.status = 401;
-      error.errorCode = errorCode.unauthenticated;
-      return next(error);
+      return next(
+        createError(
+          "You are unauthenticated user.",
+          401,
+          errorCode.unauthenticated
+        )
+      );
     }
 
     const accessTokenPayload = {
@@ -141,10 +160,13 @@ export const auth = (req: UserIdRequest, res: Response, next: NextFunction) => {
 
       // Check number type
       if (isNaN(decodedAccessToken.id)) {
-        const error: any = new Error("You are unauthenticated user.");
-        error.status = 401;
-        error.errorCode = errorCode.unauthenticated;
-        return next(error);
+        return next(
+          createError(
+            "You are unauthenticated user.",
+            401,
+            errorCode.unauthenticated
+          )
+        );
       }
 
       req.userId = decodedAccessToken.id;
@@ -153,10 +175,7 @@ export const auth = (req: UserIdRequest, res: Response, next: NextFunction) => {
       if (error.name === "TokenExpiredError") {
         generateNewToken();
       } else {
-        error.message = "Token is invalid.";
-        error.status = 400;
-        error.errorCode = errorCode.attack;
-        return next(error);
+        return next(createError("Token is invalid.", 400, errorCode.attack));
       }
     }
   }
