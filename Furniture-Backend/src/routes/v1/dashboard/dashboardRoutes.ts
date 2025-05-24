@@ -2,7 +2,7 @@ import express from "express";
 import {
   changeLanguage,
   testPermission,
-} from "../../../controllers/api/userController";
+} from "../../../controllers/dashboard/dashboardController";
 import { auth } from "../../../middlewares/auth";
 
 const router = express.Router();

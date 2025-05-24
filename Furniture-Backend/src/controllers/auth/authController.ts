@@ -1,9 +1,9 @@
+import { Request, Response, NextFunction } from "express";
 import {
   checkOtpErrorIfSameDate,
   checkOtpExistRow,
   checkUserIfNotExist,
-} from "../utils/authUtil";
-import { Request, Response, NextFunction } from "express";
+} from "../../utils/authUtil";
 import { body, validationResult } from "express-validator";
 import {
   createOtp,
@@ -13,14 +13,13 @@ import {
   getUserByPhone,
   updateOtp,
   updateUser,
-} from "../services/authService";
-import { checkUserExist } from "../utils/authUtil";
-import { generateOtp, generateToken } from "../utils/generateOtpUtil";
+} from "../../services/authService";
+import { checkUserExist } from "../../utils/authUtil";
+import { generateOtp, generateToken } from "../../utils/generateOtpUtil";
+import { errorCode } from "../../../config/errorCode";
 import bcrypt from "bcrypt";
 import moment from "moment";
 import jwt from "jsonwebtoken";
-import { errorCode } from "../../config/errorCode";
-import { error } from "console";
 
 export const register = [
   body("phone", "Invalid phone number.")

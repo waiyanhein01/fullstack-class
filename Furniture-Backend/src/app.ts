@@ -3,24 +3,16 @@ import morgan from "morgan";
 import cors from "cors";
 import helmet from "helmet";
 import compression from "compression";
-
-import healthRoutes from "./routes/v1/health";
-import authRoutes from "./routes/v1/authRoutes";
-import adminRoutes from "./routes/v1/admin/adminRoutes";
-import userRoutes from "./routes/v1/api/userRoutes";
-
+import routes from "./routes/v1/index";
 import cookieParser from "cookie-parser";
 import i18next from "i18next";
 import i18nextMiddleware from "i18next-http-middleware";
 import Backend from "i18next-fs-backend";
 import path from "path";
 
-import { auth } from "./middlewares/auth";
 import { limiter } from "./middlewares/rateLimiter";
-import authorize from "./middlewares/authorize";
 
 export const app = express();
-
 //cross origin resource sharing (CORS) configuration
 const whitelist = ["http://example1.com", "http://localhost:5173"];
 const corsOptions = {
@@ -71,10 +63,7 @@ app.use(helmet()); // this adds security headers to the response
 app.use(compression()); // this compresses the response body for all requests
 app.use(limiter); // this limits the number of requests to the server
 
-app.use("/api/v1", healthRoutes);
-app.use("/api/v1", authRoutes);
-app.use("/api/v1/admin", auth, authorize(true, "ADMIN"), adminRoutes);
-app.use("/api/v1", userRoutes);
+app.use(routes);
 
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
   const status = error.status || 500;

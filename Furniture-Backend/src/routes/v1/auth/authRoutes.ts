@@ -8,7 +8,7 @@ import {
   resetPassword,
   verifyOtp,
   verifyResetOtp,
-} from "../../controllers/authController";
+} from "../../../controllers/auth/authController";
 const router = express.Router();
 
 router.post("/register", register);

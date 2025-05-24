@@ -1,9 +1,7 @@
-import { auth } from "./../../middlewares/auth";
 import { Request, Response, NextFunction } from "express";
 import { query, validationResult } from "express-validator";
 import { errorCode } from "../../../config/errorCode";
 import { checkUserIfNotExist } from "../../utils/authUtil";
-import { title } from "process";
 import { authorizeUtil } from "../../utils/authoriseUtil";
 import { getUserById } from "../../services/authService";
 
