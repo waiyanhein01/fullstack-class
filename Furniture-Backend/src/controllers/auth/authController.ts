@@ -660,7 +660,7 @@ export const resetPassword = [
 
     // check user request is expired or not
     const isUserRequestExpired =
-      moment().diff(isExistOtpRow!.updatedAt, "minutes") > 5;
+      moment().diff(isExistOtpRow!.updatedAt, "minutes") > 10;
     if (isUserRequestExpired) {
       return next(
         createError(

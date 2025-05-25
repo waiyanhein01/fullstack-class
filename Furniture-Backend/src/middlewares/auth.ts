@@ -147,7 +147,7 @@ export const auth = (req: UserIdRequest, res: Response, next: NextFunction) => {
 
   // Check if access token is present and expires
   if (!accessToken) {
-    generateNewToken();
+    generateNewToken(); // await generateNewToken();
   } else {
     let decodedAccessToken;
     try {
