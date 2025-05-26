@@ -1,9 +1,10 @@
 import { userData } from "./../../prisma/seed";
 import { Request, Response, NextFunction } from "express";
-import jwt from "jsonwebtoken";
 import { errorCode } from "../../config/errorCode";
 import { getUserById, updateUser } from "../services/authService";
 import { createError } from "../utils/errorUtil";
+
+import jwt from "jsonwebtoken";
 
 interface UserIdRequest extends Request {
   userId?: number;

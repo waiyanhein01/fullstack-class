@@ -17,10 +17,11 @@ import {
 import { checkUserExist } from "../../utils/authUtil";
 import { generateOtp, generateToken } from "../../utils/generateOtpUtil";
 import { errorCode } from "../../../config/errorCode";
+import { createError } from "../../utils/errorUtil";
+
 import bcrypt from "bcrypt";
 import moment from "moment";
 import jwt from "jsonwebtoken";
-import { createError } from "../../utils/errorUtil";
 
 export const register = [
   body("phone", "Invalid phone number.")

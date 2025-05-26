@@ -1,4 +1,6 @@
 import express, { NextFunction, Request, Response } from "express";
+import { limiter } from "./middlewares/rateLimiter";
+
 import morgan from "morgan";
 import cors from "cors";
 import helmet from "helmet";
@@ -9,8 +11,6 @@ import i18next from "i18next";
 import i18nextMiddleware from "i18next-http-middleware";
 import Backend from "i18next-fs-backend";
 import path from "path";
-
-import { limiter } from "./middlewares/rateLimiter";
 
 export const app = express();
 //cross origin resource sharing (CORS) configuration
