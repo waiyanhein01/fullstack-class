@@ -11,6 +11,11 @@ import i18next from "i18next";
 import i18nextMiddleware from "i18next-http-middleware";
 import Backend from "i18next-fs-backend";
 import path from "path";
+import cron from "node-cron";
+import {
+  createOrUpdateSettingStatus,
+  getSettingStatus,
+} from "./services/systemService";
 
 export const app = express();
 //cross origin resource sharing (CORS) configuration
@@ -53,6 +58,15 @@ i18next
   });
 
 app.use(i18nextMiddleware.handle(i18next));
+
+// cron job will automatically do a task every minute,hour, day, week, month, year what u want
+// cron.schedule("* * * * *", async () => {
+//   const setting = await getSettingStatus("maintenance");
+//   if (setting?.value === "true") {
+//     await createOrUpdateSettingStatus("maintenance", "false");
+//     console.log("Maintenance mode disabled");
+//   }
+// });
 
 app.use(morgan("dev")); // this logs all requests to the console
 app.use(express.urlencoded({ extended: true })); // this parses incoming requests with urlencoded payloads and is based on body-parser
