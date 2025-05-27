@@ -141,3 +141,9 @@ enum Status {
   INACTIVE
   FREEZE
 }
+
+model Setting {
+  id    Int    @id @default(autoincrement())
+  key   String @unique @db.VarChar(255)
+  value String
+}
