@@ -4,6 +4,7 @@ import { errorCode } from "../../../config/errorCode";
 import { checkUserIfNotExist } from "../../utils/authUtil";
 import { authorizeUtil } from "../../utils/authoriseUtil";
 import { getUserById } from "../../services/authService";
+import { checkImageFromMulterSupport } from "../../utils/checkUtil";
 
 interface UserIdRequest extends Request {
   userId?: number;
@@ -54,4 +55,19 @@ export const testPermission = async (
     currentRole: user!.role,
     info,
   });
+};
+
+export const profileImageUpload = async (
+  req: UserIdRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = req.userId;
+  const user = await getUserById(userId!);
+  checkUserIfNotExist(user);
+
+  const image = req.file;
+  checkImageFromMulterSupport(image);
+
+  res.status(200).json({ messsage: "Upload profile image successfully." });
 };
