@@ -59,6 +59,7 @@ export const testPermission = async (
   });
 };
 
+//single profile image
 export const profileImageUpload = async (
   req: UserIdRequest,
   res: Response,
@@ -92,5 +93,23 @@ export const profileImageUpload = async (
   await updateUser(userId!, userData);
   res
     .status(200)
-    .json({ messsage: "Upload profile image successfully.", image: fileName });
+    .json({ message: "Upload profile image successfully.", image: fileName });
+};
+
+//multiple profile image
+export const profileImageUploadMultiple = async (
+  req: UserIdRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = req.userId;
+  const user = await getUserById(userId!);
+  checkUserIfNotExist(user);
+
+  const images = req.files;
+  checkImageFromMulterSupport(images);
+
+  console.log(images);
+
+  res.status(200).json({ message: "Multiple upload image successfully." });
 };
