@@ -3,8 +3,10 @@ import { query, validationResult } from "express-validator";
 import { errorCode } from "../../../config/errorCode";
 import { checkUserIfNotExist } from "../../utils/authUtil";
 import { authorizeUtil } from "../../utils/authoriseUtil";
-import { getUserById } from "../../services/authService";
+import { getUserById, updateUser } from "../../services/authService";
 import { checkImageFromMulterSupport } from "../../utils/checkUtil";
+import { unlink } from "fs/promises";
+import path from "path";
 
 interface UserIdRequest extends Request {
   userId?: number;
@@ -69,5 +71,26 @@ export const profileImageUpload = async (
   const image = req.file;
   checkImageFromMulterSupport(image);
 
-  res.status(200).json({ messsage: "Upload profile image successfully." });
+  const fileName = image?.filename;
+
+  if (user?.image) {
+    try {
+      const filePath = path.join(
+        __dirname,
+        `../../../uploads/images/${user?.image}`
+      );
+      await unlink(filePath);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const userData = {
+    image: fileName,
+  };
+
+  await updateUser(userId!, userData);
+  res
+    .status(200)
+    .json({ messsage: "Upload profile image successfully.", image: fileName });
 };
