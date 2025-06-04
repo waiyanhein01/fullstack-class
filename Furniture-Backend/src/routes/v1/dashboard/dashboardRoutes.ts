@@ -1,11 +1,12 @@
 import express from "express";
-import upload from "../../../middlewares/fileUpload";
+import upload, { uploadMemory } from "../../../middlewares/fileUpload";
 
 import {
   changeLanguage,
   testPermission,
   profileImageUpload,
   profileImageUploadMultiple,
+  profileImageOptimizedUpload,
 } from "../../../controllers/dashboard/profileController";
 import { auth } from "../../../middlewares/auth";
 
@@ -24,6 +25,14 @@ router.patch(
   auth,
   upload.array("avatar"),
   profileImageUploadMultiple
+);
+
+//for optimized image upload
+router.patch(
+  "/profile/uploads/optimized",
+  auth,
+  uploadMemory.single("avatar"),
+  profileImageOptimizedUpload
 );
 
 export default router;

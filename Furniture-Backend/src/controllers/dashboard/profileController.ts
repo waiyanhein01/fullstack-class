@@ -7,6 +7,7 @@ import { getUserById, updateUser } from "../../services/authService";
 import { checkImageFromMulterSupport } from "../../utils/checkUtil";
 import { unlink } from "fs/promises";
 import path from "path";
+import sharp from "sharp";
 
 interface UserIdRequest extends Request {
   userId?: number;
@@ -112,4 +113,54 @@ export const profileImageUploadMultiple = async (
   console.log(images);
 
   res.status(200).json({ message: "Multiple upload image successfully." });
+};
+
+//optimized profile image
+export const profileImageOptimizedUpload = async (
+  req: UserIdRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = req.userId;
+  const user = await getUserById(userId!);
+  checkUserIfNotExist(user);
+
+  const image = req.file;
+  checkImageFromMulterSupport(image);
+
+  const fileName = Date.now() + "-" + `${Math.round(Math.random() * 1e9)}.webp`;
+
+  const filePath = path.join(__dirname, `../../../uploads/images/${fileName}`);
+  try {
+    await sharp(req.file?.buffer)
+      .resize(200, 200)
+      .webp({ quality: 50 })
+      .toFile(filePath);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ message: "Optimized upload image failed." });
+    return;
+  }
+
+  if (user?.image) {
+    try {
+      const filePath = path.join(
+        __dirname,
+        `../../../uploads/images/${user?.image}`
+      );
+      await unlink(filePath);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  const userData = {
+    image: fileName,
+  };
+
+  await updateUser(userId!, userData);
+
+  res
+    .status(200)
+    .json({ message: "Optimized upload image successfully.", image: fileName });
 };

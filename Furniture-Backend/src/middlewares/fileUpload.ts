@@ -31,11 +31,21 @@ const fileFilter = (req: any, file: any, cb: FileFilterCallback): void => {
   }
 };
 
+//upload with filesStorage
 const upload = multer({
   storage: fileStorage,
   fileFilter,
   limits: {
     fileSize: 1024 * 1024 * 5, // 5MB
+  },
+});
+
+//upload with memoryStorage
+export const uploadMemory = multer({
+  storage: multer.memoryStorage(),
+  fileFilter,
+  limits: {
+    fileSize: 1024 * 1024 * 10, // 5MB
   },
 });
 
