@@ -3,14 +3,14 @@ import path from "path";
 import sharp from "sharp";
 
 const connection = {
-  host: process.env.QUEUES_HOST,
-  port: parseInt(process.env.QUEUES_PORT!),
+  host: process.env.REDIS_HOST,
+  port: parseInt(process.env.REDIS_PORT!),
 };
 
 const ImageWorker = new Worker(
   "optimizeImage",
-  async (jobs) => {
-    const { filePath, fileName } = jobs.data;
+  async (job) => {
+    const { filePath, fileName } = job.data;
 
     const optimizedImagePath = path.join(
       __dirname,
