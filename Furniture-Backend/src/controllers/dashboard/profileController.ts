@@ -130,12 +130,16 @@ export const profileImageOptimizedUpload = async (
 
   const fileName = Date.now() + "-" + `${Math.round(Math.random() * 1e9)}.webp`;
 
-  const filePath = path.join(__dirname, `../../../uploads/images/${fileName}`);
+  const optimizedImagePath = path.join(
+    __dirname,
+    `../../../uploads/images/${fileName}`
+  );
+
   try {
     await sharp(req.file?.buffer)
       .resize(200, 200)
       .webp({ quality: 50 })
-      .toFile(filePath);
+      .toFile(optimizedImagePath);
   } catch (error) {
     console.log(error);
     res.status(500).json({ message: "Optimized upload image failed." });
