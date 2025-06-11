@@ -4,7 +4,7 @@ import sharp from "sharp";
 
 const connection = {
   host: process.env.REDIS_HOST,
-  port: parseInt(process.env.REDIS_PORT!),
+  port: 6379,
 };
 
 const ImageWorker = new Worker(
@@ -28,9 +28,9 @@ const ImageWorker = new Worker(
 );
 
 ImageWorker.on("completed", (job) => {
-  console.log(`Job ${job.id} completed`);
+  console.log(`Job ${job.id} completed.`);
 });
 
 ImageWorker.on("failed", (job, err) => {
-  console.log(`Job ${job?.id} failed: ${err.message}`);
+  console.log(`Job ${job?.id} failed: ${err.message}!`);
 });

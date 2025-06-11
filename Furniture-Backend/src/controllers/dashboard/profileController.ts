@@ -125,6 +125,7 @@ export const profileImageOptimizedUpload = async (
   const userId = req.userId;
   const user = await getUserById(userId!);
   checkUserIfNotExist(user);
+  console.log(userId, "userId");
 
   const image = req.file;
   checkImageFromMulterSupport(image);
@@ -132,10 +133,11 @@ export const profileImageOptimizedUpload = async (
   const splitFileName = req.file?.filename.split(".")[0];
   const fileName = `${splitFileName}.webp`;
 
-  const jobs = await ImageQueue.add("optimized-image", {
+  const job = await ImageQueue.add("optimized-image", {
     filePath: req.file?.path,
     fileName,
   });
+  console.log(job, "here is job");
 
   // const optimizedImagePath = path.join(
   //   __dirname,
@@ -153,6 +155,7 @@ export const profileImageOptimizedUpload = async (
   //   return;
   // }
 
+  console.log("Opitimized started");
   if (user?.image) {
     try {
       const originalFilePath = path.join(
@@ -160,26 +163,27 @@ export const profileImageOptimizedUpload = async (
         `../../../uploads/images/${user?.image}`
       );
 
+      await unlink(originalFilePath);
       const optimizedFilePath = path.join(
         __dirname,
-        `../../../uploads/optimized/${user?.image.split(".")[0]}.webp`
+        `../../../uploads/optimized/${user?.image.split(".")[0]}.png`
       );
-      await unlink(originalFilePath);
       await unlink(optimizedFilePath);
+      console.log("Opitimized end");
     } catch (error) {
       console.log(error);
     }
   }
 
   const userData = {
-    image: splitFileName,
+    image: req.file?.fieldname,
   };
 
   await updateUser(userId!, userData);
 
   res.status(200).json({
-    message: "Optimized upload image successfully.",
+    message: "Optimized upload image successfully.Please wait for a while.",
     image: fileName,
-    jobId: jobs.id,
+    jobId: job.id,
   });
 };

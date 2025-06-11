@@ -20,6 +20,7 @@ router.patch(
   upload.single("avatar"),
   profileImageUpload
 );
+
 router.patch(
   "/profile/uploads/multiple",
   auth,
