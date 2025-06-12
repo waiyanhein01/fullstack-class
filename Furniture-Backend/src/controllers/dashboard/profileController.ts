@@ -111,8 +111,6 @@ export const profileImageUploadMultiple = async (
   const images = req.files;
   checkImageFromMulterSupport(images);
 
-  console.log(images);
-
   res.status(200).json({ message: "Multiple upload image successfully." });
 };
 
@@ -125,19 +123,18 @@ export const profileImageOptimizedUpload = async (
   const userId = req.userId;
   const user = await getUserById(userId!);
   checkUserIfNotExist(user);
-  console.log(userId, "userId");
 
   const image = req.file;
   checkImageFromMulterSupport(image);
 
   const splitFileName = req.file?.filename.split(".")[0];
-  const fileName = `${splitFileName}.webp`;
 
   const job = await ImageQueue.add("optimized-image", {
     filePath: req.file?.path,
-    fileName,
+    fileName: `${splitFileName}.webp`,
   });
-  console.log(job, "here is job");
+
+  // console.log(job);
 
   // const optimizedImagePath = path.join(
   //   __dirname,
@@ -155,35 +152,38 @@ export const profileImageOptimizedUpload = async (
   //   return;
   // }
 
-  console.log("Opitimized started");
   if (user?.image) {
     try {
       const originalFilePath = path.join(
         __dirname,
-        `../../../uploads/images/${user?.image}`
+        "../../..",
+        "/uploads/images",
+        user.image
+      );
+
+      const optimizedFilePath = path.join(
+        __dirname,
+        "../../..",
+        "/uploads/optimized",
+        user.image.split(".")[0] + ".webp"
       );
 
       await unlink(originalFilePath);
-      const optimizedFilePath = path.join(
-        __dirname,
-        `../../../uploads/optimized/${user?.image.split(".")[0]}.png`
-      );
       await unlink(optimizedFilePath);
-      console.log("Opitimized end");
     } catch (error) {
       console.log(error);
     }
   }
 
   const userData = {
-    image: req.file?.fieldname,
+    image: req.file?.filename,
   };
 
   await updateUser(userId!, userData);
 
   res.status(200).json({
     message: "Optimized upload image successfully.Please wait for a while.",
-    image: fileName,
+    image: `${splitFileName}.webp`,
     jobId: job.id,
   });
 };

@@ -14,7 +14,9 @@ const ImageWorker = new Worker(
 
     const optimizedImagePath = path.join(
       __dirname,
-      `../../../uploads/optimized/${fileName}`
+      "../../../",
+      "uploads/optimized",
+      fileName
     );
 
     await sharp(filePath)
