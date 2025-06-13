@@ -9,11 +9,17 @@ import {
   profileImageOptimizedUpload,
 } from "../../../controllers/dashboard/profileController";
 import { auth } from "../../../middlewares/auth";
+import {
+  getAllPostsByPagination,
+  getPostById,
+} from "../../../controllers/dashboard/getPostController";
 
 const router = express.Router();
 
 router.post("/change-language", changeLanguage);
 router.get("/test-permission", auth, testPermission);
+
+//for normal image upload
 router.patch(
   "/profile/uploads",
   auth,
@@ -35,5 +41,9 @@ router.patch(
   upload.single("avatar"),
   profileImageOptimizedUpload
 );
+
+//Get Post route
+router.get("/posts", auth, getAllPostsByPagination);
+router.get("/posts/:id", auth, getPostById);
 
 export default router;
