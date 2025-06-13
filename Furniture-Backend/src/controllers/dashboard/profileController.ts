@@ -9,6 +9,7 @@ import { unlink } from "fs/promises";
 import path from "path";
 import sharp from "sharp";
 import ImageQueue from "../../jobs/queues/imageQueue";
+import safeUnlink from "../../utils/safeUnlink";
 
 interface UserIdRequest extends Request {
   userId?: number;
@@ -129,10 +130,20 @@ export const profileImageOptimizedUpload = async (
 
   const splitFileName = req.file?.filename.split(".")[0];
 
-  const job = await ImageQueue.add("optimized-image", {
-    filePath: req.file?.path,
-    fileName: `${splitFileName}.webp`,
-  });
+  const job = await ImageQueue.add(
+    "optimized-image",
+    {
+      filePath: req.file?.path,
+      fileName: `${splitFileName}.webp`,
+    },
+    {
+      attempts: 3,
+      backoff: {
+        type: "exponential",
+        delay: 1000,
+      },
+    }
+  );
 
   // console.log(job);
 
@@ -151,14 +162,14 @@ export const profileImageOptimizedUpload = async (
   //   res.status(500).json({ message: "Optimized upload image failed." });
   //   return;
   // }
-
   if (user?.image) {
     try {
+      console.log("hello");
       const originalFilePath = path.join(
         __dirname,
         "../../..",
         "/uploads/images",
-        user.image
+        user!.image
       );
 
       const optimizedFilePath = path.join(
@@ -168,10 +179,10 @@ export const profileImageOptimizedUpload = async (
         user.image.split(".")[0] + ".webp"
       );
 
-      await unlink(originalFilePath);
-      await unlink(optimizedFilePath);
-    } catch (error) {
-      console.log(error);
+      await safeUnlink(originalFilePath);
+      await safeUnlink(optimizedFilePath);
+    } catch (error: any) {
+      console.error("Unlink failed:", error.message);
     }
   }
 
@@ -182,7 +193,7 @@ export const profileImageOptimizedUpload = async (
   await updateUser(userId!, userData);
 
   res.status(200).json({
-    message: "Optimized upload image successfully.Please wait for a while.",
+    message: "Optimized upload image successfully.Please wait.",
     image: `${splitFileName}.webp`,
     jobId: job.id,
   });
