@@ -7,6 +7,7 @@ import { checkUserIfNotExist } from "../../utils/authUtil";
 import { checkImageFromMulterSupport } from "../../utils/checkUtil";
 import { createOnePost, PostArg } from "../../services/createPostService";
 import ImageQueue from "../../jobs/queues/imageQueue";
+import sanitize from "sanitize-html";
 
 interface UserIdRequest extends Request {
   userId?: number;
@@ -15,7 +16,11 @@ interface UserIdRequest extends Request {
 export const createPost = [
   body("title", "Title is required.").trim().notEmpty().escape(),
   body("content", "Content is required.").trim().notEmpty().escape(),
-  body("body", "Body is required.").trim().notEmpty().escape(),
+  body("body", "Body is required.")
+    .trim()
+    .notEmpty()
+    .customSanitizer((value) => sanitize(value))
+    .notEmpty(),
   body("category", "Category is required.").trim().notEmpty().escape(),
   body("type", "Type is required.").trim().notEmpty().escape(),
   body("tags", "Tags is invalid")
