@@ -3,9 +3,13 @@ import { body, validationResult } from "express-validator";
 import { errorCode } from "../../../config/errorCode";
 import { createError } from "../../utils/errorUtil";
 import { getUserById } from "../../services/authService";
-import { checkUserIfNotExist } from "../../utils/authUtil";
 import { checkImageFromMulterSupport } from "../../utils/checkUtil";
-import { createOnePost, PostArg } from "../../services/createPostService";
+import {
+  createOnePost,
+  getPostById,
+  PostArg,
+} from "../../services/postService";
+
 import ImageQueue from "../../jobs/queues/imageQueue";
 import sanitize from "sanitize-html";
 import path from "node:path";
@@ -126,18 +130,59 @@ export const createPost = [
 ];
 
 export const updatePost = [
-  body("lng", "Language code is invalid.")
+  body("postId", "PostId is required.").trim().notEmpty().isInt({ min: 1 }),
+  body("title", "Title is required.").trim().notEmpty().escape(),
+  body("content", "Content is required.").trim().notEmpty().escape(),
+  body("body", "Body is required.")
     .trim()
     .notEmpty()
-    .matches("^[a-z]+$")
-    .isLength({ min: 2, max: 3 }),
+    .customSanitizer((value) => sanitize(value))
+    .notEmpty(),
+  body("category", "Category is required.").trim().notEmpty().escape(),
+  body("type", "Type is required.").trim().notEmpty().escape(),
+  body("tags", "Tags is invalid")
+    .optional({ nullable: true })
+    .customSanitizer((value) => {
+      if (value) {
+        return value.split(",").filter((tag: string) => tag.trim() !== "");
+      }
+      return value;
+    }),
   async (req: UserIdRequest, res: Response, next: NextFunction) => {
     const errors = validationResult(req).array({ onlyFirstError: true });
     if (errors.length > 0) {
-      const error: any = new Error(errors[0].msg);
-      error.status = 400;
-      error.errorCode = errorCode.invalid;
-      return next(error);
+      if (req.file) {
+        await removeFile(req.file.filename, null);
+      }
+      return next(createError(errors[0].msg, 400, errorCode.invalid));
+    }
+
+    const { postId, title, content, body, category, type, tags } = req.body;
+    const userId = req.userId;
+    // const image = req.file;
+    // checkImageFromMulterSupport(image);
+
+    const user = await getUserById(userId!);
+    if (!user) {
+      return next(
+        createError(
+          "You have not registered yet.",
+          401,
+          errorCode.unauthenticated
+        )
+      );
+    }
+
+    const post = await getPostById(+postId);
+
+    if (user.id !== post?.authorId) {
+      return next(
+        createError(
+          "You have not permission to update this post.",
+          403,
+          errorCode.unauthorized
+        )
+      );
     }
 
     res.status(200).json({ message: "Post updated successfully." });
