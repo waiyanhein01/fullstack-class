@@ -8,10 +8,39 @@ import { checkImageFromMulterSupport } from "../../utils/checkUtil";
 import { createOnePost, PostArg } from "../../services/createPostService";
 import ImageQueue from "../../jobs/queues/imageQueue";
 import sanitize from "sanitize-html";
+import path from "node:path";
+import safeUnlink from "../../utils/safeUnlink";
 
 interface UserIdRequest extends Request {
   userId?: number;
 }
+
+const removeFile = async (
+  originalFile: string,
+  optimizedFile: string | null
+) => {
+  try {
+    const originalFilePath = path.join(
+      __dirname,
+      "../../..",
+      "/uploads/images",
+      originalFile
+    );
+    await safeUnlink(originalFilePath);
+
+    if (optimizedFile) {
+      const optimizedFilePath = path.join(
+        __dirname,
+        "../../..",
+        "/uploads/optimized",
+        originalFile
+      );
+      await safeUnlink(optimizedFilePath);
+    }
+  } catch (error: any) {
+    console.error("Unlink failed:", error.message);
+  }
+};
 
 export const createPost = [
   body("title", "Title is required.").trim().notEmpty().escape(),
@@ -35,16 +64,27 @@ export const createPost = [
   async (req: UserIdRequest, res: Response, next: NextFunction) => {
     const errors = validationResult(req).array({ onlyFirstError: true });
     if (errors.length > 0) {
+      if (req.file) {
+        await removeFile(req.file.filename, null);
+      }
       return next(createError(errors[0].msg, 400, errorCode.invalid));
     }
 
     const { title, content, body, category, type, tags } = req.body;
     const userId = req.userId;
-    const user = await getUserById(userId!);
-    checkUserIfNotExist(user);
-
     const image = req.file;
     checkImageFromMulterSupport(image);
+
+    const user = await getUserById(userId!);
+    if (!user) {
+      return next(
+        createError(
+          "You have not registered yet.",
+          401,
+          errorCode.unauthenticated
+        )
+      );
+    }
 
     const splitFileName = req.file?.filename.split(".")[0];
 

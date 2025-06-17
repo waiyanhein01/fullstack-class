@@ -167,7 +167,7 @@ export const profileImageOptimizedUpload = async (
   // }
   if (user?.image) {
     try {
-      console.log("hello");
+      // console.log("hello");
       const originalFilePath = path.join(
         __dirname,
         "../../..",
