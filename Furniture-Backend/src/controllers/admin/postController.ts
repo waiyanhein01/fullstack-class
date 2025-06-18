@@ -8,6 +8,7 @@ import {
   createOnePost,
   getPostById,
   PostArg,
+  updatePostById,
 } from "../../services/postService";
 
 import ImageQueue from "../../jobs/queues/imageQueue";
@@ -35,9 +36,9 @@ const removeFile = async (
     if (optimizedFile) {
       const optimizedFilePath = path.join(
         __dirname,
-        "../../..",
+        "../../../uploads/optimized",
         "/uploads/optimized",
-        originalFile
+        optimizedFile
       );
       await safeUnlink(optimizedFilePath);
     }
@@ -164,6 +165,10 @@ export const updatePost = [
 
     const user = await getUserById(userId!);
     if (!user) {
+      if (req.file) {
+        await removeFile(req.file!.filename, null);
+      }
+
       return next(
         createError(
           "You have not registered yet.",
@@ -173,19 +178,71 @@ export const updatePost = [
       );
     }
 
-    const post = await getPostById(+postId);
+    const post = await getPostById(+postId); // + for string to number
+    if (!post) {
+      if (req.file) {
+        await removeFile(req.file!.filename, null);
+      }
+
+      return next(
+        createError("This post does not exist.", 401, errorCode.unauthenticated)
+      );
+    }
 
     if (user.id !== post?.authorId) {
+      if (req.file) {
+        await removeFile(req.file!.filename, null);
+      }
       return next(
         createError(
-          "You have not permission to update this post.",
+          "You can not update this post.",
           403,
           errorCode.unauthorized
         )
       );
     }
 
-    res.status(200).json({ message: "Post updated successfully." });
+    let data: any = {
+      title,
+      content,
+      body,
+      image: req.file,
+      category,
+      type,
+      tags,
+    };
+
+    if (req.file) {
+      data.image = req.file.filename;
+
+      const splitFileName = req.file.filename.split(".")[0];
+      await ImageQueue.add(
+        "optimize-image",
+        {
+          filePath: req.file?.path,
+          fileName: `${splitFileName}.webp`,
+          width: 835,
+          height: 577,
+          quality: 100,
+        },
+        {
+          attempts: 3,
+          backoff: {
+            type: "exponential",
+            delay: 1000,
+          },
+        }
+      );
+
+      const optimizedFile = post.image.split(".")[0] + ".webp";
+      await removeFile(post.image, optimizedFile);
+    }
+
+    const updatedPost = await updatePostById(post.id, data);
+
+    res
+      .status(200)
+      .json({ message: "Post updated successfully.", postId: updatedPost.id });
   },
 ];
 
