@@ -137,7 +137,7 @@ export const createPost = [
 ];
 
 export const updatePost = [
-  body("postId", "PostId is required.").trim().notEmpty().isInt({ min: 1 }),
+  body("postId", "PostId is required.").isInt({ gt: 0 }),
   body("title", "Title is required.").trim().notEmpty().escape(),
   body("content", "Content is required.").trim().notEmpty().escape(),
   body("body", "Body is required.")
@@ -253,7 +253,7 @@ export const updatePost = [
 ];
 
 export const deletePost = [
-  body("postId", "PostId is required.").trim().notEmpty().isInt({ min: 1 }),
+  body("postId", "PostId is required.").isInt({ gt: 0 }),
   async (req: UserIdRequest, res: Response, next: NextFunction) => {
     const errors = validationResult(req).array({ onlyFirstError: true });
     if (errors.length > 0) {
