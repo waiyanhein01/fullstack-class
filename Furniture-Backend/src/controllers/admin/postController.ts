@@ -12,7 +12,7 @@ import {
 } from "../../services/postService";
 
 import ImageQueue from "../../jobs/queues/imageQueue";
-import sanitize from "sanitize-html";
+import sanitizeHtml from "sanitize-html";
 import path from "node:path";
 import safeUnlink from "../../utils/safeUnlink";
 
@@ -36,14 +36,14 @@ const removeFile = async (
     if (optimizedFile) {
       const optimizedFilePath = path.join(
         __dirname,
-        "../../../uploads/optimized",
+        "../../..",
         "/uploads/optimized",
         optimizedFile
       );
       await safeUnlink(optimizedFilePath);
     }
-  } catch (error: any) {
-    console.error("Unlink failed:", error.message);
+  } catch (error) {
+    console.error("Unlink failed:", error);
   }
 };
 
@@ -53,7 +53,7 @@ export const createPost = [
   body("body", "Body is required.")
     .trim()
     .notEmpty()
-    .customSanitizer((value) => sanitize(value))
+    .customSanitizer((value) => sanitizeHtml(value))
     .notEmpty(),
   body("category", "Category is required.").trim().notEmpty().escape(),
   body("type", "Type is required.").trim().notEmpty().escape(),
@@ -137,7 +137,7 @@ export const updatePost = [
   body("body", "Body is required.")
     .trim()
     .notEmpty()
-    .customSanitizer((value) => sanitize(value))
+    .customSanitizer((value) => sanitizeHtml(value))
     .notEmpty(),
   body("category", "Category is required.").trim().notEmpty().escape(),
   body("type", "Type is required.").trim().notEmpty().escape(),
@@ -181,17 +181,17 @@ export const updatePost = [
     const post = await getPostById(+postId); // + for string to number
     if (!post) {
       if (req.file) {
-        await removeFile(req.file!.filename, null);
+        await removeFile(req.file.filename, null);
       }
 
       return next(
-        createError("This post does not exist.", 401, errorCode.unauthenticated)
+        createError("This post does not exist.", 401, errorCode.invalid)
       );
     }
 
-    if (user.id !== post?.authorId) {
+    if (user.id !== post.authorId) {
       if (req.file) {
-        await removeFile(req.file!.filename, null);
+        await removeFile(req.file.filename, null);
       }
       return next(
         createError(

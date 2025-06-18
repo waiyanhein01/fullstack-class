@@ -65,7 +65,7 @@ export const getPostById = async (id: number) => {
   return prisma.post.findUnique({ where: { id } });
 };
 
-export const updatePostById = async (id: number, postData: PostArg) => {
+export const updatePostById = async (postId: number, postData: PostArg) => {
   const data: any = {
     title: postData.title,
     content: postData.content,
@@ -92,6 +92,10 @@ export const updatePostById = async (id: number, postData: PostArg) => {
     },
   };
 
+  if (postData.image) {
+    data.image = postData.image;
+  }
+
   if (postData.tags && postData.tags.length > 0) {
     data.tags = {
       connectOrCreate: postData.tags.map((tagName) => ({
@@ -105,5 +109,5 @@ export const updatePostById = async (id: number, postData: PostArg) => {
     };
   }
 
-  return prisma.post.update({ where: { id }, data });
+  return prisma.post.update({ where: { id: postId }, data });
 };
