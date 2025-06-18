@@ -8,3 +8,12 @@ export const checkImageFromMulterSupport = (image: any) => {
     throw error;
   }
 };
+
+export const checkPostIfNotExist = (post: any) => {
+  if (!post) {
+    const error: any = new Error("Post not found.");
+    error.status = 404;
+    error.errorCode = errorCode.notFound;
+    throw error;
+  }
+};

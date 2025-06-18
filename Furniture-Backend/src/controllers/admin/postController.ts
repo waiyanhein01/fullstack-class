@@ -3,9 +3,13 @@ import { body, validationResult } from "express-validator";
 import { errorCode } from "../../../config/errorCode";
 import { createError } from "../../utils/errorUtil";
 import { getUserById } from "../../services/authService";
-import { checkImageFromMulterSupport } from "../../utils/checkUtil";
+import {
+  checkImageFromMulterSupport,
+  checkPostIfNotExist,
+} from "../../utils/checkUtil";
 import {
   createOnePost,
+  deletePostById,
   getPostById,
   PostArg,
   updatePostById,
@@ -15,6 +19,7 @@ import ImageQueue from "../../jobs/queues/imageQueue";
 import sanitizeHtml from "sanitize-html";
 import path from "node:path";
 import safeUnlink from "../../utils/safeUnlink";
+import { checkUserIfNotExist } from "../../utils/authUtil";
 
 interface UserIdRequest extends Request {
   userId?: number;
@@ -122,11 +127,12 @@ export const createPost = [
       tags,
     };
 
-    const post = await createOnePost(data);
+    const createdPost = await createOnePost(data);
 
-    res
-      .status(200)
-      .json({ message: "A new post created successfully.", postId: post.id });
+    res.status(200).json({
+      message: "A new post created successfully.",
+      postId: createdPost.id,
+    });
   },
 ];
 
@@ -247,20 +253,38 @@ export const updatePost = [
 ];
 
 export const deletePost = [
-  body("lng", "Language code is invalid.")
-    .trim()
-    .notEmpty()
-    .matches("^[a-z]+$")
-    .isLength({ min: 2, max: 3 }),
+  body("postId", "PostId is required.").trim().notEmpty().isInt({ min: 1 }),
   async (req: UserIdRequest, res: Response, next: NextFunction) => {
     const errors = validationResult(req).array({ onlyFirstError: true });
     if (errors.length > 0) {
-      const error: any = new Error(errors[0].msg);
-      error.status = 400;
-      error.errorCode = errorCode.invalid;
-      return next(error);
+      return next(createError(errors[0].msg, 400, errorCode.invalid));
     }
 
-    res.status(200).json({ message: "Post delete successfully." });
+    const userId = req.userId;
+    const user = await getUserById(userId!);
+    checkUserIfNotExist(user);
+
+    const postId = req.body.postId;
+    const post = await getPostById(+postId); // + for string to number
+    checkPostIfNotExist(post);
+
+    if (user!.id !== post!.authorId) {
+      return next(
+        createError(
+          "You can not delete this post.",
+          403,
+          errorCode.unauthorized
+        )
+      );
+    }
+
+    const deletedPost = await deletePostById(post!.id);
+
+    const optimizedFile = post!.image.split(".")[0] + ".webp";
+    await removeFile(post!.image, optimizedFile);
+
+    res
+      .status(200)
+      .json({ message: "Post deleted successfully.", postId: deletedPost.id });
   },
 ];

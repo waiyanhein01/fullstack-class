@@ -11,4 +11,5 @@ export const errorCode = {
   accountFreeze: "Error_AccountFreeze",
   unauthorized: "Error_Unauthorized",
   maintenance: "Error_Maintenance",
+  notFound: "Error_NotFound",
 };
