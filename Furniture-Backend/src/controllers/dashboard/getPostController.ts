@@ -5,7 +5,7 @@ import { createError } from "../../utils/errorUtil";
 import { getUserById } from "../../services/authService";
 import { checkUserIfNotExist } from "../../utils/authUtil";
 import {
-  getAllPostsByOffsetPaginationData,
+  getAllPostsByPagination,
   getPostWithRelatedData,
 } from "../../services/postService";
 
@@ -13,6 +13,7 @@ interface UserIdRequest extends Request {
   userId?: number;
 }
 
+// offset pagination
 export const getAllPostsByOffsetPagination = [
   query("page", "Page number is invalid.").isInt({ gt: 0 }).optional(),
   query("limit", "Limit number is invalid.").isInt({ gt: 4 }).optional(),
@@ -50,7 +51,7 @@ export const getAllPostsByOffsetPagination = [
       },
     };
 
-    const posts = await getAllPostsByOffsetPaginationData(options);
+    const posts = await getAllPostsByPagination(options);
     const currentPage = +page;
     let nextPage = null;
     const hasNextPage = posts.length > +limit; // Check if there is a next page
@@ -71,22 +72,58 @@ export const getAllPostsByOffsetPagination = [
   },
 ];
 
+// cursor pagination
+// This is a more efficient way to paginate through large datasets
 export const getAllPostsByInfinitePagination = [
-  body("lng", "Language code is invalid.")
-    .trim()
-    .notEmpty()
-    .matches("^[a-z]+$")
-    .isLength({ min: 2, max: 3 }),
+  query("cursor", "Cursor is invalid.").isInt({ gt: 0 }).optional(),
+  query("limit", "Limit number is invalid.").isInt({ gt: 4 }).optional(),
   async (req: UserIdRequest, res: Response, next: NextFunction) => {
     const errors = validationResult(req).array({ onlyFirstError: true });
     if (errors.length > 0) {
-      const error: any = new Error(errors[0].msg);
-      error.status = 400;
-      error.errorCode = errorCode.invalid;
-      return next(error);
+      return next(createError(errors[0].msg, 400, errorCode.invalid));
     }
 
-    res.status(200).json({ message: "Post fetched successfully." });
+    const lastCursor = req.query.cursor; // Default to cursor 1 if not provided
+    const limit = req.query.limit || 5; // Default to 5 items per page
+    const userId = req.userId;
+    const user = await getUserById(userId!);
+    checkUserIfNotExist(user);
+
+    const options = {
+      cursor: lastCursor ? { id: +lastCursor } : undefined, // Convert cursor to number if provided
+      take: +limit + 1, // Fetch one more item to check if there is a next page
+      skip: lastCursor ? 1 : 0, // Skip the cursor item if provided
+      select: {
+        id: true,
+        title: true,
+        content: true,
+        image: true,
+        author: {
+          select: {
+            fullName: true,
+          },
+        },
+        updatedAt: true,
+      },
+      orderBy: {
+        id: "asc",
+      },
+    };
+
+    const posts = await getAllPostsByPagination(options);
+    const hasNextPage = posts.length > +limit; // Check if there is a next page
+    if (hasNextPage) {
+      posts.pop(); // Remove the last item if it exceeds the limit
+    }
+
+    const nextCursor = posts.length > 0 ? posts[posts.length - 1].id : null;
+
+    res.status(200).json({
+      message: "Get all posts by cursor pagination.",
+      nextCursor,
+      hasNextPage,
+      posts,
+    });
   },
 ];
 
