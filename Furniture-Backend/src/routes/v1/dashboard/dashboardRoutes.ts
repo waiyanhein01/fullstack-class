@@ -10,7 +10,8 @@ import {
 } from "../../../controllers/dashboard/profileController";
 import { auth } from "../../../middlewares/auth";
 import {
-  getAllPostsByPagination,
+  getAllPostsByInfinitePagination,
+  getAllPostsByOffsetPagination,
   getPost,
 } from "../../../controllers/dashboard/getPostController";
 
@@ -43,7 +44,8 @@ router.patch(
 );
 
 //Get Post route
-router.get("/posts", auth, getAllPostsByPagination);
+router.get("/posts", auth, getAllPostsByOffsetPagination);
+router.get("/posts/infinite", auth, getAllPostsByInfinitePagination);
 router.get("/posts/:id", auth, getPost);
 
 export default router;

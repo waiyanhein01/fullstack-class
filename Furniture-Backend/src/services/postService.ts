@@ -151,3 +151,7 @@ export const getPostWithRelatedData = async (id: number) => {
     },
   });
 };
+
+export const getAllPostsByOffsetPaginationData = async (options: any) => {
+  return prisma.post.findMany(options);
+};
