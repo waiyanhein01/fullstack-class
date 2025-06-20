@@ -1,6 +1,4 @@
-import { PrismaClient } from "../../generated/prisma";
-
-const prisma = new PrismaClient();
+import { prisma } from "./prismaClientService"; // Adjust the import path as necessary
 
 export interface PostArg {
   title: string;
@@ -114,4 +112,42 @@ export const updatePostById = async (postId: number, postData: PostArg) => {
 
 export const deletePostById = async (id: number) => {
   return prisma.post.delete({ where: { id } });
+};
+
+// Fetch a post with related data like author, category, type, and tags
+export const getPostWithRelatedData = async (id: number) => {
+  return prisma.post.findUnique({
+    where: { id },
+    // omit: {createdAt: true},// Exclude createdAt from the result
+    select: {
+      id: true,
+      title: true,
+      content: true,
+      body: true,
+      image: true,
+      author: {
+        select: {
+          // firstName: true,
+          // lastName: true,
+          fullName: true, // Computed field for full name
+        },
+      },
+      category: {
+        select: {
+          name: true,
+        },
+      },
+      type: {
+        select: {
+          name: true,
+        },
+      },
+      tags: {
+        select: {
+          name: true,
+        },
+      },
+      updatedAt: true,
+    },
+  });
 };

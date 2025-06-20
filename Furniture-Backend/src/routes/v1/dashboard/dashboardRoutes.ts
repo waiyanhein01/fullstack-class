@@ -11,7 +11,7 @@ import {
 import { auth } from "../../../middlewares/auth";
 import {
   getAllPostsByPagination,
-  getPostById,
+  getPost,
 } from "../../../controllers/dashboard/getPostController";
 
 const router = express.Router();
@@ -44,6 +44,6 @@ router.patch(
 
 //Get Post route
 router.get("/posts", auth, getAllPostsByPagination);
-router.get("/posts/:id", auth, getPostById);
+router.get("/posts/:id", auth, getPost);
 
 export default router;

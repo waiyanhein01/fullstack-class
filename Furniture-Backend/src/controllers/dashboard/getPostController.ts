@@ -1,6 +1,13 @@
 import { Request, Response, NextFunction } from "express";
-import { body, validationResult } from "express-validator";
+import { body, param, validationResult } from "express-validator";
 import { errorCode } from "../../../config/errorCode";
+import { createError } from "../../utils/errorUtil";
+import { getUserById } from "../../services/authService";
+import { checkUserIfNotExist } from "../../utils/authUtil";
+import {
+  getPostById,
+  getPostWithRelatedData,
+} from "../../services/postService";
 
 interface UserIdRequest extends Request {
   userId?: number;
@@ -25,21 +32,41 @@ export const getAllPostsByPagination = [
   },
 ];
 
-export const getPostById = [
-  body("lng", "Language code is invalid.")
-    .trim()
-    .notEmpty()
-    .matches("^[a-z]+$")
-    .isLength({ min: 2, max: 3 }),
+export const getPost = [
+  param("id", "Post ID is required.").isInt({ gt: 0 }),
   async (req: UserIdRequest, res: Response, next: NextFunction) => {
     const errors = validationResult(req).array({ onlyFirstError: true });
     if (errors.length > 0) {
-      const error: any = new Error(errors[0].msg);
-      error.status = 400;
-      error.errorCode = errorCode.invalid;
-      return next(error);
+      return next(createError(errors[0].msg, 400, errorCode.invalid));
     }
 
-    res.status(200).json({ message: "Post fetched successfully." });
+    const postId = req.params.id;
+    const userId = req.userId;
+    const user = await getUserById(userId!);
+    checkUserIfNotExist(user);
+
+    const post = await getPostWithRelatedData(+postId); // + for string to number
+
+    // const modifiedPost = {
+    //   id: post?.id,
+    //   title: post?.title,
+    //   content: post?.content,
+    //   body: post?.body,
+    //   image: "/optimized/" + post?.image.split(".")[0] + ".webp", // Assuming image is stored in optimized folder
+    //   fullName:
+    //     (post?.author.firstName ?? "") + " " + (post?.author.lastName ?? ""),
+    //   category: post?.category.name,
+    //   type: post?.type.name,
+    //   tags:
+    //     post?.tags && post.tags.length > 0
+    //       ? post.tags.map((tag: { name: string }) => tag.name)
+    //       : null,
+    //   updatedAt: post?.updatedAt.toLocaleDateString("en-US", {
+    //     year: "numeric",
+    //     month: "long",
+    //     day: "numeric",
+    //   }),
+    // };
+    res.status(200).json({ message: "Post fetched successfully.", post });
   },
 ];
