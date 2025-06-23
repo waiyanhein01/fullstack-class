@@ -1,12 +1,8 @@
 import { Queue } from "bullmq";
-
-const connection = {
-  host: process.env.REDIS_HOST,
-  port: 6379,
-};
+import { redis } from "../../../config/redisClient";
 
 const ImageQueue = new Queue("optimizeImage", {
-  connection,
+  connection: redis,
 });
 
 export default ImageQueue;

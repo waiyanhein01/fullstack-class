@@ -1,11 +1,7 @@
 import { Worker } from "bullmq";
 import path from "path";
 import sharp from "sharp";
-
-const connection = {
-  host: process.env.REDIS_HOST,
-  port: 6379,
-};
+import { redis } from "../../../config/redisClient";
 
 const ImageWorker = new Worker(
   "optimizeImage",
@@ -25,7 +21,7 @@ const ImageWorker = new Worker(
       .toFile(optimizedImagePath);
   },
   {
-    connection,
+    connection: redis,
   }
 );
 
