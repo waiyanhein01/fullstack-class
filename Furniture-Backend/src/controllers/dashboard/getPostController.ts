@@ -8,6 +8,8 @@ import {
   getAllPostsByPagination,
   getPostWithRelatedData,
 } from "../../services/postService";
+import { getOrSetCache } from "../../utils/cacheUtil";
+import { checkPostIfNotExist } from "../../utils/checkUtil";
 
 interface UserIdRequest extends Request {
   userId?: number;
@@ -51,7 +53,12 @@ export const getAllPostsByOffsetPagination = [
       },
     };
 
-    const posts = await getAllPostsByPagination(options);
+    // const posts = await getAllPostsByPagination(options);
+    const cacheKey = `posts:${JSON.stringify(req.query)}`;
+    const posts = await getOrSetCache(cacheKey, async () => {
+      return getAllPostsByPagination(options);
+    });
+
     const currentPage = +page;
     let nextPage = null;
     const hasNextPage = posts.length > +limit; // Check if there is a next page
@@ -110,7 +117,12 @@ export const getAllPostsByInfinitePagination = [
       },
     };
 
-    const posts = await getAllPostsByPagination(options);
+    // const posts = await getAllPostsByPagination(options);
+    const cacheKey = `posts:${JSON.stringify(req.query)}`;
+    const posts = await getOrSetCache(cacheKey, async () => {
+      return getAllPostsByPagination(options);
+    });
+
     const hasNextPage = posts.length > +limit; // Check if there is a next page
     if (hasNextPage) {
       posts.pop(); // Remove the last item if it exceeds the limit
@@ -140,8 +152,14 @@ export const getPost = [
     const user = await getUserById(userId!);
     checkUserIfNotExist(user);
 
-    const post = await getPostWithRelatedData(+postId); // + for string to number
+    // const post = await getPostWithRelatedData(+postId); // + for string to number
 
+    const cacheKey = `posts:${JSON.stringify(postId)}`;
+    const post = await getOrSetCache(cacheKey, async () => {
+      return await getPostWithRelatedData(+postId);
+    });
+
+    checkPostIfNotExist(post);
     // const modifiedPost = {
     //   id: post?.id,
     //   title: post?.title,

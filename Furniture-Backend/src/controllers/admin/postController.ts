@@ -32,8 +32,7 @@ const removeFile = async (
   try {
     const originalFilePath = path.join(
       __dirname,
-      "../../..",
-      "/uploads/images",
+      "../../../uploads/images",
       originalFile
     );
     await safeUnlink(originalFilePath);
@@ -41,8 +40,7 @@ const removeFile = async (
     if (optimizedFile) {
       const optimizedFilePath = path.join(
         __dirname,
-        "../../..",
-        "/uploads/optimized",
+        "../../../uploads/optimized",
         optimizedFile
       );
       await safeUnlink(optimizedFilePath);
