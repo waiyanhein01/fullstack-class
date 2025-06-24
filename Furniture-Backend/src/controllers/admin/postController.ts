@@ -20,6 +20,7 @@ import sanitizeHtml from "sanitize-html";
 import path from "node:path";
 import safeUnlink from "../../utils/safeUnlink";
 import { checkUserIfNotExist } from "../../utils/authUtil";
+import cacheQueue from "../../jobs/queues/cacheQueue";
 
 interface UserIdRequest extends Request {
   userId?: number;
@@ -32,7 +33,8 @@ const removeFile = async (
   try {
     const originalFilePath = path.join(
       __dirname,
-      "../../../uploads/images",
+      "../../..",
+      "/uploads/images",
       originalFile
     );
     await safeUnlink(originalFilePath);
@@ -40,7 +42,8 @@ const removeFile = async (
     if (optimizedFile) {
       const optimizedFilePath = path.join(
         __dirname,
-        "../../../uploads/optimized",
+        "../../..",
+        "/uploads/optimized",
         optimizedFile
       );
       await safeUnlink(optimizedFilePath);
@@ -126,6 +129,10 @@ export const createPost = [
     };
 
     const createdPost = await createOnePost(data);
+
+    await cacheQueue.add("cache-posts", {
+      pattern: "posts:*",
+    });
 
     res.status(200).json({
       message: "A new post created successfully.",
@@ -243,6 +250,9 @@ export const updatePost = [
     }
 
     const updatedPost = await updatePostById(post.id, data);
+    await cacheQueue.add("cache-posts", {
+      pattern: "posts:*",
+    });
 
     res
       .status(200)
@@ -280,6 +290,9 @@ export const deletePost = [
 
     const optimizedFile = post!.image.split(".")[0] + ".webp";
     await removeFile(post!.image, optimizedFile);
+    await cacheQueue.add("cache-posts", {
+      pattern: "posts:*",
+    });
 
     res
       .status(200)
