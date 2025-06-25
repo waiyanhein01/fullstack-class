@@ -116,7 +116,7 @@ export const createPost = [
       tags,
     };
 
-    const createdPost = await createOnePost(data);
+    const createPost = await createOnePost(data);
 
     await cacheQueue.add("cache-posts", {
       pattern: "posts:*",
@@ -124,7 +124,7 @@ export const createPost = [
 
     res.status(200).json({
       message: "A new post created successfully.",
-      postId: createdPost.id,
+      postId: createPost.id,
     });
   },
 ];
