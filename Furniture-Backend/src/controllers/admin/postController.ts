@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from "express";
 import { body, validationResult } from "express-validator";
 import { errorCode } from "../../../config/errorCode";
 import { createError } from "../../utils/errorUtil";
-import { getUserById } from "../../services/authService";
 import {
   checkImageFromMulterSupport,
   checkPostIfNotExist,
@@ -19,11 +18,11 @@ import ImageQueue from "../../jobs/queues/imageQueue";
 import sanitizeHtml from "sanitize-html";
 import path from "node:path";
 import safeUnlink from "../../utils/safeUnlink";
-import { checkUserIfNotExist } from "../../utils/authUtil";
 import cacheQueue from "../../jobs/queues/cacheQueue";
 
 interface UserIdRequest extends Request {
   userId?: number;
+  user?: any;
 }
 
 const removeFile = async (
@@ -82,20 +81,9 @@ export const createPost = [
     }
 
     const { title, content, body, category, type, tags } = req.body;
-    const userId = req.userId;
+    const user = req.user;
     const image = req.file;
     checkImageFromMulterSupport(image);
-
-    const user = await getUserById(userId!);
-    if (!user) {
-      return next(
-        createError(
-          "You have not registered yet.",
-          401,
-          errorCode.unauthenticated
-        )
-      );
-    }
 
     const splitFileName = req.file?.filename.split(".")[0];
 
@@ -170,24 +158,7 @@ export const updatePost = [
     }
 
     const { postId, title, content, body, category, type, tags } = req.body;
-    const userId = req.userId;
-    // const image = req.file;
-    // checkImageFromMulterSupport(image);
-
-    const user = await getUserById(userId!);
-    if (!user) {
-      if (req.file) {
-        await removeFile(req.file!.filename, null);
-      }
-
-      return next(
-        createError(
-          "You have not registered yet.",
-          401,
-          errorCode.unauthenticated
-        )
-      );
-    }
+    const user = req.user;
 
     const post = await getPostById(+postId); // + for string to number
     if (!post) {
@@ -268,10 +239,7 @@ export const deletePost = [
       return next(createError(errors[0].msg, 400, errorCode.invalid));
     }
 
-    const userId = req.userId;
-    const user = await getUserById(userId!);
-    checkUserIfNotExist(user);
-
+    const user = req.user;
     const postId = req.body.postId;
     const post = await getPostById(+postId); // + for string to number
     checkPostIfNotExist(post);
@@ -290,6 +258,7 @@ export const deletePost = [
 
     const optimizedFile = post!.image.split(".")[0] + ".webp";
     await removeFile(post!.image, optimizedFile);
+
     await cacheQueue.add("cache-posts", {
       pattern: "posts:*",
     });

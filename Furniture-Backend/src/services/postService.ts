@@ -96,6 +96,7 @@ export const updatePostById = async (postId: number, postData: PostArg) => {
 
   if (postData.tags && postData.tags.length > 0) {
     data.tags = {
+      set: [],
       connectOrCreate: postData.tags.map((tagName) => ({
         where: {
           name: tagName,
