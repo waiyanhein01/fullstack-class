@@ -1,0 +1,5 @@
+ if u want to use seeder u can paste this code in package.json
+ 
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
+  }
