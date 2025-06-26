@@ -9,6 +9,7 @@ import {
 } from "../../../controllers/admin/postController";
 import {
   createProduct,
+  deleteProduct,
   updateProduct,
   // deleteProduct,
 } from "../../../controllers/admin/productController";
@@ -26,6 +27,6 @@ router.delete("/posts/:id", deletePost);
 //Products CRUD route
 router.post("/products", upload.array("images", 4), createProduct);
 router.patch("/products/:id", upload.array("images", 4), updateProduct);
-// router.delete("/products/:id", deleteProduct);
+router.delete("/products/:id", deleteProduct);
 
 export default router;

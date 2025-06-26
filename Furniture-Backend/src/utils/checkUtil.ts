@@ -17,3 +17,12 @@ export const checkPostIfNotExist = (post: any) => {
     throw error;
   }
 };
+
+export const checkProductIfNotExist = (product: any) => {
+  if (!product) {
+    const error: any = new Error("Product not found.");
+    error.status = 404;
+    error.errorCode = errorCode.notFound;
+    throw error;
+  }
+};

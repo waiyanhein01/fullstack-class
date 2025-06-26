@@ -6,8 +6,12 @@ import {
   getProductById,
   createOneProduct,
   updateProductById,
+  deleteProductById,
 } from "../../services/productService";
-import { checkImageFromMulterSupport } from "../../utils/checkUtil";
+import {
+  checkImageFromMulterSupport,
+  checkProductIfNotExist,
+} from "../../utils/checkUtil";
 
 import ImageQueue from "../../jobs/queues/imageQueue";
 import path from "node:path";
@@ -266,40 +270,36 @@ export const updateProduct = [
   },
 ];
 
-// export const deleteProduct = [
-//   body("postId", "PostId is required.").isInt({ gt: 0 }),
-//   async (req: UserIdRequest, res: Response, next: NextFunction) => {
-//     const errors = validationResult(req).array({ onlyFirstError: true });
-//     if (errors.length > 0) {
-//       return next(createError(errors[0].msg, 400, errorCode.invalid));
-//     }
+export const deleteProduct = [
+  body("productId", "ProductId is required.").isInt({ gt: 0 }),
+  async (req: UserIdRequest, res: Response, next: NextFunction) => {
+    const errors = validationResult(req).array({ onlyFirstError: true });
+    if (errors.length > 0) {
+      return next(createError(errors[0].msg, 400, errorCode.invalid));
+    }
 
-//     const user = req.user;
-//     const postId = req.body.postId;
-//     const post = await getPostById(+postId); // + for string to number
-//     checkPostIfNotExist(post);
+    const { productId } = req.body;
+    // check product in database
+    const product = await getProductById(+productId);
+    checkProductIfNotExist(product);
 
-//     if (user!.id !== post!.authorId) {
-//       return next(
-//         createError(
-//           "You can not delete this post.",
-//           403,
-//           errorCode.unauthorized
-//         )
-//       );
-//     }
+    // remove old images
+    const originalFiles = product!.images.map((img: any) => img.path);
+    const optimizedFiles = product!!.images.map(
+      (img: any) => img.path.split(".")[0] + ".webp"
+    );
+    await removeFile(originalFiles, optimizedFiles);
 
-//     const deletedPost = await deletePostById(post!.id);
+    // delete product
+    const deletedProduct = await deleteProductById(product!.id);
 
-//     const optimizedFile = post!.image.split(".")[0] + ".webp";
-//     await removeFile(post!.image, optimizedFile);
+    await cacheQueue.add("cache-products", {
+      pattern: "products:*",
+    });
 
-//     await cacheQueue.add("cache-posts", {
-//       pattern: "posts:*",
-//     });
-
-//     res
-//       .status(200)
-//       .json({ message: "Post deleted successfully.", postId: deletedPost.id });
-//   },
-// ];
+    res.status(200).json({
+      message: "Product deleted successfully.",
+      productId: deletedProduct.id,
+    });
+  },
+];
