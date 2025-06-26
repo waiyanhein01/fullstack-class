@@ -2,9 +2,6 @@ import { prisma } from "./prismaClientService";
 
 export const createOneProduct = async (productData: any) => {
   const data: any = {
-    // category,
-    // type,
-    // tags,
     name: productData.name,
     description: productData.description,
     price: productData.price,
@@ -35,6 +32,7 @@ export const createOneProduct = async (productData: any) => {
     },
   };
 
+  //if optional
   if (productData.tags && productData.tags.length > 0) {
     data.tags = {
       connectOrCreate: productData.tags.map((tagName: string) => ({
@@ -48,4 +46,68 @@ export const createOneProduct = async (productData: any) => {
     };
   }
   return prisma.product.create({ data });
+};
+
+export const getProductById = async (id: number) => {
+  return prisma.product.findUnique({
+    where: { id },
+    include: {
+      images: true,
+    },
+  });
+};
+
+export const updateProductById = async (
+  productId: number,
+  productData: any
+) => {
+  const data: any = {
+    name: productData.name,
+    description: productData.description,
+    price: productData.price,
+    discount: productData.discount,
+    inventory: productData.inventory,
+    category: {
+      connectOrCreate: {
+        where: {
+          name: productData.category,
+        },
+        create: {
+          name: productData.category,
+        },
+      },
+    },
+    type: {
+      connectOrCreate: {
+        where: {
+          name: productData.type,
+        },
+        create: {
+          name: productData.type,
+        },
+      },
+    },
+  };
+
+  //if optional
+  if (productData.tags && productData.tags.length > 0) {
+    data.tags = {
+      connectOrCreate: productData.tags.map((tagName: string) => ({
+        where: {
+          name: tagName,
+        },
+        create: {
+          name: tagName,
+        },
+      })),
+    };
+  }
+
+  if (productData.images && productData.images.length > 0) {
+    data.images = {
+      deleteMany: {},
+      create: productData.images,
+    };
+  }
+  return prisma.product.update({ where: { id: productId }, data });
 };

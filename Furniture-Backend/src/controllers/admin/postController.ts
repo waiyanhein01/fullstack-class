@@ -122,7 +122,7 @@ export const createPost = [
       pattern: "posts:*",
     });
 
-    res.status(200).json({
+    res.status(201).json({
       message: "A new post created successfully.",
       postId: createPost.id,
     });
