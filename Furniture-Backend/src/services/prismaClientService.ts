@@ -22,9 +22,7 @@ export const prisma = new PrismaClient().$extends({
       image: {
         needs: { image: true },
         compute(post) {
-          return post.image
-            ? `/optimized/${post.image.split(".")[0]}.webp`
-            : post.image; // Assuming image is stored in optimized folder
+          return `/optimized/${post.image.split(".")[0]}.webp`;
         },
       },
       updatedAt: {
@@ -35,6 +33,14 @@ export const prisma = new PrismaClient().$extends({
             month: "long",
             day: "numeric",
           });
+        },
+      },
+    },
+    image: {
+      path: {
+        needs: { path: true },
+        compute(image) {
+          return `/optimized/${image.path.split(".")[0]}.webp`;
         },
       },
     },

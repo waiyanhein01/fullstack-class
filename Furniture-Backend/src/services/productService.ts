@@ -115,3 +115,20 @@ export const updateProductById = async (
 export const deleteProductById = async (id: number) => {
   return prisma.product.delete({ where: { id } });
 };
+
+export const getProductWithRelatedData = async (id: number) => {
+  // note: use "omit" you can exclude fields from the result and "include" you can include related data
+  // note: use "select" to specify which fields you want no need to use "include"
+  return prisma.product.findUnique({
+    where: { id },
+    omit: { createdAt: true, updatedAt: true, categoryId: true, typeId: true }, // Exclude createdAt from the result
+    include: {
+      images: {
+        select: {
+          id: true,
+          path: true,
+        },
+      },
+    },
+  });
+};

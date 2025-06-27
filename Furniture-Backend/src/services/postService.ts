@@ -117,6 +117,8 @@ export const deletePostById = async (id: number) => {
 
 // Fetch a post with related data like author, category, type, and tags
 export const getPostWithRelatedData = async (id: number) => {
+  // note: use "omit" you can exclude fields from the result and "include" you can include related data
+  // note: use "select" to specify which fields you want no need to use "include"
   return prisma.post.findUnique({
     where: { id },
     // omit: {createdAt: true},// Exclude createdAt from the result
