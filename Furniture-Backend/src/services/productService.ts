@@ -132,3 +132,7 @@ export const getProductWithRelatedData = async (id: number) => {
     },
   });
 };
+
+export const getAllProductsLists = async (options: any) => {
+  return prisma.product.findMany(options);
+};

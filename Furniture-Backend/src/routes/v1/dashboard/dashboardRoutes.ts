@@ -14,7 +14,10 @@ import {
   getAllPostsByOffsetPagination,
   getPost,
 } from "../../../controllers/dashboard/getPostController";
-import { getProduct } from "../../../controllers/dashboard/getProductController";
+import {
+  getAllProductsByCursorPagination,
+  getProduct,
+} from "../../../controllers/dashboard/getProductController";
 
 const router = express.Router();
 
@@ -51,5 +54,6 @@ router.get("/posts/:id", auth, getPost);
 
 // Get Product route
 router.get("/products/:id", auth, getProduct);
+router.get("/products", auth, getAllProductsByCursorPagination);
 
 export default router;

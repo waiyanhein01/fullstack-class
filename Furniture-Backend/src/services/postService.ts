@@ -155,6 +155,6 @@ export const getPostWithRelatedData = async (id: number) => {
   });
 };
 
-export const getAllPostsByPagination = async (options: any) => {
+export const getAllPostsLists = async (options: any) => {
   return prisma.post.findMany(options);
 };

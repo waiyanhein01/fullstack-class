@@ -5,7 +5,7 @@ import { createError } from "../../utils/errorUtil";
 import { getUserById } from "../../services/authService";
 import { checkUserIfNotExist } from "../../utils/authUtil";
 import {
-  getAllPostsByPagination,
+  getAllPostsLists,
   getPostWithRelatedData,
 } from "../../services/postService";
 import { getOrSetCache } from "../../utils/cacheUtil";
@@ -56,7 +56,7 @@ export const getAllPostsByOffsetPagination = [
     // const posts = await getAllPostsByPagination(options);
     const cacheKey = `posts:${JSON.stringify(req.query)}`;
     const posts = await getOrSetCache(cacheKey, async () => {
-      return getAllPostsByPagination(options);
+      return getAllPostsLists(options);
     });
 
     const currentPage = +page;
@@ -120,7 +120,7 @@ export const getAllPostsByInfinitePagination = [
     // const posts = await getAllPostsByPagination(options);
     const cacheKey = `posts:${JSON.stringify(req.query)}`;
     const posts = await getOrSetCache(cacheKey, async () => {
-      return getAllPostsByPagination(options);
+      return getAllPostsLists(options);
     });
 
     const hasNextPage = posts.length > +limit; // Check if there is a next page
