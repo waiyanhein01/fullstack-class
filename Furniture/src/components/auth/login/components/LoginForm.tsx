@@ -6,7 +6,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { Link, useNavigate } from "react-router";
+import { Link, useSubmit } from "react-router";
 
 import {
   Form,
@@ -16,10 +16,14 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
+import { PasswordInput } from "./PasswordInput";
 
 const FormSchema = z.object({
   phone: z
     .string()
+    .nonempty({
+      message: "Phone number is required.",
+    })
     .min(7, {
       message: "Phone number must be at least 7 characters.",
     })
@@ -31,6 +35,9 @@ const FormSchema = z.object({
     }),
   password: z
     .string()
+    .nonempty({
+      message: "Password is required.",
+    })
     .min(8, {
       message: "Password must be at least 8 characters.",
     })
@@ -46,7 +53,7 @@ export function LoginForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"form">) {
-  const nav = useNavigate();
+  const submit = useSubmit();
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -56,8 +63,7 @@ export function LoginForm({
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data);
-    nav("/");
+    submit(data, { method: "post", action: "/login" });
   }
   return (
     <>
@@ -108,8 +114,7 @@ export function LoginForm({
                       </button>
                     </div>
                     <FormControl>
-                      <Input
-                        type="password"
+                      <PasswordInput
                         className="rounded-md border"
                         placeholder="Enter your password"
                         {...field}
