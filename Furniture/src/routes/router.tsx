@@ -12,6 +12,7 @@ import ProductsDetailPage from "@/features/products/pages/ProductsDetailPage";
 import AboutUsPage from "@/features/about-us/pages/AboutUsPage";
 import LoginPage from "@/components/auth/login/pages/LoginPage";
 import RegisterPage from "@/components/auth/register/pages/RegisterPage";
+import { homeLoader } from "./loader/loader";
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,7 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <HomePage />,
+        loader: homeLoader,
       },
       {
         path: "products",
@@ -51,12 +53,12 @@ const router = createBrowserRouter([
   },
   {
     path: "/login",
-    element: <LoginPage/>,
+    element: <LoginPage />,
   },
   {
     path: "/signup",
-    element: <RegisterPage/>,
-  }
+    element: <RegisterPage />,
+  },
 ]);
 
 export default router;

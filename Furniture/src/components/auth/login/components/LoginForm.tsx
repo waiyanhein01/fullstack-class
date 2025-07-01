@@ -18,12 +18,28 @@ import {
 } from "@/components/ui/form";
 
 const FormSchema = z.object({
-  email: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
-  password: z.string().min(8, {
-    message: "Password must be at least 8 characters.",
-  }),
+  phone: z
+    .string()
+    .min(7, {
+      message: "Phone number must be at least 7 characters.",
+    })
+    .max(12, {
+      message: "Phone number must be at most 12 characters.",
+    })
+    .regex(/^\d+$/, {
+      message: "Phone number must be numbers.",
+    }),
+  password: z
+    .string()
+    .min(8, {
+      message: "Password must be at least 8 characters.",
+    })
+    .max(8, {
+      message: "Password must be at most 8 characters.",
+    })
+    .regex(/^\d+$/, {
+      message: "Password must be numbers.",
+    }),
 });
 
 export function LoginForm({
@@ -34,7 +50,7 @@ export function LoginForm({
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      email: "",
+      phone: "",
       password: "",
     },
   });
@@ -58,15 +74,15 @@ export function LoginForm({
             <div className="grid gap-2">
               <FormField
                 control={form.control}
-                name="email"
+                name="phone"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Email</FormLabel>
+                    <FormLabel>Phone</FormLabel>
                     <FormControl>
                       <Input
-                        type="email"
+                        type="tel"
                         className="rounded-md border"
-                        placeholder="Enter your email"
+                        placeholder="Enter your phone number"
                         {...field}
                       />
                     </FormControl>
@@ -82,7 +98,15 @@ export function LoginForm({
                 name="password"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Password</FormLabel>
+                    <div className="flex items-center justify-between">
+                      <FormLabel>Password</FormLabel>
+                      <button
+                        type="button"
+                        className="cursor-pointer text-sm font-medium underline-offset-4 hover:underline"
+                      >
+                        Forgot Password?
+                      </button>
+                    </div>
                     <FormControl>
                       <Input
                         type="password"
