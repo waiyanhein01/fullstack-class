@@ -1,5 +1,5 @@
 import MainLayoutPage from "@/components/layout/pages/MainLayoutPage";
-import { createBrowserRouter } from "react-router";
+import { createBrowserRouter, redirect } from "react-router";
 import HomePage from "@/features/home/pages/HomePage";
 import ServicesPage from "@/features/services/pages/ServicesPage";
 import BlogPage from "@/features/blog/pages/BlogPage";
@@ -14,6 +14,8 @@ import LoginPage from "@/components/auth/login/pages/LoginPage";
 import RegisterPage from "@/components/auth/register/pages/RegisterPage";
 import { homeLoader, loginLoader } from "./loader/loader";
 import { loginAction, logoutAction } from "./action/action";
+import RegisterMainLayout from "@/components/auth/register/components/RegisterMainLayout";
+import VerifyOtpPage from "@/components/auth/register/pages/VerifyOtpPage";
 
 const router = createBrowserRouter([
   {
@@ -55,14 +57,18 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <LoginPage />,
-    action: loginAction,
-    loader: loginLoader,
+    action: loginAction, // for submission and mutation
+    loader: loginLoader, // for preloading before render login page
   },
   {
     path: "/signup",
-    element: <RegisterPage />,
+    element: <RegisterMainLayout />,
+    children: [
+      { index: true, element: <RegisterPage /> },
+      { path: "verify-otp", element: <VerifyOtpPage /> },
+    ],
   },
-  { path: "/logout", action: logoutAction },
+  { path: "/logout", action: logoutAction, loader: () => redirect("/login") },
 ]);
 
 export default router;

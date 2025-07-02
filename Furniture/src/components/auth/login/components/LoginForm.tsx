@@ -57,7 +57,6 @@ export function LoginForm({
   const submit = useSubmit();
   const navigation = useNavigation();
   const actionData = useActionData();
-  console.log(actionData);
 
   const isSubmitting = navigation.state === "submitting";
 
@@ -170,7 +169,7 @@ export function LoginForm({
           </div>
           <div className="text-center text-sm">
             You don&apos;t have an account?
-            <Link to={"/signup"} className="underline underline-offset-4">
+            <Link to={"/signup"} className="ps-1 underline underline-offset-4">
               Sign Up
             </Link>
           </div>

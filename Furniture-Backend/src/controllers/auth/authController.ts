@@ -827,7 +827,8 @@ export const authCheck = async (
   res: Response,
   next: NextFunction
 ) => {
-  const user = await getUserById(req.userId!);
+  const userId = req.userId;
+  const user = await getUserById(userId!);
   checkUserIfNotExist(user);
 
   res.status(200).json({

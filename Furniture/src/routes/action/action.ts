@@ -5,13 +5,15 @@ import { ActionFunctionArgs, redirect } from "react-router";
 export const loginAction = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
 
-  const loginData = {
-    phone: formData.get("phone"),
-    password: formData.get("password"),
-  };
+  const credentials = Object.fromEntries(formData); // Convert FormData to an object if u have too many input fields
+
+  //   const loginData = {
+  //     phone: formData.get("phone"),
+  //     password: formData.get("password"),
+  //   };
 
   try {
-    const response = await authApi.post("login", loginData);
+    const response = await authApi.post("login", credentials);
     if (response.status !== 200) {
       return { error: response.data || "Login failed" };
     }
