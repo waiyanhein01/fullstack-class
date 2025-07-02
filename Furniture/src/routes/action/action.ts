@@ -1,4 +1,4 @@
-import { authApi } from "@/api";
+import api, { authApi } from "@/api";
 import { AxiosError } from "axios";
 import { ActionFunctionArgs, redirect } from "react-router";
 
@@ -22,6 +22,17 @@ export const loginAction = async ({ request }: ActionFunctionArgs) => {
   } catch (error) {
     if (error instanceof AxiosError) {
       return { error: error.response?.data || "Login failed" };
+    }
+  }
+};
+
+export const logoutAction = async () => {
+  try {
+    await api.post("logout");
+    return redirect("/login");
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return { error: error.response?.data || "Logout failed" };
     }
   }
 };

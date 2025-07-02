@@ -6,13 +6,12 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
-  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from "@/types";
 import { Icons } from "@/components/Icons";
-import { Link } from "react-router";
+import { Form } from "react-router";
 
 interface UserProps {
   user: User;
@@ -47,27 +46,28 @@ export function DropdownProfile({ user }: UserProps) {
           <DropdownMenuItem>
             <Icons.DashboardIcon />
             Dashboard
-            <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
+            {/* <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut> */}
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Icons.BillIcon />
             Billing
-            <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
+            {/* <DropdownMenuShortcut>⌘B</DropdownMenuShortcut> */}
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Icons.SettingsIcon />
             Settings
-            <DropdownMenuShortcut>⌘S</DropdownMenuShortcut>
+            {/* <DropdownMenuShortcut>⌘S</DropdownMenuShortcut> */}
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <Link to={"/login"}>
-          <DropdownMenuItem>
-            <Icons.LogoutIcon />
-            Log out
-            <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
-          </DropdownMenuItem>
-        </Link>
+        <Form method="post" action="/logout">
+          <button className="w-full">
+            <DropdownMenuItem>
+              <Icons.LogoutIcon />
+              Log out
+            </DropdownMenuItem>
+          </button>
+        </Form>
       </DropdownMenuContent>
     </DropdownMenu>
   );

@@ -6,7 +6,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { Link, useSubmit } from "react-router";
+import { Link, useActionData, useNavigation, useSubmit } from "react-router";
 
 import {
   Form,
@@ -17,6 +17,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { PasswordInput } from "./PasswordInput";
+import { LoaderCircle } from "lucide-react";
 
 const FormSchema = z.object({
   phone: z
@@ -54,6 +55,12 @@ export function LoginForm({
   ...props
 }: React.ComponentPropsWithoutRef<"form">) {
   const submit = useSubmit();
+  const navigation = useNavigation();
+  const actionData = useActionData();
+  console.log(actionData);
+
+  const isSubmitting = navigation.state === "submitting";
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -124,9 +131,28 @@ export function LoginForm({
                   </FormItem>
                 )}
               />
+
+              {/* error message from server with react router action data */}
+              {actionData && (
+                <p className="text-sm text-red-500">
+                  {actionData?.error.message}
+                </p>
+              )}
             </div>
 
-            <Button type="submit">Sign In</Button>
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              className="disabled:pointer-events-none disabled:opacity-50"
+            >
+              {isSubmitting ? (
+                <span className="flex items-center gap-1">
+                  Signing In <LoaderCircle className="animate-spin" />
+                </span>
+              ) : (
+                "Sign In"
+              )}
+            </Button>
             <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
               <span className="bg-background text-muted-foreground relative z-10 px-2">
                 Or continue with
