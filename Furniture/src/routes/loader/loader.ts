@@ -9,3 +9,5 @@ export const homeLoader = async () => {
     throw error;
   }
 };
+
+export const loginLoader = async () => {};

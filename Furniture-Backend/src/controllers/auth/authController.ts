@@ -23,6 +23,10 @@ import bcrypt from "bcrypt";
 import moment from "moment";
 import jwt from "jsonwebtoken";
 
+interface UserIdRequest extends Request {
+  userId?: number;
+}
+
 export const register = [
   body("phone", "Invalid phone number.")
     .trim()
@@ -816,4 +820,20 @@ export const logout = async (
   });
 
   res.status(200).json({ message: "Logout successfully." });
+};
+
+export const authCheck = async (
+  req: UserIdRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const user = await getUserById(req.userId!);
+  checkUserIfNotExist(user);
+
+  res.status(200).json({
+    message: "You are authenticated user.",
+    userId: user?.id,
+    userName: user?.firstName + " " + user?.lastName,
+    userImage: user?.image,
+  });
 };
