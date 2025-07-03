@@ -24,7 +24,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, InputProps>(
         <Button
           type="button"
           variant="ghost"
-          className="absolute top-1/2 right-2 -translate-y-1/2 hover:bg-transparent"
+          className="absolute top-1/2 right-2 -translate-y-1/2 hover:bg-transparent focus:ring-0 focus-visible:ring-0"
           onClick={() => setIsPasswordVisible(!isPasswordVisible)}
           disabled={props.value === "" || props.disabled}
         >

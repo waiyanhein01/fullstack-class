@@ -123,6 +123,7 @@ export function LoginForm({
                       <PasswordInput
                         className="focus:border-primary focus:ring-primary rounded-md border"
                         placeholder="Enter your password"
+                        inputMode="numeric"
                         {...field}
                       />
                     </FormControl>
@@ -146,7 +147,7 @@ export function LoginForm({
             >
               {isSubmitting ? (
                 <span className="flex items-center gap-1">
-                  Signing In <LoaderCircle className="animate-spin" />
+                  Loading <LoaderCircle className="animate-spin" />
                 </span>
               ) : (
                 "Sign In"
