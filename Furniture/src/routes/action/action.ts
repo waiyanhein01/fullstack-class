@@ -38,3 +38,27 @@ export const logoutAction = async () => {
     }
   }
 };
+
+export const registerAction = async ({ request }: ActionFunctionArgs) => {
+  const formData = await request.formData();
+
+  const credentials = Object.fromEntries(formData); // Convert FormData to an object if u have too many input fields
+
+  //   const loginData = {
+  //     phone: formData.get("phone"),
+  //     password: formData.get("password"),
+  //   };
+
+  try {
+    const response = await authApi.post("login", credentials);
+    if (response.status !== 200) {
+      return { error: response.data || "Sending Otp failed" };
+    }
+
+    return redirect("/register/verify-otp");
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return { error: error.response?.data || "Sending Otp failed" };
+    }
+  }
+};

@@ -13,7 +13,7 @@ import AboutUsPage from "@/features/about-us/pages/AboutUsPage";
 import LoginPage from "@/components/auth/login/pages/LoginPage";
 import RegisterPage from "@/components/auth/register/pages/RegisterPage";
 import { homeLoader, loginLoader } from "./loader/loader";
-import { loginAction, logoutAction } from "./action/action";
+import { loginAction, logoutAction, registerAction } from "./action/action";
 import RegisterMainLayout from "@/components/auth/register/components/RegisterMainLayout";
 import VerifyOtpPage from "@/components/auth/register/pages/VerifyOtpPage";
 import ConfirmPasswordPage from "@/components/auth/register/pages/ConfirmPasswordPage";
@@ -65,7 +65,12 @@ const router = createBrowserRouter([
     path: "/register",
     element: <RegisterMainLayout />,
     children: [
-      { index: true, element: <RegisterPage /> },
+      {
+        index: true,
+        element: <RegisterPage />,
+        loader: loginLoader,
+        action: registerAction,
+      },
       { path: "verify-otp", element: <VerifyOtpPage /> },
       { path: "confirm-password", element: <ConfirmPasswordPage /> },
     ],
