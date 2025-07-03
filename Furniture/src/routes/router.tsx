@@ -16,6 +16,7 @@ import { homeLoader, loginLoader } from "./loader/loader";
 import { loginAction, logoutAction } from "./action/action";
 import RegisterMainLayout from "@/components/auth/register/components/RegisterMainLayout";
 import VerifyOtpPage from "@/components/auth/register/pages/VerifyOtpPage";
+import ConfirmPasswordPage from "@/components/auth/register/pages/ConfirmPasswordPage";
 
 const router = createBrowserRouter([
   {
@@ -61,11 +62,12 @@ const router = createBrowserRouter([
     loader: loginLoader, // for preloading before render login page
   },
   {
-    path: "/signup",
+    path: "/register",
     element: <RegisterMainLayout />,
     children: [
       { index: true, element: <RegisterPage /> },
       { path: "verify-otp", element: <VerifyOtpPage /> },
+      { path: "confirm-password", element: <ConfirmPasswordPage /> },
     ],
   },
   { path: "/logout", action: logoutAction, loader: () => redirect("/login") },

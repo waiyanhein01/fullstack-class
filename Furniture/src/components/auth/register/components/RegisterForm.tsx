@@ -1,51 +1,124 @@
-import { GalleryVerticalEnd } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Icons } from "@/components/Icons";
+
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { Link, useActionData, useNavigation, useSubmit } from "react-router";
+
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
+import { LoaderCircle } from "lucide-react";
+
+const FormSchema = z.object({
+  phone: z
+    .string()
+    .nonempty({
+      message: "Phone number is required.",
+    })
+    .min(7, {
+      message: "Phone number must be at least 7 characters.",
+    })
+    .max(12, {
+      message: "Phone number must be at most 12 characters.",
+    })
+    .regex(/^\d+$/, {
+      message: "Phone number must be numbers.",
+    }),
+});
+
 export function RegisterForm({
   className,
   ...props
-}: React.ComponentProps<"div">) {
+}: React.ComponentPropsWithoutRef<"form">) {
+  const submit = useSubmit();
+  const navigation = useNavigation();
+  const actionData = useActionData();
+
+  const isSubmitting = navigation.state === "submitting";
+
+  const form = useForm<z.infer<typeof FormSchema>>({
+    resolver: zodResolver(FormSchema),
+    defaultValues: {
+      phone: "",
+    },
+  });
+
+  function onSubmit(data: z.infer<typeof FormSchema>) {
+    submit(data, { method: "post", action: "." }); //"." means current route
+  }
+
   return (
-    <div className={cn("flex flex-col gap-6", className)} {...props}>
-      <form>
-        <div className="flex flex-col gap-6">
-          <div className="flex flex-col items-center gap-2">
-            <a
-              href="#"
-              className="flex flex-col items-center gap-2 font-medium"
-            >
-              <div className="flex size-8 items-center justify-center rounded-md">
-                <GalleryVerticalEnd className="size-6" />
-              </div>
-              <span className="sr-only">Acme Inc.</span>
-            </a>
-            <h1 className="text-xl font-bold">Welcome to Acme Inc.</h1>
-            <div className="text-center text-sm">
-              Don&apos;t have an account?{" "}
-              <a href="#" className="underline underline-offset-4">
-                Sign up
-              </a>
+    <Form {...form}>
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className={cn("flex flex-col gap-6", className)}
+        {...props}
+      >
+        <div className="flex flex-col items-center gap-2">
+          <Link to="#" className="flex flex-col items-center gap-2 font-medium">
+            <div className="flex size-8 items-center justify-center rounded-md">
+              <Icons.NavIcon className="size-6" />
             </div>
+            <span className="sr-only">Furniture Shop</span>
+          </Link>
+          <h1 className="text-xl font-bold">Register to your account</h1>
+          <div className="text-center text-sm">
+            Already have an account?{" "}
+            <Link to="/login" className="underline underline-offset-4">
+              Sign In
+            </Link>
           </div>
-          <div className="flex flex-col gap-6">
-            <div className="grid gap-3">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="m@example.com"
-                required
-              />
-            </div>
-            <Button type="submit" className="w-full">
-              Login
-            </Button>
+        </div>
+        <div className="grid gap-6">
+          <div className="grid gap-2">
+            <FormField
+              control={form.control}
+              name="phone"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Phone</FormLabel>
+                  <FormControl>
+                    <Input
+                      type="tel"
+                      className="focus:border-primary focus:ring-primary rounded-md border"
+                      placeholder="Enter your phone number"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </div>
+          {actionData && (
+            <p className="text-sm text-red-500">{actionData?.error.message}</p>
+          )}
+
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            className="disabled:pointer-events-none disabled:opacity-50"
+          >
+            {isSubmitting ? (
+              <span className="flex items-center gap-1">
+                Signing In <LoaderCircle className="animate-spin" />
+              </span>
+            ) : (
+              "Sign In"
+            )}
+          </Button>
           <div className="after:border-border relative text-center text-sm after:absolute after:inset-0 after:top-1/2 after:z-0 after:flex after:items-center after:border-t">
             <span className="bg-background text-muted-foreground relative z-10 px-2">
-              Or
+              Or continue with
             </span>
           </div>
           <div className="grid gap-4 sm:grid-cols-2">
@@ -70,10 +143,11 @@ export function RegisterForm({
           </div>
         </div>
       </form>
-      <div className="text-muted-foreground *:[a]:hover:text-primary text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
-        By clicking continue, you agree to our <a href="#">Terms of Service</a>{" "}
-        and <a href="#">Privacy Policy</a>.
+      <div className="text-muted-foreground *:[a]:hover:text-primary mt-5 text-center text-xs text-balance *:[a]:underline *:[a]:underline-offset-4">
+        By clicking continue, you agree to our{" "}
+        <Link to="#">Terms of Service</Link> and{" "}
+        <Link to="#">Privacy Policy</Link>.
       </div>
-    </div>
+    </Form>
   );
 }

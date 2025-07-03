@@ -93,7 +93,7 @@ export function LoginForm({
                     <FormControl>
                       <Input
                         type="tel"
-                        className="rounded-md border"
+                        className="focus:border-primary focus:ring-primary rounded-md border"
                         placeholder="Enter your phone number"
                         {...field}
                       />
@@ -121,7 +121,7 @@ export function LoginForm({
                     </div>
                     <FormControl>
                       <PasswordInput
-                        className="rounded-md border"
+                        className="focus:border-primary focus:ring-primary rounded-md border"
                         placeholder="Enter your password"
                         {...field}
                       />
@@ -169,7 +169,10 @@ export function LoginForm({
           </div>
           <div className="text-center text-sm">
             You don&apos;t have an account?
-            <Link to={"/signup"} className="ps-1 underline underline-offset-4">
+            <Link
+              to={"/register"}
+              className="ps-1 underline underline-offset-4"
+            >
               Sign Up
             </Link>
           </div>
