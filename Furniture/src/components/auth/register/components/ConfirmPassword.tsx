@@ -138,12 +138,13 @@ export function ConfirmPassword({
                     </FormItem>
                   )}
                 />
+                {/* error message from server with react router action data */}
+                {actionData && (
+                  <p className="text-sm text-red-500">
+                    {actionData?.error.message}
+                  </p>
+                )}
               </div>
-              {actionData && (
-                <p className="text-sm text-red-500">
-                  {actionData?.error.message}
-                </p>
-              )}
 
               <Button
                 type="submit"

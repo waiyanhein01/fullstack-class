@@ -2,7 +2,7 @@ import { errorCode } from "../../config/errorCode";
 
 export const checkUserExist = (user: any) => {
   if (user) {
-    const error: any = new Error("User already exists.");
+    const error: any = new Error("This user already exists.");
     error.status = 409;
     error.code = errorCode.userExist;
     throw error;

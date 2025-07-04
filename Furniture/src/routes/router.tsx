@@ -12,7 +12,7 @@ import ProductsDetailPage from "@/features/products/pages/ProductsDetailPage";
 import AboutUsPage from "@/features/about-us/pages/AboutUsPage";
 import LoginPage from "@/components/auth/login/pages/LoginPage";
 import RegisterPage from "@/components/auth/register/pages/RegisterPage";
-import { homeLoader, loginLoader } from "./loader/loader";
+import { homeLoader, loginLoader, verifyOtpLoader } from "./loader/loader";
 import { loginAction, logoutAction, registerAction } from "./action/action";
 import RegisterMainLayout from "@/components/auth/register/components/RegisterMainLayout";
 import VerifyOtpPage from "@/components/auth/register/pages/VerifyOtpPage";
@@ -71,7 +71,11 @@ const router = createBrowserRouter([
         loader: loginLoader,
         action: registerAction,
       },
-      { path: "verify-otp", element: <VerifyOtpPage /> },
+      {
+        path: "verify-otp",
+        element: <VerifyOtpPage />,
+        loader: verifyOtpLoader,
+      },
       { path: "confirm-password", element: <ConfirmPasswordPage /> },
     ],
   },

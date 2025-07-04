@@ -103,12 +103,12 @@ export function Register({
                     </FormItem>
                   )}
                 />
+                {actionData && (
+                  <p className="text-sm text-red-500">
+                    {actionData?.error.message}
+                  </p>
+                )}
               </div>
-              {actionData && (
-                <p className="text-sm text-red-500">
-                  {actionData?.error.message}
-                </p>
-              )}
 
               <Button
                 type="submit"
