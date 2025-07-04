@@ -32,3 +32,13 @@ export const verifyOtpLoader = async () => {
 
   return null;
 };
+
+export const confirmPasswordLoader = async () => {
+  const authCheck = useAuthStore.getState();
+
+  if (authCheck.status !== "confirm-password") {
+    return redirect("/register/verify-otp");
+  }
+
+  return null;
+};

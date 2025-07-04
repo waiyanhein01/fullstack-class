@@ -64,3 +64,32 @@ export const registerAction = async ({ request }: ActionFunctionArgs) => {
     }
   }
 };
+
+export const verifyOtpAction = async ({ request }: ActionFunctionArgs) => {
+  const authStore = useAuthStore.getState();
+  const formData = await request.formData();
+  const credentials = {
+    phone: authStore.phone,
+    token: authStore.token,
+    otp: formData.get("otp"),
+  };
+
+  try {
+    const response = await authApi.post("verify-otp", credentials);
+    if (response.status !== 200) {
+      return { error: response.data || "Verifying Otp failed" };
+    }
+
+    authStore.setAuth(
+      response.data.phone,
+      response.data.token,
+      Status.confirm_password,
+    );
+
+    return redirect("/register/confirm-password");
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return { error: error.response?.data || "Verifying Otp failed" };
+    }
+  }
+};

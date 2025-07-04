@@ -12,8 +12,18 @@ import ProductsDetailPage from "@/features/products/pages/ProductsDetailPage";
 import AboutUsPage from "@/features/about-us/pages/AboutUsPage";
 import LoginPage from "@/components/auth/login/pages/LoginPage";
 import RegisterPage from "@/components/auth/register/pages/RegisterPage";
-import { homeLoader, loginLoader, verifyOtpLoader } from "./loader/loader";
-import { loginAction, logoutAction, registerAction } from "./action/action";
+import {
+  confirmPasswordLoader,
+  homeLoader,
+  loginLoader,
+  verifyOtpLoader,
+} from "./loader/loader";
+import {
+  loginAction,
+  logoutAction,
+  registerAction,
+  verifyOtpAction,
+} from "./action/action";
 import RegisterMainLayout from "@/components/auth/register/components/RegisterMainLayout";
 import VerifyOtpPage from "@/components/auth/register/pages/VerifyOtpPage";
 import ConfirmPasswordPage from "@/components/auth/register/pages/ConfirmPasswordPage";
@@ -75,8 +85,13 @@ const router = createBrowserRouter([
         path: "verify-otp",
         element: <VerifyOtpPage />,
         loader: verifyOtpLoader,
+        action: verifyOtpAction,
       },
-      { path: "confirm-password", element: <ConfirmPasswordPage /> },
+      {
+        path: "confirm-password",
+        element: <ConfirmPasswordPage />,
+        loader: confirmPasswordLoader,
+      },
     ],
   },
   { path: "/logout", action: logoutAction, loader: () => redirect("/login") },
