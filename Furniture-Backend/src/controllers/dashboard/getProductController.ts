@@ -42,7 +42,7 @@ export const getProduct = [
 // This is a more efficient way to paginate through large datasets
 export const getAllProductsByCursorPagination = [
   query("cursor", "Cursor is invalid.").isInt({ gt: 0 }).optional(),
-  query("limit", "Limit number is invalid.").isInt({ gt: 4 }).optional(),
+  query("limit", "Limit number is invalid.").isInt({ gt: 2 }).optional(),
   async (req: UserIdRequest, res: Response, next: NextFunction) => {
     const errors = validationResult(req).array({ onlyFirstError: true });
     if (errors.length > 0) {
