@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/form";
 import { LoaderCircle } from "lucide-react";
 import { PasswordInput } from "../../login/components/PasswordInput";
+import { useState } from "react";
 
 const FormSchema = z.object({
   password: z
@@ -53,6 +54,7 @@ export function ConfirmPassword({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"form">) {
+  const [isMatchError, setIsMatchError] = useState<string | null>();
   const submit = useSubmit();
   const navigation = useNavigation();
   const actionData = useActionData();
@@ -68,6 +70,12 @@ export function ConfirmPassword({
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
+    if (data.password !== data.confirmPassword) {
+      setIsMatchError("Passwords do not match.");
+      return;
+    } else {
+      setIsMatchError(null);
+    }
     submit(data, { method: "post", action: "/register/confirm-password" }); //"." means current route
   }
 
@@ -140,9 +148,24 @@ export function ConfirmPassword({
                 />
                 {/* error message from server with react router action data */}
                 {actionData && (
-                  <p className="text-sm text-red-500">
-                    {actionData?.error.message}
-                  </p>
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm text-red-500">
+                      {actionData?.error.message}
+                    </p>
+                    <Link
+                      to="/register"
+                      className="text-sm underline underline-offset-4"
+                    >
+                      Back to register
+                    </Link>
+                  </div>
+                )}
+
+                {/* password match error message from client */}
+                {isMatchError && (
+                  <div className="flex items-center gap-2">
+                    <p className="text-sm text-red-500">{isMatchError}</p>
+                  </div>
                 )}
               </div>
 

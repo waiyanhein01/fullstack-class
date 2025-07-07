@@ -23,7 +23,7 @@ import { Icons } from "@/components/Icons";
 import { LoaderCircle } from "lucide-react";
 
 const FormSchema = z.object({
-  pin: z.string().min(6, {
+  otp: z.string().min(6, {
     message: "Your one-time password must be 6 digits.",
   }),
 });
@@ -38,7 +38,7 @@ export function VerifyOtp() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      pin: "",
+      otp: "",
     },
   });
 
@@ -68,7 +68,7 @@ export function VerifyOtp() {
             </div>
             <FormField
               control={form.control}
-              name="pin"
+              name="otp"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>

@@ -1,5 +1,5 @@
 import api, { authApi } from "@/api";
-import { useAuthStore } from "@/store/authStore";
+import { Status, useAuthStore } from "@/store/authStore";
 import { redirect } from "react-router";
 
 export const homeLoader = async () => {
@@ -26,7 +26,7 @@ export const loginLoader = async () => {
 export const verifyOtpLoader = async () => {
   const authCheck = useAuthStore.getState();
 
-  if (authCheck.status !== "verify-otp") {
+  if (authCheck.status !== Status.verify_otp) {
     return redirect("/register");
   }
 
@@ -36,7 +36,7 @@ export const verifyOtpLoader = async () => {
 export const confirmPasswordLoader = async () => {
   const authCheck = useAuthStore.getState();
 
-  if (authCheck.status !== "confirm-password") {
+  if (authCheck.status !== Status.confirm_password) {
     return redirect("/register/verify-otp");
   }
 

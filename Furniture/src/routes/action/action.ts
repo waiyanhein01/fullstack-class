@@ -93,3 +93,31 @@ export const verifyOtpAction = async ({ request }: ActionFunctionArgs) => {
     }
   }
 };
+
+export const confirmPasswordAction = async ({
+  request,
+}: ActionFunctionArgs) => {
+  const authStore = useAuthStore.getState();
+  const formData = await request.formData();
+  const credentials = {
+    phone: authStore.phone,
+    token: authStore.token,
+    password: formData.get("password"),
+  };
+
+  try {
+    const response = await authApi.post("confirm-password", credentials);
+    // always care and check here status code is backend response
+    if (response.status !== 201) {
+      return { error: response.data || "Registration failed" };
+    }
+
+    authStore.resetAuth();
+
+    return redirect("/");
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return { error: error.response?.data || "Registration failed" };
+    }
+  }
+};

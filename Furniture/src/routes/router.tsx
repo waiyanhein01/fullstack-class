@@ -19,6 +19,7 @@ import {
   verifyOtpLoader,
 } from "./loader/loader";
 import {
+  confirmPasswordAction,
   loginAction,
   logoutAction,
   registerAction,
@@ -91,6 +92,7 @@ const router = createBrowserRouter([
         path: "confirm-password",
         element: <ConfirmPasswordPage />,
         loader: confirmPasswordLoader,
+        action: confirmPasswordAction,
       },
     ],
   },
