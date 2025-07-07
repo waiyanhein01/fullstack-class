@@ -14,7 +14,6 @@ interface ProductProps {
 }
 
 const imgUrl = import.meta.env.VITE_IMG_URL;
-console.log(imgUrl);
 
 const ProductCarouselSection = ({ products }: ProductProps) => {
   return (

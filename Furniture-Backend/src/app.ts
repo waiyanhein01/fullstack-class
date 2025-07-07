@@ -77,17 +77,17 @@ app.use(helmet()); // this adds security headers to the response
 app.use(compression()); // this compresses the response body for all requests
 app.use(limiter); // this limits the number of requests to the server
 
-app.use(routes);
-
-app.use(express.static("public")); //for public access images
-app.use(express.static("uploads/images")); //for public access images
-app.use(express.static("uploads/optimized")); //for public access images
-
 //image access from url
 app.use((req, res, next) => {
   res.setHeader("Cross-Origin-Resource-Policy", "same-site");
   next();
 });
+
+app.use(routes);
+
+app.use(express.static("public")); //for public access images
+app.use(express.static("uploads")); //for public access images
+// app.use(express.static("uploads/optimized")); //for public access images
 
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
   const status = error.status || 500;
