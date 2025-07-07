@@ -132,6 +132,7 @@ export const getAllPostsByInfinitePagination = [
 
     res.status(200).json({
       message: "Get all posts by cursor pagination.",
+      prevCursor: lastCursor,
       nextCursor,
       hasNextPage,
       posts,

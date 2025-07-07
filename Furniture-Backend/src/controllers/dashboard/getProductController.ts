@@ -127,6 +127,7 @@ export const getAllProductsByCursorPagination = [
 
     res.status(200).json({
       message: "Get all products by cursor pagination.",
+      prevCursor: lastCursor,
       nextCursor,
       hasNextPage,
       products,

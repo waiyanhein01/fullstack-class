@@ -83,6 +83,12 @@ app.use(express.static("public")); //for public access images
 app.use(express.static("uploads/images")); //for public access images
 app.use(express.static("uploads/optimized")); //for public access images
 
+//image access from url
+app.use((req, res, next) => {
+  res.setHeader("Cross-Origin-Resource-Policy", "same-site");
+  next();
+});
+
 app.use((error: any, req: Request, res: Response, next: NextFunction) => {
   const status = error.status || 500;
   const message = error.message || "Server Error";
