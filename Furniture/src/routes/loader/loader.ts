@@ -4,8 +4,10 @@ import { redirect } from "react-router";
 
 export const homeLoader = async () => {
   try {
-    const response = await api.get("dashboard/products");
-    return response.data;
+    const products = await api.get("dashboard/products?limit=8");
+    const posts = await api.get("dashboard/posts/infinite?limit=3");
+
+    return { productsData: products.data, postsData: posts.data };
   } catch (error) {
     console.error("Error fetching home data:", error);
   }

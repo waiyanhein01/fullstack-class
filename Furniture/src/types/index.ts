@@ -17,10 +17,10 @@ export type Image = {
 };
 
 export type Product = {
-  id: string;
+  id: number;
   name: string;
   description: string;
-  images: string[];
+  images: Image[];
   categoryId: string;
   price: number;
   discount: number;
@@ -55,15 +55,15 @@ export type User = {
 };
 
 export type CartType = {
+  id: string;
+  name: string;
+  price: number;
+  quantity: number;
+  image: {
     id: string;
     name: string;
-    price: number;
-    quantity: number
-    image: {
-      id: string;
-      name: string;
-      url: string;
-    },
-    category: string;
-    subcategory: string;
-}
+    url: string;
+  };
+  category: string;
+  subcategory: string;
+};

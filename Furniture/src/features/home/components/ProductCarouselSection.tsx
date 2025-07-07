@@ -13,6 +13,9 @@ interface ProductProps {
   products: Product[];
 }
 
+const imgUrl = import.meta.env.VITE_IMG_URL;
+console.log(imgUrl);
+
 const ProductCarouselSection = ({ products }: ProductProps) => {
   return (
     <section>
@@ -36,8 +39,10 @@ const ProductCarouselSection = ({ products }: ProductProps) => {
             >
               <div className="flex justify-between gap-5">
                 <img
-                  src={product.images[0]}
+                  src={imgUrl + product?.images[0].path}
                   className="size-28 rounded-md"
+                  loading="lazy"
+                  decoding="async"
                   alt={product.name}
                 />
                 <div className="space-y-2">

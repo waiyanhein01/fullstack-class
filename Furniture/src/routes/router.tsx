@@ -1,5 +1,4 @@
 import MainLayoutPage from "@/components/layout/pages/MainLayoutPage";
-import { createBrowserRouter, redirect } from "react-router";
 import HomePage from "@/features/home/pages/HomePage";
 import ServicesPage from "@/features/services/pages/ServicesPage";
 import BlogPage from "@/features/blog/pages/BlogPage";
@@ -12,6 +11,11 @@ import ProductsDetailPage from "@/features/products/pages/ProductsDetailPage";
 import AboutUsPage from "@/features/about-us/pages/AboutUsPage";
 import LoginPage from "@/components/auth/login/pages/LoginPage";
 import RegisterPage from "@/components/auth/register/pages/RegisterPage";
+import RegisterMainLayout from "@/components/auth/register/components/RegisterMainLayout";
+import VerifyOtpPage from "@/components/auth/register/pages/VerifyOtpPage";
+import ConfirmPasswordPage from "@/components/auth/register/pages/ConfirmPasswordPage";
+
+import { createBrowserRouter, redirect } from "react-router";
 import {
   confirmPasswordLoader,
   homeLoader,
@@ -25,9 +29,6 @@ import {
   registerAction,
   verifyOtpAction,
 } from "./action/action";
-import RegisterMainLayout from "@/components/auth/register/components/RegisterMainLayout";
-import VerifyOtpPage from "@/components/auth/register/pages/VerifyOtpPage";
-import ConfirmPasswordPage from "@/components/auth/register/pages/ConfirmPasswordPage";
 
 const router = createBrowserRouter([
   {
