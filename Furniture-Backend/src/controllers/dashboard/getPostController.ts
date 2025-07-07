@@ -113,7 +113,7 @@ export const getAllPostsByInfinitePagination = [
         updatedAt: true,
       },
       orderBy: {
-        id: "asc",
+        id: "desc",
       },
     };
 

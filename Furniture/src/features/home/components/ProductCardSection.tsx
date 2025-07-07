@@ -9,6 +9,8 @@ interface ProductsProps {
   products: Product[];
 }
 
+const imgUrl = import.meta.env.VITE_IMG_URL;
+
 const ProductCardSection = ({ products }: ProductsProps) => {
   return (
     <section className="mt-24">
@@ -18,15 +20,16 @@ const ProductCardSection = ({ products }: ProductsProps) => {
         linkTitle="View All Products"
       />
       <div className="mt-6 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-4">
-        {products.map((product) => (
+        {products.slice(0, 4).map((product) => (
           <Card key={product.id} className="overflow-hidden">
             <CardContent>
               <Link to={`/products/${product.id}`} className="">
                 <img
-                  src={product.images[0]}
+                  src={imgUrl + product.images[0].path}
                   alt="Blog Image"
                   loading="lazy"
-                  className="aspect-square w-full object-cover"
+                  decoding="async"
+                  className="aspect-square w-full object-contain"
                 />
                 <h1 className="my-2 ml-4 line-clamp-1 text-base font-semibold">
                   {product.name}
@@ -37,7 +40,9 @@ const ProductCardSection = ({ products }: ProductsProps) => {
                       {formatPrice(product.discount)}
                     </h2>
                   )}
-                  <h2 className="ml-4 text-sm font-semibold">{formatPrice(product.price)}</h2>
+                  <h2 className="ml-4 text-sm font-semibold">
+                    {formatPrice(product.price)}
+                  </h2>
                 </div>
               </Link>
             </CardContent>

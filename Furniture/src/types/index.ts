@@ -16,6 +16,10 @@ export type Image = {
   path: string;
 };
 
+export type Tag = {
+  name: string;
+};
+
 export type Product = {
   id: number;
   name: string;
@@ -30,14 +34,17 @@ export type Product = {
 };
 
 export type Post = {
-  id: string;
-  author: string;
+  id: number;
+  author: {
+    id: number;
+    fullName: string;
+  };
   title: string;
   content: string;
   image: string;
   body: string;
-  updated_at: string;
-  tags: string[];
+  updatedAt: string;
+  tags: Tag[];
 };
 
 export type Category = {

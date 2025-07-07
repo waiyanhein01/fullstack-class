@@ -6,7 +6,7 @@ export const prisma = new PrismaClient().$extends({
       fullName: {
         needs: { firstName: true, lastName: true },
         compute({ firstName, lastName }) {
-          return `${firstName ?? ""} ${lastName ?? ""}`;
+          return `${firstName ?? ""}${lastName ?? ""}`;
         },
       },
       image: {
