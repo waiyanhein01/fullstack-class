@@ -36,7 +36,6 @@ export type Product = {
 export type Post = {
   id: number;
   author: {
-    id: number;
     fullName: string;
   };
   title: string;
@@ -44,7 +43,7 @@ export type Post = {
   image: string;
   body: string;
   updatedAt: string;
-  tags: Tag[];
+  // tags: Tag[];
 };
 
 export type Category = {

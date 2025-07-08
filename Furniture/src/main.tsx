@@ -4,11 +4,15 @@ import "./index.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { RouterProvider } from "react-router";
 import router from "./routes/router.tsx";
+import { QueryClientProvider } from "@tanstack/react-query";
+import { queryClient } from "./api/query.ts";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <RouterProvider router={router} />
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+        <RouterProvider router={router} />
+      </ThemeProvider>
+    </QueryClientProvider>
   </StrictMode>,
 );

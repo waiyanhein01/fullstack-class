@@ -33,7 +33,12 @@ const BlogDetailCard = ({ currentId, posts }: DetailPostProps) => {
 
         <div className="flex items-center gap-4">
           {currentId?.tags.map((tag) => (
-            <button className="bg-[#3b5d50] py-1 px-4 rounded text-slate-100" key={tag}>{tag}</button>
+            <button
+              className="rounded bg-[#3b5d50] px-4 py-1 text-slate-100"
+              key={tag}
+            >
+              {tag}
+            </button>
           ))}
         </div>
       </div>
@@ -52,12 +57,12 @@ const BlogDetailCard = ({ currentId, posts }: DetailPostProps) => {
                 key={post.id}
                 to={`/blogs/${post.id}`}
                 className={({ isActive }) =>
-                  `block p-2 mb-3 rounded-md transition-all ${
+                  `mb-3 block rounded-md p-2 transition-all ${
                     isActive ? "bg-gray-200" : "hover:bg-gray-100"
                   }`
                 }
               >
-                <div className=" flex gap-3">
+                <div className="flex gap-3">
                   <img
                     src={post.image}
                     alt="Blog Image"

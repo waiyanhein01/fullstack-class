@@ -13,7 +13,7 @@ const BlogCardSection = ({ posts }: BlogCardSectionProps) => {
     <section className="mt-24">
       <Title title="Recent Blog" href={`/blogs`} linkTitle="View All Posts" />
       <div className="mt-6 grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-3">
-        {posts.map((post) => (
+        {posts?.map((post) => (
           <Link key={post.id} to={`/blogs/${post.id}`} className="">
             <img
               src={imgUrl + post.image}
