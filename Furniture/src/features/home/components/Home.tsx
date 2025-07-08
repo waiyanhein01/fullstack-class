@@ -5,7 +5,6 @@ import Container from "@/components/layout/components/Container";
 import ProductCardSection from "./ProductCardSection";
 
 import { useLoaderData } from "react-router";
-
 const Home = () => {
   const { productsData, postsData } = useLoaderData();
   return (
