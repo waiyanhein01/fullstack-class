@@ -7,6 +7,7 @@ import ProductCardSection from "./ProductCardSection";
 // import { useLoaderData } from "react-router"; this is method 1
 import { useQuery } from "@tanstack/react-query";
 import { postsQuery, productsQuery } from "@/api/query";
+import { Button } from "@/components/ui/button";
 const Home = () => {
   // const { productsData, postsData } = useLoaderData(); this is method 1
   const {
@@ -26,19 +27,44 @@ const Home = () => {
   } = useQuery(postsQuery("limit=3"));
 
   if (isProductsLoading && isPostsLoading) {
-    return <div>Loading...</div>;
+    return (
+      <div>
+        <h1 className="flex h-svh items-center justify-center text-center">
+          Loading...
+        </h1>
+      </div>
+    );
   }
 
   if (isProductsError && isPostsError) {
-    return <div>Error: {productsError?.message || postsError?.message}</div>;
+    return (
+      <div className="flex h-svh flex-col items-center justify-center text-center">
+        <h1 className="mb-2 font-semibold text-red-400">
+          {productsError?.message || postsError?.message}
+        </h1>
+        <Button
+          onClick={() => {
+            refetchProducts();
+            refetchPosts();
+          }}
+          variant="secondary"
+        >
+          Retry
+        </Button>
+      </div>
+    );
   }
   return (
     <section className="container mx-auto my-20 2xl:my-16">
       <Container>
         <HeroSection />
-        <ProductCarouselSection products={productsData.products} />
-        <ProductCardSection products={productsData.products} />
-        <BlogCardSection posts={postsData.posts} />
+        {productsData && (
+          <ProductCarouselSection products={productsData.products} />
+        )}
+        {productsData && (
+          <ProductCardSection products={productsData.products} />
+        )}
+        {postsData && <BlogCardSection posts={postsData.posts} />}
       </Container>
     </section>
   );

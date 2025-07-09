@@ -2,17 +2,6 @@ import api, { authApi } from "@/api";
 import { Status, useAuthStore } from "@/store/authStore";
 import { redirect } from "react-router";
 
-export const homeLoader = async () => {
-  try {
-    const products = await api.get("dashboard/products?limit=8");
-    const posts = await api.get("dashboard/posts/infinite?limit=3");
-
-    return { productsData: products.data, postsData: posts.data };
-  } catch (error) {
-    console.error("Error fetching home data:", error);
-  }
-};
-
 export const loginLoader = async () => {
   try {
     const response = await authApi.get("auth-check");
@@ -43,4 +32,15 @@ export const confirmPasswordLoader = async () => {
   }
 
   return null;
+};
+
+export const homeLoader = async () => {
+  try {
+    const products = await api.get("dashboard/products?limit=8");
+    const posts = await api.get("dashboard/posts/infinite?limit=3");
+
+    return { productsData: products.data, postsData: posts.data };
+  } catch (error) {
+    console.error("Error fetching home data:", error);
+  }
 };
