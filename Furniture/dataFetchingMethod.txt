@@ -1,5 +1,8 @@
 Method 1 (React Router loader)
 login success --> Loader(fetching data every time when you reach related page) --> Home
 
-Method 2 (Tanstack Query)
+Method 2 (Tan stack Query)
 login success --> Home --> useQuery(cache after fetch)
+
+Method 3 (Tan stack Query and React Router loader)
+login success --> Loader(Cache after fetch with tan stack query) --> Home(cache data)

@@ -1,4 +1,5 @@
-import api, { authApi } from "@/api";
+import { authApi } from "@/api";
+import { postsQuery, productsQuery, queryClient } from "@/api/query";
 import { Status, useAuthStore } from "@/store/authStore";
 import { redirect } from "react-router";
 
@@ -34,13 +35,26 @@ export const confirmPasswordLoader = async () => {
   return null;
 };
 
-export const homeLoader = async () => {
-  try {
-    const products = await api.get("dashboard/products?limit=8");
-    const posts = await api.get("dashboard/posts/infinite?limit=3");
+// this is method 1
+// export const homeLoader = async () => {
+//   try {
+//     const products = await api.get("dashboard/products?limit=8");
+//     const posts = await api.get("dashboard/posts/infinite?limit=3");
 
-    return { productsData: products.data, postsData: posts.data };
-  } catch (error) {
-    console.error("Error fetching home data:", error);
-  }
+//     return { productsData: products.data, postsData: posts.data };
+//   } catch (error) {
+//     console.error("Error fetching home data:", error);
+//   }
+// };
+
+// this is method 3
+export const homeLoader = async () => {
+  await queryClient.ensureQueryData(productsQuery("limit=8"));
+  await queryClient.ensureQueryData(postsQuery("limit=3"));
+  return null;
 };
+
+//noted ensureQueryData
+// ensureQueryData is used to make sure that the data is fetched before rendering the component
+// if the data is already in the cache, it will not fetch it again
+// if the data is not in the cache, it will fetch it and cache it
