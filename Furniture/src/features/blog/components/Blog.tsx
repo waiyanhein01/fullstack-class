@@ -1,16 +1,50 @@
 import Container from "@/components/layout/components/Container";
 import BlogCard from "./BlogCard";
-import { posts } from "@/data/posts";
 import { BreadCrumb } from "@/components/layout/components/BreadCrumb";
+import { useInfiniteQuery } from "@tanstack/react-query";
+import { postsInfiniteQuery } from "@/api/query";
+import { Button } from "@/components/ui/button";
 
 const Blog = () => {
-  return (
-    <section className="container mx-auto my-20">
+  const {
+    status,
+    data,
+    // isFetching,
+    isFetchingNextPage,
+    // isFetchingPreviousPage,
+    fetchNextPage,
+    // fetchPreviousPage,
+    hasNextPage,
+    // hasPreviousPage,
+    error,
+  } = useInfiniteQuery(postsInfiniteQuery());
+
+  const allPosts = data?.pages.flatMap((page) => page.posts) ?? [];
+
+  return status === "pending" ? (
+    <p>Loading..</p>
+  ) : status === "error" ? (
+    <p>Blog Error:{error.message}</p>
+  ) : (
+    <section className="container mx-auto mt-20">
       <Container>
         <BreadCrumb currentPage="Blogs" />
         <h1 className="text-xl font-bold 2xl:text-2xl">Latest Blog Posts</h1>
-        <BlogCard posts={posts} />
+        <BlogCard posts={allPosts} />
       </Container>
+      <div className="my-4 flex justify-center">
+        <Button
+          onClick={() => fetchNextPage()}
+          disabled={!hasNextPage || isFetchingNextPage}
+          variant={!hasNextPage ? "ghost" : "secondary"}
+        >
+          {isFetchingNextPage
+            ? "Loading..."
+            : hasNextPage
+              ? "Load More"
+              : "Nothing more to load"}
+        </Button>
+      </div>
     </section>
   );
 };

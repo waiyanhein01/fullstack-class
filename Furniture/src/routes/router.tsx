@@ -18,8 +18,9 @@ import ConfirmPasswordPage from "@/components/auth/register/pages/ConfirmPasswor
 import { createBrowserRouter, redirect } from "react-router";
 import {
   confirmPasswordLoader,
-  // homeLoader,
+  homeLoader,
   loginLoader,
+  postsInfiniteLoader,
   verifyOtpLoader,
 } from "./loader/loader";
 import {
@@ -39,7 +40,7 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <HomePage />,
-        // loader: homeLoader, // this is method 1
+        loader: homeLoader, // this is method 1 and 3
       },
       {
         path: "products",
@@ -57,7 +58,7 @@ const router = createBrowserRouter([
         path: "blogs",
         element: <MainBlogLayoutPage />,
         children: [
-          { index: true, element: <BlogPage /> },
+          { index: true, element: <BlogPage />, loader: postsInfiniteLoader },
           { path: ":blogId", element: <BlogDetailPage /> },
         ],
       },

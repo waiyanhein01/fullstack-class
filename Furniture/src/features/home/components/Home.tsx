@@ -1,8 +1,8 @@
 import HeroSection from "./HeroSection";
 import ProductCarouselSection from "./ProductCarouselSection";
 import BlogCardSection from "./BlogCardSection";
-import Container from "@/components/layout/components/Container";
 import ProductCardSection from "./ProductCardSection";
+import Container from "@/components/layout/components/Container";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { postsQuery, productsQuery } from "@/api/query";
 
@@ -66,12 +66,14 @@ const Home = () => {
   // this is method 3
   const { data: productsData } = useSuspenseQuery(productsQuery("limit=8"));
   const { data: postsData } = useSuspenseQuery(postsQuery("limit=3"));
+  // console.log(postsData, "postsData");
 
   return (
     <section className="container mx-auto my-20 2xl:my-16">
       <Container>
         <HeroSection />
         <ProductCarouselSection products={productsData.products} />
+        <ProductCardSection products={productsData.products} />
         <BlogCardSection posts={postsData.posts} />
       </Container>
     </section>

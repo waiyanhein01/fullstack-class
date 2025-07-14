@@ -1,5 +1,10 @@
 import { authApi } from "@/api";
-import { postsQuery, productsQuery, queryClient } from "@/api/query";
+import {
+  postsInfiniteQuery,
+  postsQuery,
+  productsQuery,
+  queryClient,
+} from "@/api/query";
 import { Status, useAuthStore } from "@/store/authStore";
 import { redirect } from "react-router";
 
@@ -51,6 +56,12 @@ export const confirmPasswordLoader = async () => {
 export const homeLoader = async () => {
   await queryClient.ensureQueryData(productsQuery("limit=8"));
   await queryClient.ensureQueryData(postsQuery("limit=3"));
+  // console.log(data, "cached");
+  return null;
+};
+
+export const postsInfiniteLoader = async () => {
+  await queryClient.ensureInfiniteQueryData(postsInfiniteQuery());
   return null;
 };
 

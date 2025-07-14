@@ -5,12 +5,13 @@ interface BlogCardProps {
   posts: Post[];
 }
 const BlogCard = ({ posts }: BlogCardProps) => {
+  const imgUrl = import.meta.env.VITE_IMG_URL;
   return (
     <div className="mt-6 grid grid-cols-1 gap-16 md:grid-cols-2 lg:grid-cols-3">
       {posts.map((post) => (
         <Link key={post.id} to={`/blogs/${post.id}`} className="">
           <img
-            src={post.image}
+            src={imgUrl + post.image}
             alt="Blog Image"
             className="w-full rounded-2xl"
           />
@@ -21,8 +22,8 @@ const BlogCard = ({ posts }: BlogCardProps) => {
             {post.content}
           </h1>
           <span className="text-sm">
-            by<span className="font-semibold"> {post.author} </span>on
-            <span className="font-semibold"> {post.updated_at}</span>
+            by<span className="font-semibold"> {post.author.fullName} </span>on
+            <span className="font-semibold"> {post.updatedAt}</span>
           </span>
         </Link>
       ))}
