@@ -9,7 +9,7 @@ const Blog = () => {
   const {
     status,
     data,
-    // isFetching,
+    isFetching,
     isFetchingNextPage,
     // isFetchingPreviousPage,
     fetchNextPage,
@@ -44,6 +44,9 @@ const Blog = () => {
               ? "Load More"
               : "Nothing more to load"}
         </Button>
+      </div>
+      <div className="">
+        {isFetching && !isFetchingNextPage ? "Background Updating..." : null}
       </div>
     </section>
   );
