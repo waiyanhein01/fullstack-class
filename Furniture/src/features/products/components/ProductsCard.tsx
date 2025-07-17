@@ -9,7 +9,6 @@ interface ProductsCardProps {
   product: Product;
 }
 const ProductsCard = ({ product }: ProductsCardProps) => {
-  console.log(product, "product");
   const imgUrl = import.meta.env.VITE_IMG_URL;
   return (
     <div className="">
