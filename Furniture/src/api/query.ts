@@ -1,4 +1,3 @@
-import { api } from "./index";
 import { QueryClient } from "@tanstack/react-query";
 import api from ".";
 
@@ -46,18 +45,18 @@ export const postsInfiniteQuery = () => ({
 
 const fetchPostDetail = async (id: number) => {
   const post = await api.get(`dashboard/posts/${id}`);
-  console.log(post, "post");
   if (!post) {
     throw new Response("Post not found", {
       status: 404,
       statusText: "Not Found",
     });
   }
+  return post.data;
 };
 
 export const postDetailQuery = (id: number) => ({
   queryKey: ["posts", "detail", id],
-  queryFn: fetchPostDetail(id),
+  queryFn: () => fetchPostDetail(id),
 });
 
 // useQuery for get data(read) // useQuery can use in component

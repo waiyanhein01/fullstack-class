@@ -57,7 +57,6 @@ export const confirmPasswordLoader = async () => {
 export const homeLoader = async () => {
   await queryClient.ensureQueryData(productsQuery("limit=8"));
   await queryClient.ensureQueryData(postsQuery("limit=3"));
-  // console.log(data, "cached");
   return null;
 };
 
@@ -67,13 +66,12 @@ export const postsInfiniteLoader = async () => {
 };
 
 export const postDetailLoader = async ({ params }: LoaderFunctionArgs) => {
-  if (!params.postId) {
-    throw new Error("Post id not found");
+  if (!params.blogId) {
+    throw new Error("No Post ID provided");
   }
-
   await queryClient.ensureQueryData(postsQuery("limit=6"));
-  await queryClient.ensureQueryData(postDetailQuery(Number(params.postId)));
-  return { postId: params.postId };
+  await queryClient.ensureQueryData(postDetailQuery(Number(params.blogId)));
+  return { blogId: params.blogId };
 };
 
 //noted ensureQueryData

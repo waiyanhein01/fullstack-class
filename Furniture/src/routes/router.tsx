@@ -41,7 +41,7 @@ const router = createBrowserRouter([
       {
         index: true,
         element: <HomePage />,
-        loader: homeLoader, // this is method 1 and 3
+        // loader: homeLoader, // this is method 1 and 3
       },
       {
         path: "products",

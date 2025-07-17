@@ -75,7 +75,7 @@ app.use(cookieParser()); // this parses incoming requests with cookies
 app.use(cors(corsOptions)); // this enables CORS for all requests
 app.use(helmet()); // this adds security headers to the response
 app.use(compression()); // this compresses the response body for all requests
-app.use(limiter); // this limits the number of requests to the server
+// app.use(limiter); // this limits the number of requests to the server
 
 //image access from url
 app.use((req, res, next) => {
