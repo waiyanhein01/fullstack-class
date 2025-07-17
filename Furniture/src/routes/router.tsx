@@ -20,6 +20,7 @@ import {
   confirmPasswordLoader,
   homeLoader,
   loginLoader,
+  postDetailLoader,
   postsInfiniteLoader,
   verifyOtpLoader,
 } from "./loader/loader";
@@ -59,7 +60,11 @@ const router = createBrowserRouter([
         element: <MainBlogLayoutPage />,
         children: [
           { index: true, element: <BlogPage />, loader: postsInfiniteLoader },
-          { path: ":blogId", element: <BlogDetailPage /> },
+          {
+            path: ":blogId",
+            element: <BlogDetailPage />,
+            loader: postDetailLoader,
+          },
         ],
       },
       {

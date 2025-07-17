@@ -43,7 +43,7 @@ export type Post = {
   image: string;
   body: string;
   updatedAt: string;
-  // tags: Tag[];
+  tags: Tag[];
 };
 
 export type Category = {

@@ -1,15 +1,24 @@
 import { BreadCrumb } from "@/components/layout/components/BreadCrumb";
-import { useParams } from "react-router";
-import { posts } from "@/data/posts";
 import BlogDetailCard from "./BlogDetailCard";
 import Container from "@/components/layout/components/Container";
+import { useLoaderData } from "react-router";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { postDetailQuery, postsQuery } from "@/api/query";
 
 const BlogDetail = () => {
-  const { blogId } = useParams();
-
-  const currentId = posts.find((post) => post.id === blogId);
+  // const { blogId } = useParams();
+  // const currentId = posts.find((post) => post.id === blogId);
   // console.log(currentId);
 
+  const { postId } = useLoaderData();
+  console.log(postId, "postId");
+
+  const { data: postDetailData } = useSuspenseQuery(postDetailQuery(postId));
+  const { data: postsData } = useSuspenseQuery(postsQuery("limit=6"));
+
+  console.log(postDetailData, postsData);
+
+  return;
   return (
     <div className="container mx-auto my-20">
       <Container>
@@ -17,7 +26,7 @@ const BlogDetail = () => {
           currentPage="BlogDetail"
           links={[{ path: "/blogs", title: "Blogs" }]}
         />
-        <BlogDetailCard currentId={currentId} posts={posts} />
+        <BlogDetailCard currentId={postDetailData} posts={postsData} />
       </Container>
     </div>
   );

@@ -1,12 +1,13 @@
 import { authApi } from "@/api";
 import {
+  postDetailQuery,
   postsInfiniteQuery,
   postsQuery,
   productsQuery,
   queryClient,
 } from "@/api/query";
 import { Status, useAuthStore } from "@/store/authStore";
-import { redirect } from "react-router";
+import { LoaderFunctionArgs, redirect } from "react-router";
 
 export const loginLoader = async () => {
   try {
@@ -63,6 +64,16 @@ export const homeLoader = async () => {
 export const postsInfiniteLoader = async () => {
   await queryClient.ensureInfiniteQueryData(postsInfiniteQuery());
   return null;
+};
+
+export const postDetailLoader = async ({ params }: LoaderFunctionArgs) => {
+  if (!params.postId) {
+    throw new Error("Post id not found");
+  }
+
+  await queryClient.ensureQueryData(postsQuery("limit=6"));
+  await queryClient.ensureQueryData(postDetailQuery(Number(params.postId)));
+  return { postId: params.postId };
 };
 
 //noted ensureQueryData
