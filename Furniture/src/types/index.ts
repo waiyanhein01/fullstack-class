@@ -47,12 +47,12 @@ export type Post = {
 };
 
 export type Category = {
-  id: string;
+  id: number;
   label: string;
 };
 
 export type User = {
-  id: string;
+  id: number;
   firstName: string;
   lastName: string;
   username: string;
@@ -61,12 +61,12 @@ export type User = {
 };
 
 export type CartType = {
-  id: string;
+  id: number;
   name: string;
   price: number;
   quantity: number;
   image: {
-    id: string;
+    id: number;
     name: string;
     url: string;
   };

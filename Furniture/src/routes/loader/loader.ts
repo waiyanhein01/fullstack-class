@@ -1,8 +1,10 @@
 import { authApi } from "@/api";
 import {
+  categoryTypeQuery,
   postDetailQuery,
   postsInfiniteQuery,
   postsQuery,
+  productsInfiniteQuery,
   productsQuery,
   queryClient,
 } from "@/api/query";
@@ -72,6 +74,12 @@ export const postDetailLoader = async ({ params }: LoaderFunctionArgs) => {
   await queryClient.ensureQueryData(postsQuery("limit=6"));
   await queryClient.ensureQueryData(postDetailQuery(Number(params.blogId)));
   return { blogId: params.blogId };
+};
+
+export const productsInfiniteLoader = async () => {
+  await queryClient.ensureQueryData(categoryTypeQuery());
+  await queryClient.prefetchInfiniteQuery(productsInfiniteQuery());
+  return null;
 };
 
 //noted ensureQueryData

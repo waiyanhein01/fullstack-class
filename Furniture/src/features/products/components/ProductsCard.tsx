@@ -9,16 +9,18 @@ interface ProductsCardProps {
   product: Product;
 }
 const ProductsCard = ({ product }: ProductsCardProps) => {
+  console.log(product, "product");
+  const imgUrl = import.meta.env.VITE_IMG_URL;
   return (
     <div className="">
       <Card key={product.id} className="overflow-hidden">
         <CardContent>
           <Link to={`/products/${product.id}`} className="">
             <img
-              src={product.images[0]}
+              src={imgUrl + product.images[0].path}
               alt="Blog Image"
               loading="lazy"
-              className="aspect-square w-full object-cover"
+              className="aspect-square w-full bg-transparent object-contain object-center"
             />
             <h1 className="my-2 ml-4 line-clamp-1 text-base font-semibold">
               {product.name}

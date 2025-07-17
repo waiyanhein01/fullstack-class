@@ -57,6 +57,6 @@ router.get("/posts/:id", auth, getPost);
 router.get("/products/:id", auth, getProduct);
 router.get("/products", auth, getAllProductsByCursorPagination);
 
-router.get("category-type", auth, getCategoryType);
+router.get("/category-type", auth, getCategoryType);
 
 export default router;

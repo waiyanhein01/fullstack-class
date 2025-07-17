@@ -18,10 +18,11 @@ import ConfirmPasswordPage from "@/components/auth/register/pages/ConfirmPasswor
 import { createBrowserRouter, redirect } from "react-router";
 import {
   confirmPasswordLoader,
-  homeLoader,
+  // homeLoader,
   loginLoader,
   postDetailLoader,
   postsInfiniteLoader,
+  productsInfiniteLoader,
   verifyOtpLoader,
 } from "./loader/loader";
 import {
@@ -46,6 +47,7 @@ const router = createBrowserRouter([
       {
         path: "products",
         element: <ProductsMainLayout />,
+        loader: productsInfiniteLoader,
         children: [
           { index: true, element: <ProductsPage /> },
           { path: ":productId", element: <ProductsDetailPage /> },

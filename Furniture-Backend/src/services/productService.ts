@@ -138,9 +138,9 @@ export const getAllProductsLists = async (options: any) => {
 };
 
 export const getCategoryTypeLists = async () => {
-  return prisma.category.findMany({
-    select: {
-      name: true,
-    },
-  });
+  return prisma.category.findMany();
+};
+
+export const getTypeLists = async () => {
+  return prisma.type.findMany();
 };

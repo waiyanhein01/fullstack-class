@@ -8,7 +8,9 @@ import { getOrSetCache } from "../../utils/cacheUtil";
 import { checkProductIfNotExist } from "../../utils/checkUtil";
 import {
   getAllProductsLists,
+  getCategoryTypeLists,
   getProductWithRelatedData,
+  getTypeLists,
 } from "../../services/productService";
 
 interface UserIdRequest extends Request {
@@ -141,6 +143,10 @@ export const getCategoryType = [
     const user = await getUserById(userId!);
     checkUserIfNotExist(user);
 
-    res.status(200).json({ message: "Get all category and type." });
+    const categories = await getCategoryTypeLists();
+    const types = await getTypeLists();
+    res
+      .status(200)
+      .json({ message: "Get all category and type.", categories, types });
   },
 ];
