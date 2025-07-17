@@ -134,3 +134,13 @@ export const getAllProductsByCursorPagination = [
     });
   },
 ];
+
+export const getCategoryType = [
+  async (req: UserIdRequest, res: Response, next: NextFunction) => {
+    const userId = req.userId;
+    const user = await getUserById(userId!);
+    checkUserIfNotExist(user);
+
+    res.status(200).json({ message: "Get all category and type." });
+  },
+];

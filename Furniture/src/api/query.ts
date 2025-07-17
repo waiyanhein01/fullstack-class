@@ -59,5 +59,13 @@ export const postDetailQuery = (id: number) => ({
   queryFn: () => fetchPostDetail(id),
 });
 
+const fetchCategoryType = async () =>
+  await api.get(`dashboard/category-type`).then((res) => res.data);
+
+export const categoryTypeQuery = () => ({
+  queryKey: ["category", "type"],
+  queryFn: fetchCategoryType,
+});
+
 // useQuery for get data(read) // useQuery can use in component
 // useMutation for post, put,delete data(write)

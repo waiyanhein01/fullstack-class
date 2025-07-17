@@ -16,6 +16,7 @@ import {
 } from "../../../controllers/dashboard/getPostController";
 import {
   getAllProductsByCursorPagination,
+  getCategoryType,
   getProduct,
 } from "../../../controllers/dashboard/getProductController";
 
@@ -55,5 +56,7 @@ router.get("/posts/:id", auth, getPost);
 // Get Product route
 router.get("/products/:id", auth, getProduct);
 router.get("/products", auth, getAllProductsByCursorPagination);
+
+router.get("category-type", auth, getCategoryType);
 
 export default router;
