@@ -19,7 +19,7 @@ const ProductsCard = ({ product }: ProductsCardProps) => {
               src={imgUrl + product.images[0].path}
               alt="Blog Image"
               loading="lazy"
-              className="aspect-square w-full bg-transparent object-contain object-center"
+              className="aspect-square w-full bg-neutral-100 object-contain object-center"
             />
             <h1 className="my-2 ml-4 line-clamp-1 text-base font-semibold">
               {product.name}

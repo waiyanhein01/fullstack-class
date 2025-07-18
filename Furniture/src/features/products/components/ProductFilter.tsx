@@ -15,35 +15,46 @@ import {
 import { Category } from "@/types";
 
 interface ProductFilterProps {
-  filterLists: {
-    categories: Category[];
-    types: Category[];
-  };
+  categories: Category[];
+  types: Category[];
 }
+
+interface FilterListProps {
+  filterLists: ProductFilterProps;
+  productFilterHandler: (categories: string[], types: string[]) => void;
+  selectedCategory: string[];
+  selectedType: string[];
+}
+
 const FormSchema = z.object({
-  categories: z
-    .array(z.string())
-    .refine((value) => value.some((item) => item), {
-      message: "You have to select at least one categories.",
-    }),
-  types: z.array(z.string()).refine((value) => value.some((item) => item), {
-    message: "You have to select at least one types.",
-  }),
+  categories: z.array(z.string()),
+  // .refine((value) => value.some((item) => item), {
+  //   message: "You have to select at least one categories.",
+  // }),
+  types: z.array(z.string()),
+  // .refine((value) => value.some((item) => item), {
+  //   message: "You have to select at least one types.",
+  // }),
 });
 
 // categories,
 
-export function ProductFilter({ filterLists }: ProductFilterProps) {
+export function ProductFilter({
+  filterLists,
+  productFilterHandler,
+  selectedCategory,
+  selectedType,
+}: FilterListProps) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      categories: [],
-      types: [],
+      categories: selectedCategory,
+      types: selectedType,
     },
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data);
+    productFilterHandler(data.categories, data.types);
   }
 
   return (
@@ -69,24 +80,30 @@ export function ProductFilter({ filterLists }: ProductFilterProps) {
                     return (
                       <FormItem
                         key={category.id}
-                        className="flex flex-row items-start space-y-0 space-x-3"
+                        className="flex flex-row items-start space-y-0 space-x-1"
                       >
                         <FormControl>
                           <Checkbox
-                            checked={field.value?.includes(category.id)}
+                            checked={field.value?.includes(
+                              category.id.toString(),
+                            )}
                             onCheckedChange={(checked) => {
                               return checked
-                                ? field.onChange([...field.value, category.id])
+                                ? field.onChange([
+                                    ...field.value,
+                                    category.id.toString(),
+                                  ])
                                 : field.onChange(
                                     field.value?.filter(
-                                      (value) => value !== category.id,
+                                      (value) =>
+                                        value !== category.id.toString(),
                                     ),
                                   );
                             }}
                           />
                         </FormControl>
                         <FormLabel className="text-sm font-normal">
-                          {category.label}
+                          {category.name}
                         </FormLabel>
                       </FormItem>
                     );
@@ -118,24 +135,27 @@ export function ProductFilter({ filterLists }: ProductFilterProps) {
                     return (
                       <FormItem
                         key={type.id}
-                        className="flex flex-row items-start space-y-0 space-x-3"
+                        className="flex flex-row items-start space-y-0 space-x-1"
                       >
                         <FormControl>
                           <Checkbox
-                            checked={field.value?.includes(type.id)}
+                            checked={field.value?.includes(type.id.toString())}
                             onCheckedChange={(checked) => {
                               return checked
-                                ? field.onChange([...field.value, type.id])
+                                ? field.onChange([
+                                    ...field.value,
+                                    type.id.toString(),
+                                  ])
                                 : field.onChange(
                                     field.value?.filter(
-                                      (value) => value !== type.id,
+                                      (value) => value !== type.id.toString(),
                                     ),
                                   );
                             }}
                           />
                         </FormControl>
                         <FormLabel className="text-sm font-normal">
-                          {type.label}
+                          {type.name}
                         </FormLabel>
                       </FormItem>
                     );

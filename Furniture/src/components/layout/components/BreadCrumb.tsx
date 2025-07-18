@@ -30,7 +30,7 @@ export function BreadCrumb({ currentPage, links }: BreadCrumbProps) {
         <BreadcrumbSeparator />
         {links &&
           links.map((link: Link) => (
-            <BreadcrumbItem>
+            <BreadcrumbItem key={link.path}>
               <BreadcrumbLink>
                 <Link key={link.path} to={link.path}>
                   {link.title}

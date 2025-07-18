@@ -29,7 +29,7 @@ const ProductCardSection = ({ products }: ProductsProps) => {
                   alt="Blog Image"
                   loading="lazy"
                   decoding="async"
-                  className="aspect-square w-full object-contain"
+                  className="aspect-square w-full bg-neutral-100 object-contain object-center"
                 />
                 <h1 className="my-2 ml-4 line-clamp-1 text-base font-semibold">
                   {product.name}

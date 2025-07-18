@@ -36,13 +36,13 @@ const Blog = () => {
         <Button
           onClick={() => fetchNextPage()}
           disabled={!hasNextPage || isFetchingNextPage}
-          variant={!hasNextPage ? "ghost" : "secondary"}
+          variant={!hasNextPage ? "ghost" : "outline"}
         >
           {isFetchingNextPage
             ? "Loading..."
             : hasNextPage
-              ? "Load More"
-              : "Nothing more to load"}
+              ? "See More"
+              : "Nothing more to show"}
         </Button>
       </div>
       <div className="">

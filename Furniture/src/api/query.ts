@@ -77,8 +77,8 @@ const fetchInfiniteProducts = async ({
   types?: string | null;
 }) => {
   let query = pageParam ? `?limit=6&cursor=${pageParam}` : "?limit=6";
-  if (categories) query += `&categories=${categories}`;
-  if (types) query += `&types=${types}`;
+  if (categories) query += `&category=${categories}`;
+  if (types) query += `&type=${types}`;
   const res = await api.get(`dashboard/products/${query}`);
   return res.data;
 };
