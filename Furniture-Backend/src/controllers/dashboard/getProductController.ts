@@ -12,6 +12,11 @@ import {
   getProductWithRelatedData,
   getTypeLists,
 } from "../../services/productService";
+import {
+  addProductToFavourite,
+  removeProductFromFavourite,
+} from "../../services/userService";
+import cacheQueue from "../../jobs/queues/cacheQueue";
 
 interface UserIdRequest extends Request {
   userId?: number;
@@ -148,5 +153,44 @@ export const getCategoryType = [
     res
       .status(200)
       .json({ message: "Get all category and type.", categories, types });
+  },
+];
+
+export const favouriteProductToggle = [
+  body("productId", "Product ID is invalid.").isInt({ gt: 0 }),
+  body("favourite", "Favourite status is invalid.").isBoolean(),
+  async (req: UserIdRequest, res: Response, next: NextFunction) => {
+    const errors = validationResult(req).array({ onlyFirstError: true });
+    if (errors.length > 0) {
+      return next(createError(errors[0].msg, 400, errorCode.invalid));
+    }
+
+    const userId = req.userId;
+    const user = await getUserById(userId!);
+    checkUserIfNotExist(user);
+
+    const { productId, favourite } = req.body;
+
+    if (favourite) {
+      await addProductToFavourite(user!.id, productId);
+    } else {
+      await removeProductFromFavourite(user!.id, productId);
+    }
+
+    cacheQueue.add(
+      "cache-product-favourite",
+      {
+        pattern: "products:*",
+      },
+      // This is optional, but can be useful for debugging
+      {
+        jobId: `Invalidate - ${Date.now()}`,
+        priority: 1,
+      }
+    );
+
+    res.status(200).json({
+      message: `Product ${favourite ? "added to" : "removed from"} favourite.`,
+    });
   },
 ];

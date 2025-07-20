@@ -80,6 +80,7 @@ model Product {
   type            Type              @relation(fields: [typeId], references: [id])
   productOnOrders ProductOnOrders[]
   tags            ProductTag[]
+  user            User[]
 }
 
 model ProductOnOrders {
@@ -142,6 +143,7 @@ model User {
   updatedAt       DateTime  @updatedAt
   orders          Order[]
   posts           Post[]
+  products        Product[]
 }
 
 enum Role {

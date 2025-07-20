@@ -15,6 +15,7 @@ import {
   getPost,
 } from "../../../controllers/dashboard/getPostController";
 import {
+  favouriteProductToggle,
   getAllProductsByCursorPagination,
   getCategoryType,
   getProduct,
@@ -57,6 +58,10 @@ router.get("/posts/:id", auth, getPost);
 router.get("/products/:id", auth, getProduct);
 router.get("/products", auth, getAllProductsByCursorPagination);
 
+// Favorite Product toggle route
+router.patch("/products/favorite-toggle", auth, favouriteProductToggle);
+
+// Get Category and Type
 router.get("/category-type", auth, getCategoryType);
 
 export default router;
