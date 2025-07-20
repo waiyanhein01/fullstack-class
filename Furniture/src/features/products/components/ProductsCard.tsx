@@ -37,7 +37,7 @@ const ProductsCard = ({ product }: ProductsCardProps) => {
           </Link>
         </CardContent>
         <CardFooter className="w-full">
-          {product.status === "active" ? (
+          {product.status === "ACTIVE" ? (
             <Button className="flex w-full cursor-pointer items-center justify-center bg-[#3b5d50] hover:bg-[#2f4c3f]">
               <Icons.PlusIcon />
               Add to cart

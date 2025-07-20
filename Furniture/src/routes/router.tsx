@@ -22,6 +22,7 @@ import {
   loginLoader,
   postDetailLoader,
   postsInfiniteLoader,
+  productDetailLoader,
   productsInfiniteLoader,
   verifyOtpLoader,
 } from "./loader/loader";
@@ -50,7 +51,11 @@ const router = createBrowserRouter([
         loader: productsInfiniteLoader,
         children: [
           { index: true, element: <ProductsPage /> },
-          { path: ":productId", element: <ProductsDetailPage /> },
+          {
+            path: ":productId",
+            element: <ProductsDetailPage />,
+            loader: productDetailLoader,
+          },
         ],
       },
       {

@@ -4,6 +4,7 @@ import {
   postDetailQuery,
   postsInfiniteQuery,
   postsQuery,
+  productDetailQuery,
   productsInfiniteQuery,
   productsQuery,
   queryClient,
@@ -80,6 +81,17 @@ export const productsInfiniteLoader = async () => {
   await queryClient.ensureQueryData(categoryTypeQuery());
   await queryClient.prefetchInfiniteQuery(productsInfiniteQuery());
   return null;
+};
+
+export const productDetailLoader = async ({ params }: LoaderFunctionArgs) => {
+  if (!params.productId) {
+    throw new Error("No Product ID provided");
+  }
+  await queryClient.ensureQueryData(productsQuery("limit=4"));
+  await queryClient.ensureQueryData(
+    productDetailQuery(Number(params.productId)),
+  );
+  return { productId: params.productId };
 };
 
 //noted ensureQueryData

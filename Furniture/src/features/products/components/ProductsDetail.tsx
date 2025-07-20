@@ -1,13 +1,12 @@
-import { BreadCrumb } from "@/components/layout/components/BreadCrumb";
 import Container from "@/components/layout/components/Container";
-import { products } from "@/data/products";
 import ProductsCard from "./ProductsCard";
-import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { Separator } from "@/components/ui/separator";
 import ProductRatingStar from "./ProductRatingStar";
+import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
+import { BreadCrumb } from "@/components/layout/components/BreadCrumb";
+import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/Icons";
-import { useParams } from "react-router";
+import { useLoaderData, useNavigate } from "react-router";
 import { formatPrice } from "@/lib/utils";
 import {
   Carousel,
@@ -22,18 +21,32 @@ import {
 } from "@/components/ui/accordion";
 import Autoplay from "embla-carousel-autoplay";
 import { AddToCartForm } from "./AddToCardForm";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { productDetailQuery, productsQuery } from "@/api/query";
+import { Image, Product } from "@/types";
 
 const ProductsDetail = () => {
-  const { productId } = useParams();
+  // const { productId } = useParams();
+  // const currentProduct = products.find((product) => productId === product.id);
+  const nav = useNavigate();
+  const { productId } = useLoaderData();
+  const { data: productDetailData } = useSuspenseQuery(
+    productDetailQuery(Number(productId)),
+  );
+  const { data: productsData } = useSuspenseQuery(productsQuery("limit=4"));
 
-  const currentProduct = products.find((product) => productId === product.id);
-  console.log("currentProduct", currentProduct);
+  const imgUrl = import.meta.env.VITE_IMG_URL;
+
+  const backHandler = () => {
+    nav(-1);
+  };
+
   return (
     <div className="container mx-auto my-20 overflow-hidden">
       <Container>
         <BreadCrumb
           currentPage="ProductsDetail"
-          links={[{ path: "/products", title: "Products" }]}
+          links={[{ onClick: backHandler, title: "Products" }]}
         />
         <div className="flex w-full flex-col gap-16 md:flex-row">
           <div className="w-full md:w-1/2">
@@ -41,15 +54,22 @@ const ProductsDetail = () => {
               plugins={[
                 Autoplay({
                   delay: 2000,
+                  stopOnInteraction: false,
                 }),
               ]}
               className="w-full overflow-hidden"
             >
               <CarouselContent>
-                {currentProduct?.images?.map((image) => (
-                  <CarouselItem>
+                {productDetailData.product.images.map((image: Image) => (
+                  <CarouselItem key={image.id}>
                     <div className="p-1">
-                      <img src={image} alt={image} className="h-full w-full" />
+                      <img
+                        src={imgUrl + image.path}
+                        alt={productDetailData.product.name}
+                        loading="lazy"
+                        decoding="async"
+                        className="object-contain object-center"
+                      />
                     </div>
                   </CarouselItem>
                 ))}
@@ -58,21 +78,23 @@ const ProductsDetail = () => {
           </div>
           <div className="w-full md:w-1/2">
             <h1 className="text-lg font-bold md:text-xl 2xl:text-2xl">
-              {currentProduct?.name}
+              {productDetailData.product.name}
             </h1>
 
             <h2 className="mt-3 font-semibold">
-              {formatPrice(currentProduct?.price ?? 0)}
+              {formatPrice(productDetailData.product.price ?? 0)}
             </h2>
 
             <Separator className="my-5" />
 
             <h3 className="my-4 font-semibold">
-              {currentProduct?.inventory} in stock
+              {productDetailData.product.inventory} in stock
             </h3>
 
             <div className="mt-5 flex items-center justify-between">
-              <ProductRatingStar rating={Number(currentProduct?.rating)} />
+              <ProductRatingStar
+                rating={Number(productDetailData.product.rating)}
+              />
               <span className="">
                 <Button variant="outline">
                   <Icons.HeartIcon />
@@ -82,7 +104,7 @@ const ProductsDetail = () => {
 
             <div className="mt-5">
               <AddToCartForm
-                buyNowDisabled={currentProduct?.status !== "active"}
+                buyNowDisabled={productDetailData.product.status !== "ACTIVE"}
               />
             </div>
 
@@ -93,7 +115,7 @@ const ProductsDetail = () => {
                 <AccordionItem value="item-1">
                   <AccordionTrigger>Description</AccordionTrigger>
                   <AccordionContent>
-                    {currentProduct?.description}
+                    {productDetailData.product.description}
                   </AccordionContent>
                 </AccordionItem>
               </Accordion>
@@ -106,7 +128,7 @@ const ProductsDetail = () => {
           </h1>
           <ScrollArea className="w-96 rounded-md whitespace-nowrap lg:w-full">
             <div className="flex w-max gap-8 p-4 lg:w-full lg:p-0">
-              {products.slice(0, 4).map((product) => (
+              {productsData.products.map((product: Product) => (
                 <ProductsCard product={product} key={product.id} />
               ))}
             </div>

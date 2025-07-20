@@ -1,10 +1,10 @@
-import { BreadCrumb } from "@/components/layout/components/BreadCrumb";
 import Container from "@/components/layout/components/Container";
+import SanitizedComponent from "./SanitizedComponent";
+import { BreadCrumb } from "@/components/layout/components/BreadCrumb";
 import { useLoaderData } from "react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { postDetailQuery, postsQuery } from "@/api/query";
 import { Post, Tag } from "@/types";
-import SanitizedComponent from "./SanitizedComponent";
 import { NavLink } from "react-router";
 import { Icons } from "@/components/Icons";
 
@@ -16,7 +16,7 @@ const BlogDetail = () => {
   const { blogId } = useLoaderData();
 
   const { data: postDetailData } = useSuspenseQuery(postDetailQuery(+blogId));
-  const { data: postData } = useSuspenseQuery(postsQuery("limit=6"));
+  const { data: postsData } = useSuspenseQuery(postsQuery("limit=6"));
 
   const imgUrl = import.meta.env.VITE_IMG_URL;
 
@@ -78,7 +78,7 @@ const BlogDetail = () => {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-1">
-                {postData.posts.map((post: Post) => (
+                {postsData.posts.map((post: Post) => (
                   <NavLink
                     key={post.id}
                     to={`/blogs/${post.id}`}

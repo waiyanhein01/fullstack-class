@@ -102,5 +102,21 @@ export const productsInfiniteQuery = (
   // maxPages: 10,
 });
 
+const fetchProductDetail = async (id: number) => {
+  const product = await api.get(`dashboard/products/${id}`);
+  if (!product) {
+    throw new Response("Product not found", {
+      status: 404,
+      statusText: "Not Found",
+    });
+  }
+  return product.data;
+};
+
+export const productDetailQuery = (id: number) => ({
+  queryKey: ["products", "detail", id],
+  queryFn: () => fetchProductDetail(id),
+});
+
 // useQuery for get data(read) // useQuery can use in component
 // useMutation for post, put,delete data(write)
