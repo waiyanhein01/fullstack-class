@@ -58,8 +58,8 @@ router.get("/posts/:id", auth, getPost);
 router.get("/products/:id", auth, getProduct);
 router.get("/products", auth, getAllProductsByCursorPagination);
 
-// Favorite Product toggle route
-router.patch("/products/favorite-toggle", auth, favouriteProductToggle);
+// Favourite Product toggle route
+router.patch("/products/favourite-toggle", auth, favouriteProductToggle);
 
 // Get Category and Type
 router.get("/category-type", auth, getCategoryType);
