@@ -20,7 +20,11 @@ const FormSchema = z.object({
   number: z.string().min(1),
 });
 
-export function AddToCartForm({buyNowDisabled}: { buyNowDisabled?: boolean }) {
+export function AddToCartForm({
+  buyNowDisabled,
+}: {
+  buyNowDisabled?: boolean;
+}) {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -72,10 +76,20 @@ export function AddToCartForm({buyNowDisabled}: { buyNowDisabled?: boolean }) {
           </Button>
         </div>
         <div className="space-x-2.5">
-          <Button type="button" size={"sm"} disabled={buyNowDisabled} className={` ${buyNowDisabled ? "bg-slate-400" : "btn-primary"}`}>
+          <Button
+            type="button"
+            size={"sm"}
+            disabled={buyNowDisabled}
+            className={` ${buyNowDisabled ? "bg-slate-400" : "btn-primary"}`}
+          >
             Buy now
           </Button>
-          <Button type="submit" size={"sm"} variant="outline" className="cursor-pointer">
+          <Button
+            type="submit"
+            size={"sm"}
+            variant="outline"
+            className="cursor-pointer"
+          >
             Add to cart
           </Button>
         </div>

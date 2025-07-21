@@ -116,7 +116,7 @@ export const deleteProductById = async (id: number) => {
   return prisma.product.delete({ where: { id } });
 };
 
-export const getProductWithRelatedData = async (id: number) => {
+export const getProductWithRelatedData = async (id: number, userId: number) => {
   // note: use "omit" you can exclude fields from the result and "include" you can include related data
   // note: use "select" to specify which fields you want no need to use "include"
   return prisma.product.findUnique({
@@ -127,6 +127,14 @@ export const getProductWithRelatedData = async (id: number) => {
         select: {
           id: true,
           path: true,
+        },
+      },
+      user: {
+        where: {
+          id: userId,
+        },
+        select: {
+          id: true,
         },
       },
     },

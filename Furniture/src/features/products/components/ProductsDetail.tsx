@@ -24,6 +24,7 @@ import { AddToCartForm } from "./AddToCardForm";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { productDetailQuery, productsQuery } from "@/api/query";
 import { Image, Product } from "@/types";
+import FavouriteIcon from "./FavouriteIcon";
 
 const ProductsDetail = () => {
   // const { productId } = useParams();
@@ -95,11 +96,7 @@ const ProductsDetail = () => {
               <ProductRatingStar
                 rating={Number(productDetailData.product.rating)}
               />
-              <span className="">
-                <Button variant="outline">
-                  <Icons.HeartIcon />
-                </Button>
-              </span>
+              <FavouriteIcon />
             </div>
 
             <div className="mt-5">

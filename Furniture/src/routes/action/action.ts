@@ -1,4 +1,5 @@
 import api, { authApi } from "@/api";
+import { queryClient } from "@/api/query";
 import { Status, useAuthStore } from "@/store/authStore";
 import { AxiosError } from "axios";
 import { ActionFunctionArgs, redirect } from "react-router";
@@ -118,6 +119,37 @@ export const confirmPasswordAction = async ({
   } catch (error) {
     if (error instanceof AxiosError) {
       return { error: error.response?.data || "Registration failed" };
+    }
+  }
+};
+
+export const favouriteAction = async ({
+  request,
+  params,
+}: ActionFunctionArgs) => {
+  const formData = await request.formData();
+  const data = {
+    productId: params.productId,
+    favourite: formData.get("favourite") === "true" ? true : false,
+  };
+
+  try {
+    const response = await api.patch(
+      "dashboard/products/favourite-toggle",
+      data,
+    );
+    if (response.status !== 200) {
+      return { error: response.data || "Toggling favourite failed" };
+    }
+
+    await queryClient.invalidateQueries({
+      queryKey: ["products", "detail", params.productId],
+    });
+
+    return null;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return { error: error.response?.data || "Toggling favourite failed" };
     }
   }
 };

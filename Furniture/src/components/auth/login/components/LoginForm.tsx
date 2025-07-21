@@ -6,7 +6,7 @@ import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
-import { Link, useActionData, useNavigation, useSubmit } from "react-router";
+import { Link, useNavigation, useSubmit } from "react-router";
 
 import {
   Form,
@@ -69,7 +69,7 @@ export function LoginForm({
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    submit(data, { method: "post", action: "/login" });
+    submit(data, { method: "post", action: "/login" }); // you can use this action will go current screen to another screen situation
   }
   return (
     <>

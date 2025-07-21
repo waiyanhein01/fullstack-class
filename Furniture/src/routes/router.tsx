@@ -28,6 +28,7 @@ import {
 } from "./loader/loader";
 import {
   confirmPasswordAction,
+  favouriteAction,
   loginAction,
   logoutAction,
   registerAction,
@@ -55,6 +56,7 @@ const router = createBrowserRouter([
             path: ":productId",
             element: <ProductsDetailPage />,
             loader: productDetailLoader,
+            action: favouriteAction,
           },
         ],
       },
