@@ -6,6 +6,7 @@ import { DropdownProfile } from "./DropDownProfile";
 import { User } from "@/data/users";
 import Cart from "./Cart";
 import ProgressLoader from "@/components/progress-loader.tsx";
+import WhiteListHeart from "./WhiteListHeart";
 
 const Header = () => {
   return (
@@ -19,6 +20,7 @@ const Header = () => {
           </div>
 
           <div className="flex items-center gap-4">
+            <WhiteListHeart />
             <Cart />
             <ModeToggle />
             <DropdownProfile user={User} />
