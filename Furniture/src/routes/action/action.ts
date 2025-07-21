@@ -129,7 +129,7 @@ export const favouriteAction = async ({
 }: ActionFunctionArgs) => {
   const formData = await request.formData();
   const data = {
-    productId: params.productId,
+    productId: Number(params.productId),
     favourite: formData.get("favourite") === "true" ? true : false,
   };
 
@@ -143,7 +143,7 @@ export const favouriteAction = async ({
     }
 
     await queryClient.invalidateQueries({
-      queryKey: ["products", "detail", params.productId],
+      queryKey: ["products", "detail", Number(params.productId)],
     });
 
     return null;

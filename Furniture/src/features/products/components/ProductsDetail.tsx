@@ -4,8 +4,6 @@ import ProductRatingStar from "./ProductRatingStar";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { BreadCrumb } from "@/components/layout/components/BreadCrumb";
 import { Separator } from "@/components/ui/separator";
-import { Button } from "@/components/ui/button";
-import { Icons } from "@/components/Icons";
 import { useLoaderData, useNavigate } from "react-router";
 import { formatPrice } from "@/lib/utils";
 import {
@@ -96,7 +94,10 @@ const ProductsDetail = () => {
               <ProductRatingStar
                 rating={Number(productDetailData.product.rating)}
               />
-              <FavouriteIcon />
+              <FavouriteIcon
+                productId={productDetailData.product.id}
+                isFavourite={productDetailData.product.user.length > 0}
+              />
             </div>
 
             <div className="mt-5">
@@ -123,8 +124,8 @@ const ProductsDetail = () => {
           <h1 className="pb-4 text-lg font-bold md:text-xl 2xl:text-2xl">
             More Products from Furniture Shop
           </h1>
-          <ScrollArea className="w-96 rounded-md whitespace-nowrap lg:w-full">
-            <div className="flex w-max gap-8 p-4 lg:w-full lg:p-0">
+          <ScrollArea className="">
+            <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
               {productsData.products.map((product: Product) => (
                 <ProductsCard product={product} key={product.id} />
               ))}
