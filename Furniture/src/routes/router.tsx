@@ -28,7 +28,7 @@ import {
 } from "./loader/loader";
 import {
   confirmPasswordAction,
-  favouriteAction,
+  // favouriteAction,
   loginAction,
   logoutAction,
   registerAction,
@@ -56,7 +56,7 @@ const router = createBrowserRouter([
             path: ":productId",
             element: <ProductsDetailPage />,
             loader: productDetailLoader,
-            action: favouriteAction,
+            // action: favouriteAction, if u want to do optimistic with react router uncomment this line
           },
         ],
       },

@@ -22,7 +22,8 @@ import { AddToCartForm } from "./AddToCardForm";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { productDetailQuery, productsQuery } from "@/api/query";
 import { Image, Product } from "@/types";
-import FavouriteIcon from "./FavouriteIcon";
+// import FavouriteIcon from "./FavouriteIcon"; // if using with react-router
+import FavouriteIcon from "./TanStackOptimistic"; // if using with TanStack Query
 
 const ProductsDetail = () => {
   // const { productId } = useParams();
