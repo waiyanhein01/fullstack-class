@@ -39,13 +39,13 @@ const CartItemForm = ({ onUpdate, onRemove, quantity }: CartItemFormProps) => {
   const currentQuantity = form.watch("quantity");
 
   const handleIncrease = () => {
-    const newQuantity = Math.max(Number(currentQuantity) + 1, 1);
+    const newQuantity = Math.max(Number(currentQuantity) + 1);
     setValue("quantity", newQuantity.toString());
     onUpdate(newQuantity);
   };
 
   const handleDecrease = () => {
-    const newQuantity = Math.max(Number(currentQuantity) - 1, 1);
+    const newQuantity = Math.max(Number(currentQuantity) - 1);
     setValue("quantity", newQuantity.toString());
     onUpdate(newQuantity);
   };
@@ -54,13 +54,13 @@ const CartItemForm = ({ onUpdate, onRemove, quantity }: CartItemFormProps) => {
     <div>
       <Form {...form}>
         <form className="flex items-center justify-between">
-          <div className="flex max-w-[150px]">
+          <div className="flex max-w-[120px]">
             <Button
               onClick={handleDecrease}
               type="button"
               size={"icon"}
               variant="outline"
-              className="cursor-pointer rounded-r-none"
+              className="cursor-pointer rounded-r-none border-neutral-500"
               disabled={Number(currentQuantity) === 1}
             >
               <Icons.MinusIcon className="" />
@@ -72,10 +72,9 @@ const CartItemForm = ({ onUpdate, onRemove, quantity }: CartItemFormProps) => {
                 <FormItem>
                   <FormControl>
                     <Input
-                      type="quantity"
                       min={1}
                       inputMode="numeric"
-                      className="border"
+                      className="pointer-events-none border border-neutral-500 text-center"
                       {...field}
                     />
                   </FormControl>
@@ -89,7 +88,7 @@ const CartItemForm = ({ onUpdate, onRemove, quantity }: CartItemFormProps) => {
               type="button"
               size={"icon"}
               variant="outline"
-              className="cursor-pointer rounded-l-none"
+              className="cursor-pointer rounded-l-none border-neutral-500"
             >
               <Icons.PlusIcon />
             </Button>
