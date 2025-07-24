@@ -65,11 +65,12 @@ export type CartType = {
   name: string;
   price: number;
   quantity: number;
-  image: {
-    id: number;
-    name: string;
-    url: string;
-  };
-  category: string;
-  subcategory: string;
+  image: string;
+  // image: {
+  //   id: number;
+  //   name: string;
+  //   url: string;
+  // };
+  // category: string;
+  // subcategory: string;
 };

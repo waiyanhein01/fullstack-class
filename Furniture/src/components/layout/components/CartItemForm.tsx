@@ -1,5 +1,3 @@
-"use client";
-
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -13,49 +11,68 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { toast } from "sonner";
 import { Icons } from "@/components/Icons";
 import { Separator } from "@/components/ui/separator";
 
+interface CartItemFormProps {
+  onUpdate: (quantity: number) => void;
+  onRemove: () => void;
+  quantity: number;
+}
+
 const FormSchema = z.object({
-  number: z.string().min(1),
+  quantity: z
+    .string()
+    .min(1, "Quantity must be at least 1")
+    .regex(/^\d+$/, "Quantity must be a number"),
 });
 
-const CartItemForm = () => {
+const CartItemForm = ({ onUpdate, onRemove, quantity }: CartItemFormProps) => {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      number: "1",
+      quantity: quantity.toString(),
     },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    toast("Add to cart successfully");
-    console.log("data", data);
-  }
+  const { setValue } = form;
+  const currentQuantity = form.watch("quantity");
+
+  const handleIncrease = () => {
+    const newQuantity = Math.max(Number(currentQuantity) + 1, 1);
+    setValue("quantity", newQuantity.toString());
+    onUpdate(newQuantity);
+  };
+
+  const handleDecrease = () => {
+    const newQuantity = Math.max(Number(currentQuantity) - 1, 1);
+    setValue("quantity", newQuantity.toString());
+    onUpdate(newQuantity);
+  };
+
   return (
     <div>
       <Form {...form}>
-        <form
-          onSubmit={form.handleSubmit(onSubmit)}
-          className="flex items-center justify-between"
-        >
+        <form className="flex items-center justify-between">
           <div className="flex max-w-[150px]">
             <Button
+              onClick={handleDecrease}
+              type="button"
               size={"icon"}
               variant="outline"
               className="cursor-pointer rounded-r-none"
+              disabled={Number(currentQuantity) === 1}
             >
               <Icons.MinusIcon className="" />
             </Button>
             <FormField
               control={form.control}
-              name="number"
+              name="quantity"
               render={({ field }) => (
                 <FormItem>
                   <FormControl>
                     <Input
-                      type="number"
+                      type="quantity"
                       min={1}
                       inputMode="numeric"
                       className="border"
@@ -68,6 +85,8 @@ const CartItemForm = () => {
               )}
             />
             <Button
+              onClick={handleIncrease}
+              type="button"
               size={"icon"}
               variant="outline"
               className="cursor-pointer rounded-l-none"
@@ -77,6 +96,7 @@ const CartItemForm = () => {
           </div>
           <div className="">
             <Button
+              onClick={onRemove}
               type="submit"
               size={"sm"}
               variant="outline"
