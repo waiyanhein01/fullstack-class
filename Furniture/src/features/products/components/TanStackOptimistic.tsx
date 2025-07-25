@@ -25,11 +25,9 @@ const FavouriteIcon = ({ productId, isFavourite }: FavouriteIconProps) => {
         "dashboard/products/favourite-toggle",
         data,
       );
-      console.log(response.data.message, "response");
 
       if (response.status !== 200) {
         toast.error(response.data.message, {
-          duration: 2000,
           style: {
             borderLeft: "10px solid #f44336",
             background: "#ffffff",
@@ -38,7 +36,6 @@ const FavouriteIcon = ({ productId, isFavourite }: FavouriteIconProps) => {
         });
       } else {
         toast.success(response.data.message, {
-          duration: 2000,
           style: {
             borderLeft: "10px solid #4caf50",
             background: "#ffffff",

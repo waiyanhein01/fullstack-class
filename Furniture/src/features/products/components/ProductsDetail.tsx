@@ -24,10 +24,14 @@ import { productDetailQuery, productsQuery } from "@/api/query";
 import { Image, Product } from "@/types";
 // import FavouriteIcon from "./FavouriteIcon"; // if using with react-router
 import FavouriteIcon from "./TanStackOptimistic"; // if using with TanStack Query
+import { useCartStore } from "@/store/cartStore";
 
 const ProductsDetail = () => {
   // const { productId } = useParams();
   // const currentProduct = products.find((product) => productId === product.id);
+
+  const { addItem } = useCartStore();
+
   const nav = useNavigate();
   const { productId } = useLoaderData();
   const { data: productDetailData } = useSuspenseQuery(
@@ -36,6 +40,16 @@ const ProductsDetail = () => {
   const { data: productsData } = useSuspenseQuery(productsQuery("limit=4"));
 
   const imgUrl = import.meta.env.VITE_IMG_URL;
+
+  const handleAddToCart = (quantity: number) => {
+    addItem({
+      id: productDetailData.product.id,
+      name: productDetailData.product.name,
+      price: productDetailData.product.price,
+      image: productDetailData.product.images[0].path,
+      quantity,
+    });
+  };
 
   const backHandler = () => {
     nav(-1);
@@ -104,6 +118,8 @@ const ProductsDetail = () => {
             <div className="mt-5">
               <AddToCartForm
                 buyNowDisabled={productDetailData.product.status !== "ACTIVE"}
+                productId={productDetailData.product.id}
+                handleAddToCart={handleAddToCart}
               />
             </div>
 

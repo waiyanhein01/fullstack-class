@@ -108,7 +108,7 @@ export const register = [
     }
 
     res.status(200).json({
-      message: `Otp has been sent successfully to your phone 09${result.phone}`,
+      message: `Otp has been sent successfully to your phone 09${result.phone}.`,
       phone: result.phone,
       token: result.rememberToken,
     });

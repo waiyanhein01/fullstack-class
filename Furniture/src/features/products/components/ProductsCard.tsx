@@ -2,6 +2,7 @@ import { Icons } from "@/components/Icons";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { formatPrice } from "@/lib/utils";
+import { useCartStore } from "@/store/cartStore";
 import { Product } from "@/types";
 import { Link } from "react-router";
 
@@ -10,6 +11,20 @@ interface ProductsCardProps {
 }
 const ProductsCard = ({ product }: ProductsCardProps) => {
   const imgUrl = import.meta.env.VITE_IMG_URL;
+
+  const { carts, addItem } = useCartStore();
+  const existingItem = carts.find((cart) => cart.id === product.id);
+
+  const handleAddToCart = () => {
+    addItem({
+      id: product.id,
+      name: product.name,
+      image: product.images[0].path,
+      price: product.price,
+      quantity: 1,
+    });
+  };
+
   return (
     <div className="">
       <Card key={product.id} className="overflow-hidden">
@@ -38,7 +53,11 @@ const ProductsCard = ({ product }: ProductsCardProps) => {
         </CardContent>
         <CardFooter className="w-full">
           {product.status === "ACTIVE" ? (
-            <Button className="flex w-full cursor-pointer items-center justify-center bg-[#3b5d50] hover:bg-[#2f4c3f]">
+            <Button
+              onClick={handleAddToCart}
+              disabled={existingItem ? true : false}
+              className="flex w-full cursor-pointer items-center justify-center bg-[#3b5d50] hover:bg-[#2f4c3f]"
+            >
               <Icons.PlusIcon />
               Add to cart
             </Button>

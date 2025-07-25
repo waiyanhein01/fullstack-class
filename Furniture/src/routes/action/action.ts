@@ -3,6 +3,7 @@ import { queryClient } from "@/api/query";
 import { Status, useAuthStore } from "@/store/authStore";
 import { AxiosError } from "axios";
 import { ActionFunctionArgs, redirect } from "react-router";
+import { toast } from "sonner";
 
 export const loginAction = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
@@ -16,8 +17,15 @@ export const loginAction = async ({ request }: ActionFunctionArgs) => {
 
   try {
     const response = await authApi.post("login", credentials);
-    if (response.status !== 200) {
-      return { error: response.data || "Login failed" };
+    console.log(response);
+    if (response.status === 200) {
+      return toast.success(response.data.message, {
+        style: {
+          borderLeft: "10px solid #4caf50",
+          background: "#ffffff",
+          color: "#4caf50",
+        },
+      });
     }
     const redirectUrl =
       new URL(request.url).searchParams.get("redirect") || "/";
@@ -25,18 +33,39 @@ export const loginAction = async ({ request }: ActionFunctionArgs) => {
     return redirect(redirectUrl);
   } catch (error) {
     if (error instanceof AxiosError) {
-      return { error: error.response?.data || "Login failed" };
+      return toast.error(error.response?.data.message, {
+        style: {
+          borderLeft: "10px solid #f44336",
+          background: "#ffffff",
+          color: "#f44336",
+        },
+      });
     }
   }
 };
 
 export const logoutAction = async () => {
   try {
-    await api.post("logout");
+    const response = await api.post("logout");
+    if (response.status === 200) {
+      return toast.success(response.data.message, {
+        style: {
+          borderLeft: "10px solid #4caf50",
+          background: "#ffffff",
+          color: "#4caf50",
+        },
+      });
+    }
     return redirect("/login");
   } catch (error) {
     if (error instanceof AxiosError) {
-      return { error: error.response?.data || "Logout failed" };
+      return toast.error(error.response?.data.message, {
+        style: {
+          borderLeft: "10px solid #f44336",
+          background: "#ffffff",
+          color: "#f44336",
+        },
+      });
     }
   }
 };
@@ -50,6 +79,14 @@ export const registerAction = async ({ request }: ActionFunctionArgs) => {
     const response = await authApi.post("register", credentials);
     if (response.status !== 200) {
       return { error: response.data || "Sending Otp failed" };
+    } else {
+      toast.success(response.data.message, {
+        style: {
+          borderLeft: "10px solid #4caf50",
+          background: "#ffffff",
+          color: "#4caf50",
+        },
+      });
     }
 
     authStore.setAuth(
@@ -79,6 +116,14 @@ export const verifyOtpAction = async ({ request }: ActionFunctionArgs) => {
     const response = await authApi.post("verify-otp", credentials);
     if (response.status !== 200) {
       return { error: response.data || "Verifying Otp failed" };
+    } else {
+      toast.success(response.data.message, {
+        style: {
+          borderLeft: "10px solid #4caf50",
+          background: "#ffffff",
+          color: "#4caf50",
+        },
+      });
     }
 
     authStore.setAuth(
@@ -111,6 +156,14 @@ export const confirmPasswordAction = async ({
     // always care and check here status code is backend response
     if (response.status !== 201) {
       return { error: response.data || "Registration failed" };
+    } else {
+      toast.success(response.data.message, {
+        style: {
+          borderLeft: "10px solid #4caf50",
+          background: "#ffffff",
+          color: "#4caf50",
+        },
+      });
     }
 
     authStore.resetAuth();

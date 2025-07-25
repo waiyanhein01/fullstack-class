@@ -25,6 +25,7 @@ const ProductCard = ({ product }: ProductsProps) => {
       quantity: 1,
     });
   };
+
   return (
     <Card key={product.id} className="overflow-hidden">
       <CardContent>

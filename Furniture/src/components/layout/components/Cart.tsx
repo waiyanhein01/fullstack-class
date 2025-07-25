@@ -22,6 +22,9 @@ export default function Cart() {
   const totalItems = useCartStore((state) => state.getTotalItems());
   const totalPrice = useCartStore((state) => state.getTotalPrice());
 
+  const tax = totalPrice * 0.05;
+  const totalAmount = totalPrice + tax;
+
   const { carts: cartItems } = useCartStore();
   return (
     <div>
@@ -69,25 +72,31 @@ export default function Cart() {
                 <Separator className="" />
                 <div className="mb-3 space-y-2">
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground font-semibold">
+                    <span className="text-muted-foreground text-sm font-semibold">
                       Shipping
                     </span>
-                    <span className="font-semibold">Free</span>
+                    <span className="text-sm font-semibold">Free</span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="text-muted-foreground font-semibold">
-                      Taxes
+                    <span className="text-muted-foreground text-sm font-semibold">
+                      Subtotal
                     </span>
-                    <span className="font-semibold">
-                      Calculated at checkout
-                    </span>
-                  </div>
-                  <div className="flex justify-between">
-                    <span className="text-muted-foreground font-semibold">
-                      Total
-                    </span>
-                    <span className="font-semibold">
+                    <span className="text-sm font-semibold">
                       {formatPrice(totalPrice)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="text-muted-foreground text-sm font-semibold">
+                      Taxes(0.05%)
+                    </span>
+                    <span className="text-sm font-semibold">
+                      {formatPrice(tax)}
+                    </span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span className="font-semibold">Total Amount</span>
+                    <span className="font-semibold">
+                      {formatPrice(totalAmount)}
                     </span>
                   </div>
                 </div>

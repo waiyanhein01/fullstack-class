@@ -40,13 +40,13 @@ const CartItemForm = ({ onUpdate, onRemove, quantity }: CartItemFormProps) => {
 
   const handleIncrease = () => {
     const newQuantity = Math.max(Number(currentQuantity) + 1);
-    setValue("quantity", newQuantity.toString());
+    setValue("quantity", newQuantity.toString(), { shouldValidate: true });
     onUpdate(newQuantity);
   };
 
   const handleDecrease = () => {
-    const newQuantity = Math.max(Number(currentQuantity) - 1);
-    setValue("quantity", newQuantity.toString());
+    const newQuantity = Math.max(Number(currentQuantity) - 1, 1);
+    setValue("quantity", newQuantity.toString(), { shouldValidate: true });
     onUpdate(newQuantity);
   };
 
