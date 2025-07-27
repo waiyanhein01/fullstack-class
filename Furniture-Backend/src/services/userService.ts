@@ -1,6 +1,4 @@
-import { PrismaClient } from "../../generated/prisma";
-
-const prisma = new PrismaClient();
+import { prisma } from "./prismaClientService";
 
 export const addProductToFavourite = async (
   userId: number,
@@ -31,6 +29,33 @@ export const removeProductFromFavourite = async (
       products: {
         disconnect: {
           id: productId,
+        },
+      },
+    },
+  });
+};
+
+export const getModifyUser = async (userId: number) => {
+  return await prisma.user.findUnique({
+    where: { id: userId },
+    select: {
+      id: true,
+      firstName: true,
+      lastName: true,
+      phone: true,
+      email: true,
+      image: true,
+      products: {
+        select: {
+          id: true,
+          name: true,
+          price: true,
+          images: {
+            select: {
+              id: true,
+              path: true,
+            },
+          },
         },
       },
     },

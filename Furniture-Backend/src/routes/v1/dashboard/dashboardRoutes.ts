@@ -7,6 +7,7 @@ import {
   profileImageUpload,
   profileImageUploadMultiple,
   profileImageOptimizedUpload,
+  userProfile,
 } from "../../../controllers/dashboard/profileController";
 import { auth } from "../../../middlewares/auth";
 import {
@@ -63,5 +64,8 @@ router.patch("/products/favourite-toggle", auth, favouriteProductToggle);
 
 // Get Category and Type
 router.get("/category-type", auth, getCategoryType);
+
+// profile
+router.get("/profile", auth, userProfile);
 
 export default router;

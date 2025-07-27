@@ -6,7 +6,7 @@ import { useIsFetching, useMutation } from "@tanstack/react-query";
 import { toast } from "sonner";
 
 interface FavouriteIconProps {
-  productId: number;
+  productId: string;
   isFavourite: boolean;
 }
 
@@ -45,12 +45,6 @@ const FavouriteIcon = ({ productId, isFavourite }: FavouriteIconProps) => {
       }
       return response.data;
     },
-    // onSuccess: () => {
-    //   toast.success("Favourite updated successfully");
-    // },
-    // onError: (error: any) => {
-    //   toast.error(error.message || "Failed to update favourite");
-    // },
 
     onSettled: () => {
       // Optionally, you can invalidate queries or perform other actions after mutation
@@ -60,7 +54,7 @@ const FavouriteIcon = ({ productId, isFavourite }: FavouriteIconProps) => {
     },
   });
 
-  if (fetching || isPending) {
+  if (isPending || fetching) {
     favourite = !isFavourite; // Optimistically update the UI
   }
 

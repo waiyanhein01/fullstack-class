@@ -10,6 +10,7 @@ import path from "path";
 import sharp from "sharp";
 import ImageQueue from "../../jobs/queues/imageQueue";
 import safeUnlink from "../../utils/safeUnlink";
+import { getModifyUser } from "../../services/userService";
 
 interface UserIdRequest extends Request {
   userId?: number;
@@ -199,5 +200,21 @@ export const profileImageOptimizedUpload = async (
     message: "Optimized upload image successfully.Please wait.",
     image: `${splitFileName}.webp`,
     jobId: job.id,
+  });
+};
+
+export const userProfile = async (
+  req: UserIdRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const userId = req.userId;
+  const user = await getUserById(userId!);
+  checkUserIfNotExist(user);
+
+  const modifyUser = await getModifyUser(userId!);
+  res.status(200).json({
+    message: "Get user profile successfully.",
+    user: modifyUser,
   });
 };

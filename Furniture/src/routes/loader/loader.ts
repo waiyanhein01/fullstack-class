@@ -8,6 +8,7 @@ import {
   productsInfiniteQuery,
   productsQuery,
   queryClient,
+  userProfileQuery,
 } from "@/api/query";
 import { Status, useAuthStore } from "@/store/authStore";
 import { LoaderFunctionArgs, redirect } from "react-router";
@@ -98,3 +99,8 @@ export const productDetailLoader = async ({ params }: LoaderFunctionArgs) => {
 // ensureQueryData is used to make sure that the data is fetched before rendering the component
 // if the data is already in the cache, it will not fetch it again
 // if the data is not in the cache, it will fetch it and cache it
+
+export const profileLoader = async () => {
+  await queryClient.ensureQueryData(userProfileQuery());
+  return null;
+};

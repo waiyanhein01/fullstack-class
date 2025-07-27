@@ -9,25 +9,25 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
-import { User } from "@/types";
+import { Profile } from "@/types";
 import { Icons } from "@/components/Icons";
 import { Form } from "react-router";
 
 interface UserProps {
-  user: User;
+  user: Profile;
 }
 
 export function DropdownProfile({ user }: UserProps) {
-  const initialsUserName = user.firstName.charAt(0) + user.lastName.charAt(0);
+  const initialsUserName = user?.firstName.charAt(0) + user?.lastName.charAt(0);
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button
           variant="secondary"
-          className="size-10 rounded-full border-none p-0"
+          className="size-10 rounded-full border border-neutral-300 p-0"
         >
           <Avatar>
-            <AvatarImage src={user.imageUrl} alt={initialsUserName} />
+            <AvatarImage src={user.image} alt={initialsUserName} />
             <AvatarFallback>{initialsUserName}</AvatarFallback>
           </Avatar>
         </Button>
@@ -35,10 +35,10 @@ export function DropdownProfile({ user }: UserProps) {
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <div className="py-2">
           <DropdownMenuLabel className="leading-1">
-            {user.username}
+            {user.firstName + " " + user.lastName}
           </DropdownMenuLabel>
           <DropdownMenuLabel className="text-muted-foreground leading-1">
-            {user.email}
+            {user.email ?? "add your email"}
           </DropdownMenuLabel>
         </div>
         <DropdownMenuSeparator />

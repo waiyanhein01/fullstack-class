@@ -24,6 +24,7 @@ import {
   postsInfiniteLoader,
   productDetailLoader,
   productsInfiniteLoader,
+  profileLoader,
   verifyOtpLoader,
 } from "./loader/loader";
 import {
@@ -34,6 +35,7 @@ import {
   registerAction,
   verifyOtpAction,
 } from "./action/action";
+import FavouritePage from "@/features/favourite/pages/FavouritePage";
 
 const router = createBrowserRouter([
   {
@@ -57,6 +59,11 @@ const router = createBrowserRouter([
             element: <ProductsDetailPage />,
             loader: productDetailLoader,
             // action: favouriteAction, if u want to do optimistic with react router uncomment this line
+          },
+          {
+            path: "favourite",
+            element: <FavouritePage />,
+            loader: profileLoader,
           },
         ],
       },

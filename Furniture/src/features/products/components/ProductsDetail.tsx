@@ -30,17 +30,17 @@ const ProductsDetail = () => {
   // const { productId } = useParams();
   // const currentProduct = products.find((product) => productId === product.id);
 
-  const { addItem } = useCartStore();
-
   const nav = useNavigate();
   const { productId } = useLoaderData();
   const { data: productDetailData } = useSuspenseQuery(
     productDetailQuery(Number(productId)),
   );
   const { data: productsData } = useSuspenseQuery(productsQuery("limit=4"));
+  console.log(productsData);
 
   const imgUrl = import.meta.env.VITE_IMG_URL;
 
+  const { addItem } = useCartStore();
   const handleAddToCart = (quantity: number) => {
     addItem({
       id: productDetailData.product.id,

@@ -17,7 +17,7 @@ export const loginAction = async ({ request }: ActionFunctionArgs) => {
 
   try {
     const response = await authApi.post("login", credentials);
-    console.log(response);
+    console.log(response, "response");
     if (response.status === 200) {
       return toast.success(response.data.message, {
         style: {
@@ -29,8 +29,9 @@ export const loginAction = async ({ request }: ActionFunctionArgs) => {
     }
     const redirectUrl =
       new URL(request.url).searchParams.get("redirect") || "/";
+    redirect(redirectUrl);
 
-    return redirect(redirectUrl);
+    return response.data;
   } catch (error) {
     if (error instanceof AxiosError) {
       return toast.error(error.response?.data.message, {
@@ -183,7 +184,7 @@ export const favouriteAction = async ({
   const formData = await request.formData();
   const data = {
     productId: Number(params.productId),
-    favourite: formData.get("favourite") === "true" ? true : false,
+    favourite: formData.get("favourite") === "true",
   };
 
   try {
@@ -196,7 +197,7 @@ export const favouriteAction = async ({
     }
 
     await queryClient.invalidateQueries({
-      queryKey: ["products", "detail", Number(params.productId)],
+      queryKey: ["products", "detail", params.productId],
     });
 
     return null;

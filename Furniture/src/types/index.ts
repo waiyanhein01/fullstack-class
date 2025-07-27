@@ -74,3 +74,13 @@ export type CartType = {
   // category: string;
   // subcategory: string;
 };
+
+export type Profile = {
+  id: number;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  email: string;
+  image: string;
+  products: Product[];
+};

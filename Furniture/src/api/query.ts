@@ -118,5 +118,15 @@ export const productDetailQuery = (id: number) => ({
   queryFn: () => fetchProductDetail(id),
 });
 
+export const fetchUserProfile = async () => {
+  const res = await api.get("dashboard/profile");
+  return res.data;
+};
+
+export const userProfileQuery = () => ({
+  queryKey: ["profile"],
+  queryFn: fetchUserProfile,
+});
+
 // useQuery for get data(read) // useQuery can use in component
 // useMutation for post, put,delete data(write)

@@ -448,7 +448,9 @@ export const login = [
         path: "/",
       });
 
-    res.status(200).json({ message: "Login successfully.", userId: user!.id });
+    res
+      .status(200)
+      .json({ message: "Login successfully.", userId: user!.id, user });
   },
 ];
 
