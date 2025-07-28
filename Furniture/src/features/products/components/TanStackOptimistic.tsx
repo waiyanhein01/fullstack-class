@@ -17,7 +17,7 @@ const FavouriteIcon = ({ productId, isFavourite }: FavouriteIconProps) => {
     mutationFn: async () => {
       // Perform the mutation (e.g., API call)
       const data = {
-        productId: +productId,
+        productId: productId,
         favourite: !isFavourite,
       };
 
@@ -61,8 +61,8 @@ const FavouriteIcon = ({ productId, isFavourite }: FavouriteIconProps) => {
   return (
     <Button
       variant="outline"
-      onClick={() => mutate()}
       title={favourite ? "Remove from favourite" : "Add to favourite"}
+      onClick={() => mutate()}
     >
       <Icons.HeartIcon
         className={` ${favourite ? "fill-red-500 text-red-500" : "text-red-500"}`}

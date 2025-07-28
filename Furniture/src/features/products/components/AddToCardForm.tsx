@@ -35,7 +35,6 @@ export function AddToCartForm({
   handleAddToCart,
 }: AddToCartFormProps) {
   const { carts } = useCartStore();
-
   const existingItem = carts.find((item) => item.id === productId);
 
   const form = useForm<z.infer<typeof FormSchema>>({

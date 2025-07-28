@@ -3,6 +3,7 @@ import {
   Eye,
   EyeClosed,
   LayoutDashboard,
+  LoaderCircle,
   LogOut,
   Settings,
   ShoppingCart,
@@ -195,4 +196,5 @@ export const Icons = {
   TrashIcon: Trash2,
   EyeClosedIcon: EyeClosed,
   EyeIcon: Eye,
+  LoaderCircleIcon: LoaderCircle,
 };

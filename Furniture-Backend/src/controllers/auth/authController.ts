@@ -27,6 +27,7 @@ interface UserIdRequest extends Request {
   userId?: number;
 }
 
+// register
 export const register = [
   body("phone", "Invalid phone number.")
     .trim()
@@ -330,6 +331,7 @@ export const confirmPassword = [
   },
 ];
 
+// login
 export const login = [
   body("phone", "Invalid phone number.")
     .trim()
@@ -448,12 +450,11 @@ export const login = [
         path: "/",
       });
 
-    res
-      .status(200)
-      .json({ message: "Login successfully.", userId: user!.id, user });
+    res.status(200).json({ message: "Login successfully.", userId: user!.id });
   },
 ];
 
+// forget password
 export const forgetPassword = [
   body("phone", "Invalid phone number.")
     .trim()
@@ -739,6 +740,7 @@ export const resetPassword = [
   },
 ];
 
+// logout
 export const logout = async (
   req: Request,
   res: Response,

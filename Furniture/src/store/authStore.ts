@@ -3,8 +3,8 @@ import { immer } from "zustand/middleware/immer";
 import { persist, createJSONStorage } from "zustand/middleware";
 
 export enum Status {
-  register = "register",
-  verify_otp = "verify-otp",
+  verify_register_otp = "verify-register-otp",
+  verify_forgot_password_otp = "verify-forgot-password-otp",
   confirm_password = "confirm-password",
   reset_password = "reset-password",
   none = "none",

@@ -36,7 +36,6 @@ const ProductsDetail = () => {
     productDetailQuery(Number(productId)),
   );
   const { data: productsData } = useSuspenseQuery(productsQuery("limit=4"));
-  console.log(productsData);
 
   const imgUrl = import.meta.env.VITE_IMG_URL;
 

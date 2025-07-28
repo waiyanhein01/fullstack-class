@@ -49,7 +49,7 @@ const FormSchema = z.object({
     }),
 });
 
-export function ConfirmPassword({
+export function ResetPassword({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"form">) {
@@ -75,7 +75,7 @@ export function ConfirmPassword({
     } else {
       setIsMatchError(null);
     }
-    submit(data, { method: "post", action: "/register/confirm-password" }); // this action is for frontend route
+    submit(data, { method: "post", action: "/forgot-password/reset-password" }); // this action is for frontend route
   }
 
   return (
@@ -95,11 +95,9 @@ export function ConfirmPassword({
                 <div className="flex size-8 items-center justify-center rounded-md">
                   <Icons.NavIcon className="size-6" />
                 </div>
-                <span className="sr-only">confirm password</span>
+                <span className="sr-only">reset password</span>
               </Link>
-              <h1 className="text-xl font-bold">
-                Make password for your account
-              </h1>
+              <h1 className="text-xl font-bold">Create your new password</h1>
               <div className="text-center text-sm">
                 Passwords must be at least 8 digits long and contains only
                 numbers. They must match.
@@ -112,11 +110,11 @@ export function ConfirmPassword({
                   name="password"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Password</FormLabel>
+                      <FormLabel>New Password</FormLabel>
                       <FormControl>
                         <PasswordInput
                           className="focus:border-primary focus:ring-primary rounded-md border"
-                          placeholder="Enter your password"
+                          placeholder="Enter your new password"
                           inputMode="numeric"
                           {...field}
                         />
@@ -132,11 +130,11 @@ export function ConfirmPassword({
                   name="confirmPassword"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Confirm Password</FormLabel>
+                      <FormLabel>Confirm New Password</FormLabel>
                       <FormControl>
                         <PasswordInput
                           className="focus:border-primary focus:ring-primary rounded-md border"
-                          placeholder="Enter your confirm password"
+                          placeholder="Enter your confirm new password"
                           inputMode="numeric"
                           {...field}
                         />
@@ -152,10 +150,10 @@ export function ConfirmPassword({
                       {actionData?.error.message}
                     </p>
                     <Link
-                      to="/register"
+                      to="/login"
                       className="text-sm underline underline-offset-4"
                     >
-                      Back to register
+                      Back to login
                     </Link>
                   </div>
                 )}

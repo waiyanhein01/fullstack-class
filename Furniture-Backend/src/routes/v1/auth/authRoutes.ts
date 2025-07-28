@@ -20,7 +20,7 @@ router.post("/confirm-password", confirmPassword);
 router.post("/login", login);
 router.post("/logout", logout);
 
-router.post("/forget-password", forgetPassword);
+router.post("/forgot-password", forgetPassword);
 router.post("/verify-reset-password-otp", verifyResetOtp);
 router.post("/reset-password", resetPassword);
 

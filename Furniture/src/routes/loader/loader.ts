@@ -25,10 +25,11 @@ export const loginLoader = async () => {
   }
 };
 
+// register
 export const verifyOtpLoader = async () => {
   const authCheck = useAuthStore.getState();
 
-  if (authCheck.status !== Status.verify_otp) {
+  if (authCheck.status !== Status.verify_register_otp) {
     return redirect("/register");
   }
 
@@ -40,6 +41,27 @@ export const confirmPasswordLoader = async () => {
 
   if (authCheck.status !== Status.confirm_password) {
     return redirect("/register/verify-otp");
+  }
+
+  return null;
+};
+
+// forgot password
+export const verifyForgotPasswordOtpLoader = async () => {
+  const authCheck = useAuthStore.getState();
+
+  if (authCheck.status !== Status.verify_forgot_password_otp) {
+    return redirect("/forgot-password");
+  }
+
+  return null;
+};
+
+export const resetPasswordLoader = async () => {
+  const authCheck = useAuthStore.getState();
+
+  if (authCheck.status !== Status.reset_password) {
+    return redirect("/forgot-password/verify-forgot-password-otp");
   }
 
   return null;

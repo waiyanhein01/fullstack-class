@@ -25,19 +25,29 @@ import {
   productDetailLoader,
   productsInfiniteLoader,
   profileLoader,
+  resetPasswordLoader,
+  verifyForgotPasswordOtpLoader,
   verifyOtpLoader,
 } from "./loader/loader";
 import {
   confirmPasswordAction,
+  forgotPasswordAction,
   // favouriteAction,
   loginAction,
   logoutAction,
   registerAction,
+  resetPasswordAction,
+  verifyForgotPasswordOtpAction,
   verifyOtpAction,
 } from "./action/action";
 import FavouritePage from "@/features/favourite/pages/FavouritePage";
+import ForgotPasswordMainLayout from "@/components/auth/forgot-password/components/ForgotPasswordMainLayout";
+import ForgotPasswordPage from "@/components/auth/forgot-password/pages/ForgotPasswordPage";
+import ResetPasswordPage from "@/components/auth/forgot-password/pages/ResetPasswordPage";
+import VerifyForgotPasswordOtpPage from "@/components/auth/forgot-password/pages/VerifyForgotPasswordOtpPage";
 
 const router = createBrowserRouter([
+  // dashboard routes
   {
     path: "/",
     element: <MainLayoutPage />,
@@ -89,12 +99,16 @@ const router = createBrowserRouter([
       },
     ],
   },
+
+  // login route
   {
     path: "/login",
     element: <LoginPage />,
     action: loginAction, // for submission and mutation
     loader: loginLoader, // for preloading before render login page
   },
+
+  // register route
   {
     path: "/register",
     element: <RegisterMainLayout />,
@@ -119,6 +133,33 @@ const router = createBrowserRouter([
       },
     ],
   },
+
+  // forgot password route
+  {
+    path: "/forgot-password",
+    element: <ForgotPasswordMainLayout />,
+    children: [
+      {
+        index: true,
+        element: <ForgotPasswordPage />,
+        action: forgotPasswordAction,
+      },
+      {
+        path: "verify-forgot-password-otp",
+        element: <VerifyForgotPasswordOtpPage />,
+        loader: verifyForgotPasswordOtpLoader,
+        action: verifyForgotPasswordOtpAction,
+      },
+      {
+        path: "reset-password",
+        element: <ResetPasswordPage />,
+        loader: resetPasswordLoader,
+        action: resetPasswordAction,
+      },
+    ],
+  },
+
+  // logout
   { path: "/logout", action: logoutAction, loader: () => redirect("/login") },
 ]);
 

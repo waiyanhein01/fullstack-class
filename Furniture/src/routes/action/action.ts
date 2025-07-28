@@ -71,6 +71,7 @@ export const logoutAction = async () => {
   }
 };
 
+// register
 export const registerAction = async ({ request }: ActionFunctionArgs) => {
   const authStore = useAuthStore.getState();
   const formData = await request.formData();
@@ -79,7 +80,7 @@ export const registerAction = async ({ request }: ActionFunctionArgs) => {
   try {
     const response = await authApi.post("register", credentials);
     if (response.status !== 200) {
-      return { error: response.data || "Sending Otp failed" };
+      return { error: response.data.message || "Sending Otp failed" };
     } else {
       toast.success(response.data.message, {
         style: {
@@ -93,7 +94,7 @@ export const registerAction = async ({ request }: ActionFunctionArgs) => {
     authStore.setAuth(
       response.data.phone,
       response.data.token,
-      Status.verify_otp,
+      Status.verify_register_otp,
     );
 
     return redirect("/register/verify-otp");
@@ -116,7 +117,7 @@ export const verifyOtpAction = async ({ request }: ActionFunctionArgs) => {
   try {
     const response = await authApi.post("verify-otp", credentials);
     if (response.status !== 200) {
-      return { error: response.data || "Verifying Otp failed" };
+      return { error: response.data.message || "Verifying Otp failed" };
     } else {
       toast.success(response.data.message, {
         style: {
@@ -156,7 +157,117 @@ export const confirmPasswordAction = async ({
     const response = await authApi.post("confirm-password", credentials);
     // always care and check here status code is backend response
     if (response.status !== 201) {
-      return { error: response.data || "Registration failed" };
+      return { error: response.data.message || "Registration failed" };
+    } else {
+      toast.success(response.data.message, {
+        style: {
+          borderLeft: "10px solid #4caf50",
+          background: "#ffffff",
+          color: "#4caf50",
+        },
+      });
+    }
+
+    authStore.resetAuth();
+
+    return redirect("/login");
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return { error: error.response?.data || "Registration failed" };
+    }
+  }
+};
+
+// forgot password
+export const forgotPasswordAction = async ({ request }: ActionFunctionArgs) => {
+  const authStore = useAuthStore.getState();
+  const formData = await request.formData();
+  const credentials = Object.fromEntries(formData); // Convert FormData to an object if u have too many input fields
+
+  try {
+    const response = await authApi.post("forgot-password", credentials);
+    if (response.status !== 200) {
+      return { error: response.data.message || "Sending Otp failed" };
+    } else {
+      toast.success(response.data.message, {
+        style: {
+          borderLeft: "10px solid #4caf50",
+          background: "#ffffff",
+          color: "#4caf50",
+        },
+      });
+    }
+
+    authStore.setAuth(
+      response.data.phone,
+      response.data.token,
+      Status.verify_forgot_password_otp,
+    );
+
+    return redirect("/forgot-password/verify-forgot-password-otp");
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return { error: error.response?.data || "Sending Otp failed" };
+    }
+  }
+};
+
+export const verifyForgotPasswordOtpAction = async ({
+  request,
+}: ActionFunctionArgs) => {
+  const authStore = useAuthStore.getState();
+  const formData = await request.formData();
+  const credentials = {
+    phone: authStore.phone,
+    token: authStore.token,
+    otp: formData.get("otp"),
+  };
+
+  try {
+    const response = await authApi.post(
+      "verify-reset-password-otp",
+      credentials,
+    );
+    if (response.status !== 200) {
+      return { error: response.data.message || "Verifying Otp failed" };
+    } else {
+      toast.success(response.data.message, {
+        style: {
+          borderLeft: "10px solid #4caf50",
+          background: "#ffffff",
+          color: "#4caf50",
+        },
+      });
+    }
+
+    authStore.setAuth(
+      response.data.phone,
+      response.data.token,
+      Status.reset_password,
+    );
+
+    return redirect("/forgot-password/reset-password");
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return { error: error.response?.data || "Verifying Otp failed" };
+    }
+  }
+};
+
+export const resetPasswordAction = async ({ request }: ActionFunctionArgs) => {
+  const authStore = useAuthStore.getState();
+  const formData = await request.formData();
+  const credentials = {
+    phone: authStore.phone,
+    token: authStore.token,
+    password: formData.get("password"),
+  };
+
+  try {
+    const response = await authApi.post("reset-password", credentials);
+    // always care and check here status code is backend response
+    if (response.status !== 200) {
+      return { error: response.data.message || "Resetting Password failed" };
     } else {
       toast.success(response.data.message, {
         style: {
@@ -172,11 +283,12 @@ export const confirmPasswordAction = async ({
     return redirect("/");
   } catch (error) {
     if (error instanceof AxiosError) {
-      return { error: error.response?.data || "Registration failed" };
+      return { error: error.response?.data || "Resetting Password failed" };
     }
   }
 };
 
+// favourite
 export const favouriteAction = async ({
   request,
   params,
@@ -193,7 +305,7 @@ export const favouriteAction = async ({
       data,
     );
     if (response.status !== 200) {
-      return { error: response.data || "Toggling favourite failed" };
+      return { error: response.data.message || "Toggling favourite failed" };
     }
 
     await queryClient.invalidateQueries({

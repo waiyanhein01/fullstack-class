@@ -28,7 +28,7 @@ const FormSchema = z.object({
   }),
 });
 
-export function VerifyOtp() {
+export function VerifyForgotPasswordOtp() {
   const submit = useSubmit();
   const navigation = useNavigation();
   const actionData = useActionData();
@@ -43,7 +43,10 @@ export function VerifyOtp() {
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    submit(data, { method: "post", action: "/register/verify-otp" }); // this action is for frontend route
+    submit(data, {
+      method: "post",
+      action: "/forgot-password/verify-forgot-password-otp", // this action is for frontend route
+    });
   }
 
   return (
@@ -61,7 +64,9 @@ export function VerifyOtp() {
                 </div>
                 <span className="sr-only">verify otp</span>
               </Link>
-              <h1 className="text-xl font-bold">Verify Otp for Registration</h1>
+              <h1 className="text-xl font-bold">
+                Verify Otp for Forgot Password
+              </h1>
               <div className="text-center text-sm">
                 We've sent Otp(one-time password) to your phone.
               </div>
