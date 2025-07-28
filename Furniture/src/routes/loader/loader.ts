@@ -36,10 +36,10 @@ export const verifyOtpLoader = async () => {
   return null;
 };
 
-export const confirmPasswordLoader = async () => {
+export const accountRegistrationLoader = async () => {
   const authCheck = useAuthStore.getState();
 
-  if (authCheck.status !== Status.confirm_password) {
+  if (authCheck.status !== Status.account_registration) {
     return redirect("/register/verify-otp");
   }
 

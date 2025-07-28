@@ -13,11 +13,10 @@ import LoginPage from "@/components/auth/login/pages/LoginPage";
 import RegisterPage from "@/components/auth/register/pages/RegisterPage";
 import RegisterMainLayout from "@/components/auth/register/components/RegisterMainLayout";
 import VerifyOtpPage from "@/components/auth/register/pages/VerifyOtpPage";
-import ConfirmPasswordPage from "@/components/auth/register/pages/ConfirmPasswordPage";
 
 import { createBrowserRouter, redirect } from "react-router";
 import {
-  confirmPasswordLoader,
+  accountRegistrationLoader,
   // homeLoader,
   loginLoader,
   postDetailLoader,
@@ -30,7 +29,7 @@ import {
   verifyOtpLoader,
 } from "./loader/loader";
 import {
-  confirmPasswordAction,
+  accountRegistrationAction,
   forgotPasswordAction,
   // favouriteAction,
   loginAction,
@@ -45,6 +44,7 @@ import ForgotPasswordMainLayout from "@/components/auth/forgot-password/componen
 import ForgotPasswordPage from "@/components/auth/forgot-password/pages/ForgotPasswordPage";
 import ResetPasswordPage from "@/components/auth/forgot-password/pages/ResetPasswordPage";
 import VerifyForgotPasswordOtpPage from "@/components/auth/forgot-password/pages/VerifyForgotPasswordOtpPage";
+import AccountRegistrationPage from "@/components/auth/register/pages/AccountRegistrationPage";
 
 const router = createBrowserRouter([
   // dashboard routes
@@ -126,10 +126,10 @@ const router = createBrowserRouter([
         action: verifyOtpAction,
       },
       {
-        path: "confirm-password",
-        element: <ConfirmPasswordPage />,
-        loader: confirmPasswordLoader,
-        action: confirmPasswordAction,
+        path: "account-registration",
+        element: <AccountRegistrationPage />,
+        loader: accountRegistrationLoader,
+        action: accountRegistrationAction,
       },
     ],
   },

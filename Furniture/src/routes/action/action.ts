@@ -131,10 +131,10 @@ export const verifyOtpAction = async ({ request }: ActionFunctionArgs) => {
     authStore.setAuth(
       response.data.phone,
       response.data.token,
-      Status.confirm_password,
+      Status.account_registration,
     );
 
-    return redirect("/register/confirm-password");
+    return redirect("/register/account-registration");
   } catch (error) {
     if (error instanceof AxiosError) {
       return { error: error.response?.data || "Verifying Otp failed" };
@@ -142,7 +142,7 @@ export const verifyOtpAction = async ({ request }: ActionFunctionArgs) => {
   }
 };
 
-export const confirmPasswordAction = async ({
+export const accountRegistrationAction = async ({
   request,
 }: ActionFunctionArgs) => {
   const authStore = useAuthStore.getState();
@@ -154,7 +154,7 @@ export const confirmPasswordAction = async ({
   };
 
   try {
-    const response = await authApi.post("confirm-password", credentials);
+    const response = await authApi.post("account-registration", credentials);
     // always care and check here status code is backend response
     if (response.status !== 201) {
       return { error: response.data.message || "Registration failed" };

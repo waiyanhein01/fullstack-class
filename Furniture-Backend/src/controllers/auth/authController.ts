@@ -210,7 +210,20 @@ export const verifyOtp = [
   },
 ];
 
-export const confirmPassword = [
+export const accountRegistration = [
+  body("firstName", "Invalid first name.")
+    .trim()
+    .notEmpty()
+    .escape()
+    .optional(),
+  body("lastName", "Invalid last name.").trim().notEmpty().escape().optional(),
+  body("email", "Invalid email.")
+    .trim()
+    .notEmpty()
+    .isEmail()
+    .escape()
+    .optional(),
+  body("image", "Invalid image").optional(),
   body("phone", "Invalid phone number.")
     .trim()
     .notEmpty()
@@ -228,7 +241,8 @@ export const confirmPassword = [
       return next(createError(errors[0].msg, 400, errorCode.invalid));
     }
 
-    const { phone, password, token } = req.body;
+    const { firstName, lastName, email, phone, password, token, image } =
+      req.body;
 
     // check user exist in user table with this phone number
     const user = await getUserByPhone(phone);
@@ -274,6 +288,10 @@ export const confirmPassword = [
     const hashedPassword = await bcrypt.hash(password, salt);
 
     const userData = {
+      firstName,
+      lastName,
+      email,
+      image,
       phone,
       password: hashedPassword,
       randToken: "This will be replaced later",
@@ -281,53 +299,10 @@ export const confirmPassword = [
 
     const newUser = await createUser(userData);
 
-    //jwt token
-    const acceptTokenPayload = {
-      id: newUser.id,
-    };
-
-    const refreshTokenPayload = {
-      phone: newUser.phone,
-      id: newUser.id,
-    };
-
-    const acceptToken = jwt.sign(
-      acceptTokenPayload,
-      process.env.ACCESS_TOKEN_SECRET!,
-      {
-        expiresIn: 60 * 15,
-      }
-    );
-
-    const refreshToken = jwt.sign(
-      refreshTokenPayload,
-      process.env.REFRESH_TOKEN_SECRET!,
-      {
-        expiresIn: "30d",
-      }
-    );
-
-    await updateUser(newUser.id, {
-      randToken: refreshToken,
+    res.status(201).json({
+      message: "Account registration successfully.",
+      userId: newUser.id,
     });
-    res
-      .cookie("accessToken", acceptToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-        maxAge: 15 * 60 * 1000, // 15 minutes
-      })
-      .cookie("refreshToken", refreshToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production",
-        sameSite: process.env.NODE_ENV === "production" ? "none" : "strict",
-        maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
-      })
-      .status(201)
-      .json({
-        message: "Your account has been created.",
-        userId: newUser.id,
-      });
   },
 ];
 

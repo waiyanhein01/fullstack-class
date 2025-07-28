@@ -5,7 +5,7 @@ import { persist, createJSONStorage } from "zustand/middleware";
 export enum Status {
   verify_register_otp = "verify-register-otp",
   verify_forgot_password_otp = "verify-forgot-password-otp",
-  confirm_password = "confirm-password",
+  account_registration = "account_registration",
   reset_password = "reset-password",
   none = "none",
 }

@@ -49,7 +49,7 @@ const FormSchema = z.object({
     }),
 });
 
-export function ConfirmPassword({
+export function AccountRegistration({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<"form">) {
@@ -75,7 +75,7 @@ export function ConfirmPassword({
     } else {
       setIsMatchError(null);
     }
-    submit(data, { method: "post", action: "/register/confirm-password" }); // this action is for frontend route
+    submit(data, { method: "post", action: "/register/account-registration" }); // this action is for frontend route
   }
 
   return (
