@@ -69,6 +69,7 @@ const Products = () => {
 
     // update url & trigger via query key
     setSearchParams(newParams);
+    // cache params in store and session
     setParams(newParams.toString());
     // cancel In-flight queries
     queryClient.cancelQueries({ queryKey: ["products", "infinite"] });
@@ -80,6 +81,9 @@ const Products = () => {
 
   useEffect(() => {
     setSearchParams(getParams());
+    return () => {
+      setSearchParams(new URLSearchParams());
+    };
   }, [searchParams, getParams, setSearchParams]);
 
   return status === "pending" ? (

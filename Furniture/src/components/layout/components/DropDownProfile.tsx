@@ -11,7 +11,7 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Profile } from "@/types";
 import { Icons } from "@/components/Icons";
-import { Form } from "react-router";
+import { Form, Link } from "react-router";
 
 interface UserProps {
   user: Profile;
@@ -49,14 +49,11 @@ export function DropdownProfile({ user }: UserProps) {
             {/* <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut> */}
           </DropdownMenuItem>
           <DropdownMenuItem>
-            <Icons.BillIcon />
-            Billing
-            {/* <DropdownMenuShortcut>⌘B</DropdownMenuShortcut> */}
-          </DropdownMenuItem>
-          <DropdownMenuItem>
-            <Icons.SettingsIcon />
-            Settings
-            {/* <DropdownMenuShortcut>⌘S</DropdownMenuShortcut> */}
+            <Link to={"/change-password"} className="flex items-center gap-2">
+              <Icons.PasswordIcon />
+              Change Password
+              {/* <DropdownMenuShortcut>⌘B</DropdownMenuShortcut> */}
+            </Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />

@@ -13,7 +13,7 @@ const PasswordInput = React.forwardRef<HTMLInputElement, InputProps>(
   ({ className, ...props }, ref) => {
     const [isPasswordVisible, setIsPasswordVisible] = useState(false);
     return (
-      <div className="relative">
+      <div className="relative w-full">
         <Input
           ref={ref}
           type={isPasswordVisible ? "text" : "password"}

@@ -291,6 +291,36 @@ export const resetPasswordAction = async ({ request }: ActionFunctionArgs) => {
   }
 };
 
+export const changePasswordAction = async ({ request }: ActionFunctionArgs) => {
+  const formData = await request.formData();
+  const credentials = Object.fromEntries(formData); // Convert FormData to an object if u have too many input fields
+
+  try {
+    const response = await authApi.patch(
+      "dashboard/change-password",
+      credentials,
+    );
+    // always care and check here status code is backend response
+    if (response.status !== 200) {
+      return { error: response.data.message || "Changing Password failed" };
+    } else {
+      toast.success(response.data.message, {
+        style: {
+          borderLeft: "10px solid #4caf50",
+          background: "#ffffff",
+          color: "#4caf50",
+        },
+      });
+    }
+
+    return redirect("/");
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return { error: error.response?.data || "Changing Password failed" };
+    }
+  }
+};
+
 // favourite
 export const favouriteAction = async ({
   request,

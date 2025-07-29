@@ -30,6 +30,7 @@ import {
 } from "./loader/loader";
 import {
   accountRegistrationAction,
+  changePasswordAction,
   forgotPasswordAction,
   // favouriteAction,
   loginAction,
@@ -45,6 +46,7 @@ import ForgotPasswordPage from "@/components/auth/forgot-password/pages/ForgotPa
 import ResetPasswordPage from "@/components/auth/forgot-password/pages/ResetPasswordPage";
 import VerifyForgotPasswordOtpPage from "@/components/auth/forgot-password/pages/VerifyForgotPasswordOtpPage";
 import AccountRegistrationPage from "@/components/auth/register/pages/AccountRegistrationPage";
+import ChangePasswordPage from "@/components/auth/change-password/pages/ChangePasswordPage";
 
 const router = createBrowserRouter([
   // dashboard routes
@@ -157,6 +159,13 @@ const router = createBrowserRouter([
         action: resetPasswordAction,
       },
     ],
+  },
+
+  //change password
+  {
+    path: "/change-password",
+    element: <ChangePasswordPage />,
+    action: changePasswordAction,
   },
 
   // logout

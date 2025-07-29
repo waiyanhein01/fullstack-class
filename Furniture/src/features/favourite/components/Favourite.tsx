@@ -9,7 +9,6 @@ import { Link } from "react-router";
 
 const Favourite = () => {
   const { data } = useSuspenseQuery(userProfileQuery());
-  console.log(data, "data");
   const imgUrl = import.meta.env.VITE_IMG_URL;
 
   return (

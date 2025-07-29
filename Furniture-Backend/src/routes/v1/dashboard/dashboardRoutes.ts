@@ -8,6 +8,7 @@ import {
   profileImageUploadMultiple,
   profileImageOptimizedUpload,
   userProfile,
+  changePassword,
 } from "../../../controllers/dashboard/profileController";
 import { auth } from "../../../middlewares/auth";
 import {
@@ -67,5 +68,8 @@ router.get("/category-type", auth, getCategoryType);
 
 // profile
 router.get("/profile", auth, userProfile);
+
+//change password
+router.patch("/change-password", auth, changePassword);
 
 export default router;

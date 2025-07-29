@@ -4,6 +4,7 @@ import {
   EyeClosed,
   LayoutDashboard,
   LoaderCircle,
+  LockIcon,
   LogOut,
   Settings,
   ShoppingCart,
@@ -197,4 +198,5 @@ export const Icons = {
   EyeClosedIcon: EyeClosed,
   EyeIcon: Eye,
   LoaderCircleIcon: LoaderCircle,
+  PasswordIcon: LockIcon,
 };

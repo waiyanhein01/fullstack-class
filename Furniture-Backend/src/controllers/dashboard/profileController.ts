@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { query, validationResult } from "express-validator";
+import { body, query, validationResult } from "express-validator";
 import { errorCode } from "../../../config/errorCode";
 import { checkUserIfNotExist } from "../../utils/authUtil";
 import { authorizeUtil } from "../../utils/authoriseUtil";
@@ -11,6 +11,8 @@ import sharp from "sharp";
 import ImageQueue from "../../jobs/queues/imageQueue";
 import safeUnlink from "../../utils/safeUnlink";
 import { getModifyUser } from "../../services/userService";
+import { createError } from "../../utils/errorUtil";
+import bcrypt from "bcrypt";
 
 interface UserIdRequest extends Request {
   userId?: number;
@@ -203,6 +205,7 @@ export const profileImageOptimizedUpload = async (
   });
 };
 
+//user profile
 export const userProfile = async (
   req: UserIdRequest,
   res: Response,
@@ -218,3 +221,46 @@ export const userProfile = async (
     user: modifyUser,
   });
 };
+
+//change password
+export const changePassword = [
+  body("currentPassword", "Current password is invalid.")
+    .trim()
+    .notEmpty()
+    .matches("^[0-9]+$")
+    .isLength({ min: 8, max: 8 }),
+  body("newPassword", "New password is invalid.")
+    .trim()
+    .notEmpty()
+    .matches("^[0-9]+$")
+    .isLength({ min: 8, max: 8 }),
+  async (req: UserIdRequest, res: Response, next: NextFunction) => {
+    const userId = req.userId;
+    const user = await getUserById(userId!);
+    checkUserIfNotExist(user);
+
+    const { currentPassword, newPassword } = req.body;
+
+    const isMatchPassword = await bcrypt.compare(
+      currentPassword,
+      user!.password
+    );
+
+    if (!isMatchPassword) {
+      return next(
+        createError("Current password is incorrect.", 400, errorCode.invalid)
+      );
+    } else {
+      const salt = await bcrypt.genSalt(10);
+      const hashedNewPassword = await bcrypt.hash(newPassword, salt);
+
+      const userData = {
+        password: hashedNewPassword,
+      };
+
+      await updateUser(userId!, userData);
+
+      res.status(200).json({ message: "Change password successfully." });
+    }
+  },
+];

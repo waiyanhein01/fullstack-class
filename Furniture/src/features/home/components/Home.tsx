@@ -5,6 +5,7 @@ import ProductCardSection from "./ProductCardSection";
 import Container from "@/components/layout/components/Container";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { postsQuery, productsQuery } from "@/api/query";
+import Benefit from "./Benefit";
 
 // this is method 1
 // import { useLoaderData } from "react-router";
@@ -75,6 +76,7 @@ const Home = () => {
         <ProductCarouselSection products={productsData.products} />
         <ProductCardSection products={productsData.products} />
         <BlogCardSection posts={postsData.posts} />
+        <Benefit />
       </Container>
     </section>
   );

@@ -13,6 +13,7 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Category } from "@/types";
+import { useEffect } from "react";
 
 interface ProductFilterProps {
   categories: Category[];
@@ -56,6 +57,16 @@ export function ProductFilter({
   function onSubmit(data: z.infer<typeof FormSchema>) {
     productFilterHandler(data.categories, data.types);
   }
+
+  useEffect(() => {
+    form.setValue("categories", selectedCategory);
+    form.setValue("types", selectedType);
+
+    return () => {
+      form.setValue("categories", []);
+      form.setValue("types", []);
+    };
+  }, [selectedCategory, selectedType, form]);
 
   return (
     <Form {...form}>
