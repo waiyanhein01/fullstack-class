@@ -151,6 +151,9 @@ export const accountRegistrationAction = async ({
     phone: authStore.phone,
     token: authStore.token,
     password: formData.get("password"),
+    firstName: formData.get("firstName"),
+    lastName: formData.get("lastName"),
+    email: formData.get("email"),
   };
 
   try {

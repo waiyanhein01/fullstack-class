@@ -11,7 +11,6 @@ const ProgressLoader = () => {
         <div className="animate-progress absolute h-full w-full bg-green-600" />
       </div>
     );
-    return null;
   }
 };
 

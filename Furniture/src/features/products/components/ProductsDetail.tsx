@@ -4,7 +4,7 @@ import ProductRatingStar from "./ProductRatingStar";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { BreadCrumb } from "@/components/layout/components/BreadCrumb";
 import { Separator } from "@/components/ui/separator";
-import { useLoaderData, useNavigate } from "react-router";
+import { useLoaderData } from "react-router";
 import { formatPrice } from "@/lib/utils";
 import {
   Carousel,
@@ -30,7 +30,6 @@ const ProductsDetail = () => {
   // const { productId } = useParams();
   // const currentProduct = products.find((product) => productId === product.id);
 
-  const nav = useNavigate();
   const { productId } = useLoaderData();
   const { data: productDetailData } = useSuspenseQuery(
     productDetailQuery(Number(productId)),
@@ -50,16 +49,12 @@ const ProductsDetail = () => {
     });
   };
 
-  const backHandler = () => {
-    nav(-1);
-  };
-
   return (
     <div className="container mx-auto my-20 overflow-hidden">
       <Container>
         <BreadCrumb
           currentPage="ProductsDetail"
-          links={[{ onClick: backHandler, title: "Products" }]}
+          links={[{ path: "/products", title: "Products" }]}
         />
         <div className="flex w-full flex-col gap-16 md:flex-row">
           <div className="w-full md:w-1/2">

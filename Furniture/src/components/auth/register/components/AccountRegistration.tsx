@@ -17,8 +17,18 @@ import {
 } from "@/components/ui/form";
 import { PasswordInput } from "../../login/components/PasswordInput";
 import { useState } from "react";
+import { Input } from "@/components/ui/input";
 
 const FormSchema = z.object({
+  firstName: z.string().nonempty({
+    message: "First name is required.",
+  }),
+  lastName: z.string().nonempty({
+    message: "Last name is required.",
+  }),
+  email: z.string().nonempty({
+    message: "Email is required.",
+  }),
   password: z
     .string()
     .nonempty({
@@ -65,6 +75,9 @@ export function AccountRegistration({
     defaultValues: {
       password: "",
       confirmPassword: "",
+      firstName: "",
+      lastName: "",
+      email: "",
     },
   });
 
@@ -76,6 +89,7 @@ export function AccountRegistration({
       setIsMatchError(null);
     }
     submit(data, { method: "post", action: "/register/account-registration" }); // this action is for frontend route
+    console.log(data);
   }
 
   return (
@@ -95,18 +109,72 @@ export function AccountRegistration({
                 <div className="flex size-8 items-center justify-center rounded-md">
                   <Icons.NavIcon className="size-6" />
                 </div>
-                <span className="sr-only">confirm password</span>
+                <span className="sr-only">Account Registration</span>
               </Link>
-              <h1 className="text-xl font-bold">
-                Make password for your account
-              </h1>
-              <div className="text-center text-sm">
-                Passwords must be at least 8 digits long and contains only
-                numbers. They must match.
-              </div>
+              <h1 className="text-xl font-bold">Account Registration</h1>
             </div>
-            <div className="grid gap-6">
-              <div className="grid gap-2">
+            <div className="grid gap-4">
+              <div className="">
+                <FormField
+                  control={form.control}
+                  name="firstName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>First Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          className="focus:border-primary focus:ring-primary rounded-md border"
+                          placeholder="Enter your first name"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="">
+                <FormField
+                  control={form.control}
+                  name="lastName"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Last Name</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="text"
+                          className="focus:border-primary focus:ring-primary rounded-md border"
+                          placeholder="Enter your last name"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="">
+                <FormField
+                  control={form.control}
+                  name="email"
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>Email</FormLabel>
+                      <FormControl>
+                        <Input
+                          type="email"
+                          className="focus:border-primary focus:ring-primary rounded-md border"
+                          placeholder="Enter your email"
+                          {...field}
+                        />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              </div>
+              <div className="">
                 <FormField
                   control={form.control}
                   name="password"
@@ -126,7 +194,7 @@ export function AccountRegistration({
                   )}
                 />
               </div>
-              <div className="grid gap-2">
+              <div className="">
                 <FormField
                   control={form.control}
                   name="confirmPassword"

@@ -11,9 +11,12 @@ import {
 import { Button } from "@/components/ui/button";
 import { Product } from "@/types";
 import { useSearchParams } from "react-router";
+import { useParamStore } from "@/store/paramStore";
+import { useEffect } from "react";
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();
+  const { setParams, getParams } = useParamStore();
 
   // get url params
   const rawCategory = searchParams.get("categories");
@@ -66,6 +69,7 @@ const Products = () => {
 
     // update url & trigger via query key
     setSearchParams(newParams);
+    setParams(newParams.toString());
     // cancel In-flight queries
     queryClient.cancelQueries({ queryKey: ["products", "infinite"] });
     // clear cache
@@ -73,6 +77,10 @@ const Products = () => {
     // refetch
     refetch();
   };
+
+  useEffect(() => {
+    setSearchParams(getParams());
+  }, [searchParams, getParams, setSearchParams]);
 
   return status === "pending" ? (
     <p>Loading..</p>

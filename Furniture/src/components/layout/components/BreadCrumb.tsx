@@ -9,9 +9,8 @@ import {
 import { Link } from "react-router";
 
 interface Link {
-  path?: string;
+  path: string;
   title: string;
-  onClick?: () => void;
 }
 
 interface BreadCrumbProps {
@@ -33,13 +32,7 @@ export function BreadCrumb({ currentPage, links }: BreadCrumbProps) {
           links.map((link: Link) => (
             <BreadcrumbItem key={link.path}>
               <BreadcrumbLink>
-                <Link
-                  key={link.path}
-                  to={link.path ?? "#"}
-                  onClick={link.onClick}
-                >
-                  {link.title}
-                </Link>
+                <Link to={link.path}>{link.title}</Link>
               </BreadcrumbLink>
               <BreadcrumbSeparator />
             </BreadcrumbItem>
