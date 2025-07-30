@@ -1,4 +1,4 @@
-import { faker } from "@faker-js/faker";
+import { faker, fi } from "@faker-js/faker";
 import { PrismaClient, Prisma } from "../generated/prisma";
 import * as bcrypt from "bcrypt";
 
@@ -39,7 +39,11 @@ const prisma = new PrismaClient();
 
 function createRandomUser() {
   return {
-    phone: faker.phone.number({ style: "international" }),
+    firstName: faker.person.firstName(),
+    lastName: faker.person.lastName(),
+    image: faker.image.avatar(),
+    email: faker.internet.email(),
+    phone: faker.phone.number({ style: "international" }).slice(2),
     password: "",
     randToken: faker.internet.jwt(),
   };

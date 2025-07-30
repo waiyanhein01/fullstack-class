@@ -150,7 +150,6 @@ export function ProductFilter({
                       >
                         <FormControl>
                           <Checkbox
-                            checked={field.value?.includes(type.id.toString())}
                             onCheckedChange={(checked) => {
                               return checked
                                 ? field.onChange([

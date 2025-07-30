@@ -1,4 +1,4 @@
-import { userData } from "./../../prisma/seed";
+// import { userData } from "./../../prisma/seed";
 import { Request, Response, NextFunction } from "express";
 import { errorCode } from "../../config/errorCode";
 import { getUserById, updateUser } from "../services/authService";
