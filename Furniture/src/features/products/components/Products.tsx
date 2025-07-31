@@ -60,7 +60,6 @@ const Products = () => {
   } = useInfiniteQuery(productsInfiniteQuery(category, type));
 
   const allProducts = data?.pages.flatMap((page) => page.products) ?? [];
-  console.log(allProducts);
 
   const productFilterHandler = (categories: string[], types: string[]) => {
     const newParams = new URLSearchParams();
