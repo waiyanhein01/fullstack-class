@@ -61,11 +61,6 @@ export function ProductFilter({
   useEffect(() => {
     form.setValue("categories", selectedCategory);
     form.setValue("types", selectedType);
-
-    return () => {
-      form.setValue("categories", []);
-      form.setValue("types", []);
-    };
   }, [selectedCategory, selectedType, form]);
 
   return (
@@ -95,7 +90,7 @@ export function ProductFilter({
                       >
                         <FormControl>
                           <Checkbox
-                            checked={field.value?.includes(
+                            checked={field.value.includes(
                               category.id.toString(),
                             )}
                             onCheckedChange={(checked) => {
@@ -150,6 +145,7 @@ export function ProductFilter({
                       >
                         <FormControl>
                           <Checkbox
+                            checked={field.value.includes(type.id.toString())}
                             onCheckedChange={(checked) => {
                               return checked
                                 ? field.onChange([

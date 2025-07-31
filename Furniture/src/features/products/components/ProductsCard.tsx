@@ -32,8 +32,9 @@ const ProductsCard = ({ product }: ProductsCardProps) => {
           <Link to={`/products/${product.id}`} className="">
             <img
               src={imgUrl + product.images[0].path}
-              alt="Blog Image"
+              alt="product Image"
               loading="lazy"
+              decoding="async"
               className="aspect-square w-full bg-neutral-100 object-contain object-center"
             />
             <h1 className="my-2 ml-4 line-clamp-1 text-base font-semibold">
