@@ -1,5 +1,8 @@
 import express from "express";
-import { getAllUsers } from "../../../controllers/admin/adminController";
+import {
+  adminLogin,
+  getAllUsers,
+} from "../../../controllers/admin/adminController";
 import { setMaintenanceMode } from "../../../controllers/admin/systemController";
 import upload from "../../../middlewares/fileUpload";
 import {
@@ -28,5 +31,8 @@ router.delete("/posts/:id", deletePost);
 router.post("/products", upload.array("images", 4), createProduct);
 router.patch("/products/:id", upload.array("images", 4), updateProduct);
 router.delete("/products/:id", deleteProduct);
+
+//admin login route
+router.post("login", adminLogin);
 
 export default router;

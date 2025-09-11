@@ -146,6 +146,14 @@ model User {
   products        Product[]
 }
 
+model Admin {
+  id        Int      @id @default(autoincrement())
+  username  String   @unique @db.VarChar(52)
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
 enum Role {
   USER
   ADMIN

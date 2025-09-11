@@ -26,3 +26,11 @@ export const checkProductIfNotExist = (product: any) => {
     throw error;
   }
 };
+
+export const checkAdminIfNotExist = (admin: any) => {
+  if (!admin) {
+    const error: any = new Error("Admin does not exist");
+    error.status = 404;
+    throw error;
+  }
+};
