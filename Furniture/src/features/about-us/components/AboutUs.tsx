@@ -1,6 +1,6 @@
-import { BreadCrumb } from "@/components/layout/components/BreadCrumb";
-import Container from "@/components/layout/components/Container";
 import { Card, CardContent } from "@/components/ui/card";
+import { BreadCrumb } from "@/features/layout/components/BreadCrumb";
+import Container from "@/features/layout/components/Container";
 import { Users, Award, Leaf, Heart } from "lucide-react";
 
 const AboutUs = () => {

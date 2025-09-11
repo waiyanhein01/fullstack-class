@@ -1,5 +1,3 @@
-import { BreadCrumb } from "@/components/layout/components/BreadCrumb";
-import Container from "@/components/layout/components/Container";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
@@ -12,6 +10,8 @@ import {
   Users,
   CheckCircle,
 } from "lucide-react";
+import Container from "@/features/layout/components/Container";
+import { BreadCrumb } from "@/features/layout/components/BreadCrumb";
 
 const Services = () => {
   const services = [

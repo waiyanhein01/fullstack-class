@@ -2,8 +2,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-import Container from "@/components/layout/components/Container";
-import { BreadCrumb } from "@/components/layout/components/BreadCrumb";
 import { Button } from "@/components/ui/button";
 import {
   Form,
@@ -17,6 +15,8 @@ import { Card, CardContent } from "@/components/ui/card";
 import { PasswordInput } from "../../login/components/PasswordInput";
 import { useNavigation, useSubmit } from "react-router";
 import { LoaderCircle } from "lucide-react";
+import Container from "@/features/layout/components/Container";
+import { BreadCrumb } from "@/features/layout/components/BreadCrumb";
 
 const ChangePassword = () => {
   const submit = useSubmit();

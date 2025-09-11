@@ -1,6 +1,6 @@
 import { Icons } from "@/components/Icons";
-import Footer from "@/components/layout/components/Footer";
-import Header from "@/components/layout/components/Header";
+import Footer from "@/features/layout/components/Footer";
+import Header from "@/features/layout/components/Header";
 import { Link } from "react-router";
 
 const NotFound = () => {

@@ -43,11 +43,16 @@ export function DropdownProfile({ user }: UserProps) {
         </div>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
-          <DropdownMenuItem>
-            <Icons.DashboardIcon />
-            Dashboard
-            {/* <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut> */}
-          </DropdownMenuItem>
+          {user.role === "ADMIN" && (
+            <Link to={"/dashboard"} className="w-full">
+              <DropdownMenuItem>
+                <Icons.DashboardIcon />
+                Dashboard
+                {/* <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut> */}
+              </DropdownMenuItem>
+            </Link>
+          )}
+
           <DropdownMenuItem>
             <Link to={"/change-password"} className="flex items-center gap-2">
               <Icons.PasswordIcon />

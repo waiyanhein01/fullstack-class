@@ -10,9 +10,9 @@ import {
   navigationMenuTriggerStyle,
 } from "@/components/ui/navigation-menu";
 import { MainNavItems } from "@/types";
-import { Icons } from "../../Icons";
 import { siteConfig } from "@/configs/site";
 import { Link } from "react-router";
+import { Icons } from "@/components/Icons";
 
 interface MainNavBarProps {
   items?: MainNavItems[];

@@ -1,6 +1,6 @@
-import Header from "@/components/layout/components/Header";
+import Header from "@/features/layout/components/Header";
 import ChangePassword from "../components/ChangePassword";
-import Footer from "@/components/layout/components/Footer";
+import Footer from "@/features/layout/components/Footer";
 
 const ChangePasswordPage = () => {
   return (

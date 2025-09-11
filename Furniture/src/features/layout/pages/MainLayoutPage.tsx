@@ -1,4 +1,4 @@
-import MainLayout from "@/components/layout/components/MainLayout";
+import MainLayout from "../components/MainLayout";
 
 const MainLayoutPage = () => {
   return (

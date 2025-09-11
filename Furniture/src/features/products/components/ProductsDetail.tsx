@@ -1,8 +1,6 @@
-import Container from "@/components/layout/components/Container";
 import ProductsCard from "./ProductsCard";
 import ProductRatingStar from "./ProductRatingStar";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
-import { BreadCrumb } from "@/components/layout/components/BreadCrumb";
 import { Separator } from "@/components/ui/separator";
 import { useLoaderData } from "react-router";
 import { formatPrice } from "@/lib/utils";
@@ -25,6 +23,8 @@ import { Image, Product } from "@/types";
 // import FavouriteIcon from "./FavouriteIcon"; // if using with react-router
 import FavouriteIcon from "./TanStackOptimistic"; // if using with TanStack Query
 import { useCartStore } from "@/store/cartStore";
+import Container from "@/features/layout/components/Container";
+import { BreadCrumb } from "@/features/layout/components/BreadCrumb";
 
 const ProductsDetail = () => {
   // const { productId } = useParams();

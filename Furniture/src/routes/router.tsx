@@ -1,4 +1,3 @@
-import MainLayoutPage from "@/components/layout/pages/MainLayoutPage";
 import HomePage from "@/features/home/pages/HomePage";
 import ServicesPage from "@/features/services/pages/ServicesPage";
 import BlogPage from "@/features/blog/pages/BlogPage";
@@ -9,10 +8,10 @@ import ProductsPage from "@/features/products/pages/ProductsPage";
 import ProductsMainLayout from "@/features/products/components/ProductsMainLayout";
 import ProductsDetailPage from "@/features/products/pages/ProductsDetailPage";
 import AboutUsPage from "@/features/about-us/pages/AboutUsPage";
-import LoginPage from "@/components/auth/login/pages/LoginPage";
-import RegisterPage from "@/components/auth/register/pages/RegisterPage";
-import RegisterMainLayout from "@/components/auth/register/components/RegisterMainLayout";
-import VerifyOtpPage from "@/components/auth/register/pages/VerifyOtpPage";
+import LoginPage from "@/features/auth/login/pages/LoginPage";
+import RegisterPage from "@/features/auth/register/pages/RegisterPage";
+import RegisterMainLayout from "@/features/auth/register/components/RegisterMainLayout";
+import VerifyOtpPage from "@/features/auth/register/pages/VerifyOtpPage";
 
 import { createBrowserRouter, redirect } from "react-router";
 import {
@@ -41,12 +40,13 @@ import {
   verifyOtpAction,
 } from "./action/action";
 import FavouritePage from "@/features/favourite/pages/FavouritePage";
-import ForgotPasswordMainLayout from "@/components/auth/forgot-password/components/ForgotPasswordMainLayout";
-import ForgotPasswordPage from "@/components/auth/forgot-password/pages/ForgotPasswordPage";
-import ResetPasswordPage from "@/components/auth/forgot-password/pages/ResetPasswordPage";
-import VerifyForgotPasswordOtpPage from "@/components/auth/forgot-password/pages/VerifyForgotPasswordOtpPage";
-import AccountRegistrationPage from "@/components/auth/register/pages/AccountRegistrationPage";
-import ChangePasswordPage from "@/components/auth/change-password/pages/ChangePasswordPage";
+import ForgotPasswordMainLayout from "@/features/auth/forgot-password/components/ForgotPasswordMainLayout";
+import ForgotPasswordPage from "@/features/auth/forgot-password/pages/ForgotPasswordPage";
+import ResetPasswordPage from "@/features/auth/forgot-password/pages/ResetPasswordPage";
+import VerifyForgotPasswordOtpPage from "@/features/auth/forgot-password/pages/VerifyForgotPasswordOtpPage";
+import AccountRegistrationPage from "@/features/auth/register/pages/AccountRegistrationPage";
+import ChangePasswordPage from "@/features/auth/change-password/pages/ChangePasswordPage";
+import MainLayoutPage from "@/features/layout/pages/MainLayoutPage";
 
 const router = createBrowserRouter([
   // dashboard routes
@@ -100,6 +100,12 @@ const router = createBrowserRouter([
         element: <AboutUsPage />,
       },
     ],
+  },
+
+  // admin dashboard routes
+  {
+    path: "/dashboard",
+    element: <div>Admin Dashboard Page</div>,
   },
 
   // login route

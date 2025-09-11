@@ -1,12 +1,12 @@
-import Container from "@/components/layout/components/Container";
 import SanitizedComponent from "./SanitizedComponent";
-import { BreadCrumb } from "@/components/layout/components/BreadCrumb";
 import { useLoaderData } from "react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { postDetailQuery, postsQuery } from "@/api/query";
 import { Post, Tag } from "@/types";
 import { NavLink } from "react-router";
 import { Icons } from "@/components/Icons";
+import Container from "@/features/layout/components/Container";
+import { BreadCrumb } from "@/features/layout/components/BreadCrumb";
 
 const BlogDetail = () => {
   // const { blogId } = useParams();

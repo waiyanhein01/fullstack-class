@@ -2,10 +2,10 @@ import HeroSection from "./HeroSection";
 import ProductCarouselSection from "./ProductCarouselSection";
 import BlogCardSection from "./BlogCardSection";
 import ProductCardSection from "./ProductCardSection";
-import Container from "@/components/layout/components/Container";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { postsQuery, productsQuery } from "@/api/query";
 import Benefit from "./Benefit";
+import Container from "@/features/layout/components/Container";
 
 // this is method 1
 // import { useLoaderData } from "react-router";

@@ -1,5 +1,3 @@
-import { BreadCrumb } from "@/components/layout/components/BreadCrumb";
-import Container from "@/components/layout/components/Container";
 import ProductsCard from "./ProductsCard";
 import { ProductFilter } from "./ProductFilter";
 import { useInfiniteQuery, useSuspenseQuery } from "@tanstack/react-query";
@@ -13,6 +11,8 @@ import { Product } from "@/types";
 import { useSearchParams } from "react-router";
 import { useParamStore } from "@/store/paramStore";
 import { useEffect } from "react";
+import Container from "@/features/layout/components/Container";
+import { BreadCrumb } from "@/features/layout/components/BreadCrumb";
 
 const Products = () => {
   const [searchParams, setSearchParams] = useSearchParams();

@@ -1,7 +1,7 @@
 import { userProfileQuery } from "@/api/query";
-import { BreadCrumb } from "@/components/layout/components/BreadCrumb";
-import Container from "@/components/layout/components/Container";
 import { Card, CardContent } from "@/components/ui/card";
+import { BreadCrumb } from "@/features/layout/components/BreadCrumb";
+import Container from "@/features/layout/components/Container";
 import { formatPrice } from "@/lib/utils";
 import { Product } from "@/types";
 import { useSuspenseQuery } from "@tanstack/react-query";

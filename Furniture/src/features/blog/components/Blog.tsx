@@ -1,9 +1,9 @@
-import Container from "@/components/layout/components/Container";
 import BlogCard from "./BlogCard";
-import { BreadCrumb } from "@/components/layout/components/BreadCrumb";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { postsInfiniteQuery } from "@/api/query";
 import { Button } from "@/components/ui/button";
+import Container from "@/features/layout/components/Container";
+import { BreadCrumb } from "@/features/layout/components/BreadCrumb";
 
 const Blog = () => {
   const {

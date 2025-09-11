@@ -45,6 +45,7 @@ export const getModifyUser = async (userId: number) => {
       phone: true,
       email: true,
       image: true,
+      role: true,
       products: {
         select: {
           id: true,
