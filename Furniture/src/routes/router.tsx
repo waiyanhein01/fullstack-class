@@ -47,6 +47,8 @@ import VerifyForgotPasswordOtpPage from "@/features/auth/forgot-password/pages/V
 import AccountRegistrationPage from "@/features/auth/register/pages/AccountRegistrationPage";
 import ChangePasswordPage from "@/features/auth/change-password/pages/ChangePasswordPage";
 import MainLayoutPage from "@/features/layout/pages/MainLayoutPage";
+import AdminPage from "@/features/admin/pages/AdminPage";
+import MainAdminLayout from "@/features/admin/components/MainAdminLayout";
 
 const router = createBrowserRouter([
   // dashboard routes
@@ -104,8 +106,9 @@ const router = createBrowserRouter([
 
   // admin dashboard routes
   {
-    path: "/dashboard",
-    element: <div>Admin Dashboard Page</div>,
+    path: "/admin",
+    element: <MainAdminLayout />,
+    children: [{ index: true, element: <AdminPage /> }],
   },
 
   // login route

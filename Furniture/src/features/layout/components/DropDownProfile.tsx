@@ -44,10 +44,10 @@ export function DropdownProfile({ user }: UserProps) {
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
           {user.role === "ADMIN" && (
-            <Link to={"/dashboard"} className="w-full">
+            <Link to={"/admin"} className="w-full">
               <DropdownMenuItem>
                 <Icons.DashboardIcon />
-                Dashboard
+                Admin
                 {/* <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut> */}
               </DropdownMenuItem>
             </Link>
