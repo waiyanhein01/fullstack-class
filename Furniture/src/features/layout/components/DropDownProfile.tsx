@@ -47,7 +47,7 @@ export function DropdownProfile({ user }: UserProps) {
             <Link to={"/admin"} className="w-full">
               <DropdownMenuItem>
                 <Icons.DashboardIcon />
-                Admin
+                Admin Dashboard
                 {/* <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut> */}
               </DropdownMenuItem>
             </Link>

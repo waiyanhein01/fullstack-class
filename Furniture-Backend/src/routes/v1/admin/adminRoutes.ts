@@ -19,6 +19,8 @@ import {
 
 const router = express.Router();
 
+//admin login route
+router.post("/admin-login", adminLogin);
 router.get("/users", getAllUsers);
 router.post("/maintenance", setMaintenanceMode);
 
@@ -31,8 +33,5 @@ router.delete("/posts/:id", deletePost);
 router.post("/products", upload.array("images", 4), createProduct);
 router.patch("/products/:id", upload.array("images", 4), updateProduct);
 router.delete("/products/:id", deleteProduct);
-
-//admin login route
-router.post("/admin-login", adminLogin);
 
 export default router;

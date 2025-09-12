@@ -1,13 +1,16 @@
-import { Outlet } from "react-router";
+import { Outlet, useLocation } from "react-router";
 import Header from "./Header";
 import Footer from "./Footer";
 
 const MainLayout = () => {
+  const location = useLocation();
+  console.log(location);
+  const dashboardPaths = location.pathname === "/admin";
   return (
     <main className="flex min-h-screen flex-col">
-      <Header />
+      {!dashboardPaths && <Header />}
       <Outlet />
-      <Footer />
+      {!dashboardPaths && <Footer />}
     </main>
   );
 };

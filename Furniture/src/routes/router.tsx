@@ -29,7 +29,9 @@ import {
 } from "./loader/loader";
 import {
   accountRegistrationAction,
-  adminLoginAction,
+  // adminLoginAction,
+  // adminLoginAction,
+  // adminLoginAction,
   changePasswordAction,
   forgotPasswordAction,
   // favouriteAction,
@@ -50,7 +52,6 @@ import ChangePasswordPage from "@/features/auth/change-password/pages/ChangePass
 import MainLayoutPage from "@/features/layout/pages/MainLayoutPage";
 import AdminPage from "@/features/admin/pages/AdminPage";
 import MainAdminLayout from "@/features/admin/components/MainAdminLayout";
-import AdminDashboardPage from "@/features/admin/pages/AdminDashboardPage";
 
 const router = createBrowserRouter([
   // dashboard routes
@@ -103,7 +104,7 @@ const router = createBrowserRouter([
         path: "about",
         element: <AboutUsPage />,
       },
-      // admin dashboard routes
+
       {
         path: "admin",
         element: <MainAdminLayout />,
@@ -111,9 +112,9 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <AdminPage />,
-            action: adminLoginAction,
+            // action: adminLoginAction,
           },
-          { path: "dashboard", element: <AdminDashboardPage /> },
+          // { path: "dashboard", element:  },
         ],
       },
     ],
@@ -184,6 +185,8 @@ const router = createBrowserRouter([
     element: <ChangePasswordPage />,
     action: changePasswordAction,
   },
+
+  // admin dashboard routes
 
   // logout
   { path: "/logout", action: logoutAction, loader: () => redirect("/login") },

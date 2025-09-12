@@ -19,7 +19,7 @@ import { PasswordInput } from "@/features/auth/login/components/PasswordInput";
 
 const FormSchema = z.object({
   username: z.string().nonempty({
-    message: "Username is required.",
+    message: "Name is required.",
   }),
   password: z
     .string()
@@ -53,9 +53,8 @@ export function AdminLoginForm({
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    submit(data, { method: "post", action: "dashboard" }); // you can use this action will go current screen to another screen situation
+    submit(data, { method: "post", action: "." }); // you can use this action will go current screen to another screen situation
   }
-
   return (
     <>
       <Form {...form}>

@@ -17,7 +17,6 @@ export const loginAction = async ({ request }: ActionFunctionArgs) => {
 
   try {
     const response = await authApi.post("login", credentials);
-    console.log(response, "response");
     if (response.status === 200) {
       return toast.success(response.data.message, {
         style: {
@@ -376,9 +375,8 @@ export const adminLoginAction = async ({ request }: ActionFunctionArgs) => {
         },
       });
     }
-    const redirectUrl =
-      new URL(request.url).searchParams.get("redirect") || "/";
-    redirect(redirectUrl);
+
+    redirect("/admin");
 
     return response.data;
   } catch (error) {
