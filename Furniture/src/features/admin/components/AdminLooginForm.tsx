@@ -18,8 +18,8 @@ import { LoaderCircle } from "lucide-react";
 import { PasswordInput } from "@/features/auth/login/components/PasswordInput";
 
 const FormSchema = z.object({
-  name: z.string().nonempty({
-    message: "Name is required.",
+  username: z.string().nonempty({
+    message: "Username is required.",
   }),
   password: z
     .string()
@@ -31,9 +31,6 @@ const FormSchema = z.object({
     })
     .max(8, {
       message: "Password must be at most 8 characters.",
-    })
-    .regex(/^\d+$/, {
-      message: "Password must be numbers.",
     }),
 });
 
@@ -50,14 +47,15 @@ export function AdminLoginForm({
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      name: "",
+      username: "",
       password: "",
     },
   });
 
   function onSubmit(data: z.infer<typeof FormSchema>) {
-    submit(data, { method: "post", action: "/login" }); // you can use this action will go current screen to another screen situation
+    submit(data, { method: "post", action: "dashboard" }); // you can use this action will go current screen to another screen situation
   }
+
   return (
     <>
       <Form {...form}>
@@ -75,7 +73,7 @@ export function AdminLoginForm({
             <div className="grid gap-2">
               <FormField
                 control={form.control}
-                name="name"
+                name="username"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Username</FormLabel>

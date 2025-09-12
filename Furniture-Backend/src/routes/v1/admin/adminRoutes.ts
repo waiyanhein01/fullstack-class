@@ -33,6 +33,6 @@ router.patch("/products/:id", upload.array("images", 4), updateProduct);
 router.delete("/products/:id", deleteProduct);
 
 //admin login route
-router.post("login", adminLogin);
+router.post("/admin-login", adminLogin);
 
 export default router;

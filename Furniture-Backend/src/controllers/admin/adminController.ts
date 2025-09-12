@@ -26,14 +26,14 @@ export const getAllUsers = (
 
 // login
 export const adminLogin = [
-  body("name", "Invalid username.")
+  body("username", "Invalid username.")
     .trim()
     .notEmpty()
     .isLength({ min: 3, max: 52 }),
-  body("password", "Password must be 8 digits.")
+  body("password", "Password must be 8 length.")
     .trim()
     .notEmpty()
-    .matches("^[0-9]+$")
+    .matches("^[0-9 a-zA-Z]+$")
     .isLength({ min: 8, max: 8 }),
   async (req: Request, res: Response, next: NextFunction) => {
     const errors = validationResult(req).array({ onlyFirstError: true });
@@ -41,9 +41,9 @@ export const adminLogin = [
       return next(createError(errors[0].msg, 400, errorCode.invalid));
     }
     const password = req.body.password;
-    let name = req.body.name;
+    let username = req.body.username;
 
-    const admin = await getAdminByName(name);
+    const admin = await getAdminByName(username);
     checkUserIfNotExist(admin);
 
     // check incorrect password

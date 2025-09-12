@@ -352,3 +352,44 @@ export const favouriteAction = async ({
     }
   }
 };
+
+// admin login
+export const adminLoginAction = async ({ request }: ActionFunctionArgs) => {
+  const formData = await request.formData();
+
+  const credentials = Object.fromEntries(formData); // Convert FormData to an object if u have too many input fields
+
+  //   const loginData = {
+  //     phone: formData.get("phone"),
+  //     password: formData.get("password"),
+  //   };
+
+  try {
+    const response = await authApi.post("admin/admin-login", credentials);
+    console.log(response, "response");
+    if (response.status === 200) {
+      return toast.success(response.data.message, {
+        style: {
+          borderLeft: "10px solid #4caf50",
+          background: "#ffffff",
+          color: "#4caf50",
+        },
+      });
+    }
+    const redirectUrl =
+      new URL(request.url).searchParams.get("redirect") || "/";
+    redirect(redirectUrl);
+
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return toast.error(error.response?.data.message, {
+        style: {
+          borderLeft: "10px solid #f44336",
+          background: "#ffffff",
+          color: "#f44336",
+        },
+      });
+    }
+  }
+};
