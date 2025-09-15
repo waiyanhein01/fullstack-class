@@ -1,22 +1,14 @@
-"use client";
-
 import * as React from "react";
 import {
   IconCamera,
-  IconChartBar,
-  IconDashboard,
-  IconDatabase,
+  IconArmchair,
   IconFileAi,
   IconFileDescription,
-  IconFileWord,
-  IconFolder,
   IconHelp,
-  IconInnerShadowTop,
-  IconListDetails,
-  IconReport,
+  IconBrandTwitch,
   IconSearch,
   IconSettings,
-  IconUsers,
+  IconLayoutDashboard,
 } from "@tabler/icons-react";
 
 import {
@@ -29,9 +21,9 @@ import {
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
 import { NavMain } from "./NavMain";
-import { NavDocuments } from "./NavDocuments";
 import { NavSecondary } from "./NavSecondary";
 import { NavUser } from "./NavUser";
+import { Link } from "react-router";
 
 const data = {
   user: {
@@ -42,28 +34,18 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "#",
-      icon: IconDashboard,
+      url: "/admin",
+      icon: IconLayoutDashboard,
     },
     {
-      title: "Lifecycle",
-      url: "#",
-      icon: IconListDetails,
+      title: "Products",
+      url: "products",
+      icon: IconArmchair,
     },
     {
-      title: "Analytics",
+      title: "Posts",
       url: "#",
-      icon: IconChartBar,
-    },
-    {
-      title: "Projects",
-      url: "#",
-      icon: IconFolder,
-    },
-    {
-      title: "Team",
-      url: "#",
-      icon: IconUsers,
+      icon: IconBrandTwitch,
     },
   ],
   navClouds: [
@@ -131,23 +113,6 @@ const data = {
       icon: IconSearch,
     },
   ],
-  documents: [
-    {
-      name: "Data Library",
-      url: "#",
-      icon: IconDatabase,
-    },
-    {
-      name: "Reports",
-      url: "#",
-      icon: IconReport,
-    },
-    {
-      name: "Word Assistant",
-      url: "#",
-      icon: IconFileWord,
-    },
-  ],
 };
 
 export function AdminSidebar({
@@ -162,17 +127,16 @@ export function AdminSidebar({
               asChild
               className="data-[slot=sidebar-menu-button]:!p-1.5"
             >
-              <a href="#">
-                <IconInnerShadowTop className="!size-5" />
-                <span className="text-base font-semibold">Acme Inc.</span>
-              </a>
+              <Link to="/">
+                <img src="../../../../shop-logo.svg" alt="" />
+                <span className="text-base font-semibold">Furniture</span>
+              </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
       <SidebarContent>
         <NavMain items={data.navMain} />
-        <NavDocuments items={data.documents} />
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>

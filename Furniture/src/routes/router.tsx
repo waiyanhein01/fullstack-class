@@ -52,6 +52,7 @@ import ChangePasswordPage from "@/features/auth/change-password/pages/ChangePass
 import MainLayoutPage from "@/features/layout/pages/MainLayoutPage";
 import AdminPage from "@/features/admin/pages/AdminPage";
 import MainAdminLayout from "@/features/admin/components/MainAdminLayout";
+import AdminProductsPage from "@/features/admin/pages/AdminProductsPage";
 
 const router = createBrowserRouter([
   // dashboard routes
@@ -114,7 +115,7 @@ const router = createBrowserRouter([
             element: <AdminPage />,
             // action: adminLoginAction,
           },
-          // { path: "dashboard", element:  },
+          { path: "products", element: <AdminProductsPage /> },
         ],
       },
     ],

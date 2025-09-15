@@ -4,8 +4,7 @@ import Footer from "./Footer";
 
 const MainLayout = () => {
   const location = useLocation();
-  console.log(location);
-  const dashboardPaths = location.pathname === "/admin";
+  const dashboardPaths = location.pathname.startsWith("/admin");
   return (
     <main className="flex min-h-screen flex-col">
       {!dashboardPaths && <Header />}
