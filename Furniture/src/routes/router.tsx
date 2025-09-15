@@ -52,7 +52,8 @@ import ChangePasswordPage from "@/features/auth/change-password/pages/ChangePass
 import MainLayoutPage from "@/features/layout/pages/MainLayoutPage";
 import AdminPage from "@/features/admin/pages/AdminPage";
 import MainAdminLayout from "@/features/admin/components/MainAdminLayout";
-import AdminProductsPage from "@/features/admin/pages/AdminProductsPage";
+import AdminProductsPage from "@/features/admin/features/products/pages/AdminProductsPage";
+import AddNewProductPage from "@/features/admin/features/products/pages/AddNewProductPage";
 
 const router = createBrowserRouter([
   // dashboard routes
@@ -116,6 +117,10 @@ const router = createBrowserRouter([
             // action: adminLoginAction,
           },
           { path: "products", element: <AdminProductsPage /> },
+          {
+            path: "products/add-new-product",
+            element: <AddNewProductPage />,
+          },
         ],
       },
     ],

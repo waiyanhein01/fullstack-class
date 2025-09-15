@@ -169,7 +169,7 @@ export function ResetPassword({
               <Button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full disabled:pointer-events-none disabled:opacity-50"
+                className="btn-primary w-full disabled:pointer-events-none disabled:opacity-50"
               >
                 {isSubmitting ? (
                   <span className="flex items-center gap-1">

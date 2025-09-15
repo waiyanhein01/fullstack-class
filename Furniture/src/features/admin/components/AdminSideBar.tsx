@@ -24,13 +24,10 @@ import { NavMain } from "./NavMain";
 import { NavSecondary } from "./NavSecondary";
 import { NavUser } from "./NavUser";
 import { Link } from "react-router";
+import { useSuspenseQuery } from "@tanstack/react-query";
+import { userProfileQuery } from "@/api/query";
 
 const data = {
-  user: {
-    name: "shadcn",
-    email: "m@example.com",
-    avatar: "/avatars/shadcn.jpg",
-  },
   navMain: [
     {
       title: "Dashboard",
@@ -118,6 +115,8 @@ const data = {
 export function AdminSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
+  const { data: user } = useSuspenseQuery(userProfileQuery());
+  console.log(user);
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>
@@ -140,7 +139,7 @@ export function AdminSidebar({
         <NavSecondary items={data.navSecondary} className="mt-auto" />
       </SidebarContent>
       <SidebarFooter>
-        <NavUser user={data.user} />
+        <NavUser user={user.user} />
       </SidebarFooter>
     </Sidebar>
   );

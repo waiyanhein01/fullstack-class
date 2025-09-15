@@ -131,7 +131,7 @@ const ChangePassword = () => {
                   <Button
                     type="submit"
                     disabled={isSubmitting}
-                    className="disabled:pointer-events-none disabled:opacity-50"
+                    className="btn-primary disabled:pointer-events-none disabled:opacity-50"
                   >
                     {isSubmitting ? (
                       <span className="flex items-center gap-1">
