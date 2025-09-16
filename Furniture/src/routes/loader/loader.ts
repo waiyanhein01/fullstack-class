@@ -6,6 +6,7 @@ import {
   postsQuery,
   productDetailQuery,
   productsInfiniteQuery,
+  productsInfiniteQueryForAdmin,
   productsQuery,
   queryClient,
   userProfileQuery,
@@ -103,6 +104,11 @@ export const postDetailLoader = async ({ params }: LoaderFunctionArgs) => {
 export const productsInfiniteLoader = async () => {
   await queryClient.ensureQueryData(categoryTypeQuery());
   await queryClient.prefetchInfiniteQuery(productsInfiniteQuery());
+  return null;
+};
+
+export const productsInfiniteLoaderForAdmin = async () => {
+  await queryClient.prefetchInfiniteQuery(productsInfiniteQueryForAdmin());
   return null;
 };
 

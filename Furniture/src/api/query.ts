@@ -128,5 +128,22 @@ export const userProfileQuery = () => ({
   queryFn: fetchUserProfile,
 });
 
+// for admin
+const fetchInfiniteProductsForAdmin = async ({ pageParam = null }) => {
+  const query = pageParam ? `?limit=5&cursor=${pageParam}` : "?limit=5";
+  const res = await api.get(`dashboard/products/${query}`);
+
+  return res.data;
+};
+
+export const productsInfiniteQueryForAdmin = () => ({
+  queryKey: ["products", "infinite"],
+  queryFn: fetchInfiniteProductsForAdmin,
+  placeholderData: keepPreviousData,
+  initialPageParam: null, // start with no cursor
+  getNextPageParam: (pageParam, pages) => pageParam.nextCursor,
+  getPreviousPageParam: (pageParam, pages) => pageParam.prevCursor,
+  // maxPages: 10,
+});
 // useQuery for get data(read) // useQuery can use in component
 // useMutation for post, put,delete data(write)

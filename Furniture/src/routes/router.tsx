@@ -22,6 +22,7 @@ import {
   postsInfiniteLoader,
   productDetailLoader,
   productsInfiniteLoader,
+  productsInfiniteLoaderForAdmin,
   profileLoader,
   resetPasswordLoader,
   verifyForgotPasswordOtpLoader,
@@ -116,7 +117,11 @@ const router = createBrowserRouter([
             element: <AdminPage />,
             // action: adminLoginAction,
           },
-          { path: "products", element: <AdminProductsPage /> },
+          {
+            path: "products",
+            element: <AdminProductsPage />,
+            loader: productsInfiniteLoaderForAdmin,
+          },
           {
             path: "products/add-new-product",
             element: <AddNewProductPage />,

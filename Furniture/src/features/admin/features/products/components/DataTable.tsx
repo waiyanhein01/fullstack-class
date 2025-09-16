@@ -41,25 +41,27 @@ import {
 import { Image } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import { Link } from "react-router";
+import { productsInfiniteQueryForAdmin } from "@/api/query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
-const data: Products[] = [
-  {
-    id: 1,
-    name: "Ergonomic Chair",
-    description:
-      "Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio quam ut purus rutrum lobortis",
-    price: "140",
-    discount: "150",
-    inventory: 200,
-    status: "ACTIVE",
-    images: [
-      {
-        id: 1,
-        path: "/optimized/1757922884842-113650623.webp",
-      },
-    ],
-  },
-];
+// const data: Products[] = [
+//   {
+//     id: 1,
+//     name: "Ergonomic Chair",
+//     description:
+//       "Donec facilisis quam ut purus rutrum lobortis. Donec vitae odio quam ut purus rutrum lobortis",
+//     price: "140",
+//     discount: "150",
+//     inventory: 200,
+//     status: "ACTIVE",
+//     images: [
+//       {
+//         id: 1,
+//         path: "/optimized/1757922884842-113650623.webp",
+//       },
+//     ],
+//   },
+// ];
 
 export type Products = {
   id: number;
@@ -226,8 +228,25 @@ export function DataTable() {
     React.useState<VisibilityState>({});
   const [rowSelection, setRowSelection] = React.useState({});
 
-  const table = useReactTable({
+  const {
+    status,
     data,
+    isFetching,
+    isFetchingNextPage,
+    isFetchingPreviousPage,
+    fetchNextPage,
+    fetchPreviousPage,
+    hasNextPage,
+    hasPreviousPage,
+    error,
+    refetch,
+  } = useInfiniteQuery(productsInfiniteQueryForAdmin());
+
+  const allProducts = data?.pages.flatMap((page) => page) ?? [];
+  console.log(allProducts, "allProducts");
+
+  const table = useReactTable({
+    data: allProducts[0].products,
     columns,
     onSortingChange: setSorting,
     onColumnFiltersChange: setColumnFilters,
@@ -245,7 +264,11 @@ export function DataTable() {
     },
   });
 
-  return (
+  return status === "pending" ? (
+    <p>Loading..</p>
+  ) : status === "error" ? (
+    <p>Blog Error:{error.message}</p>
+  ) : (
     <div className="w-full">
       <div className="flex items-center gap-4 py-4">
         <Input
@@ -349,16 +372,16 @@ export function DataTable() {
           <Button
             variant="outline"
             size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
+            onClick={() => fetchPreviousPage()}
+            disabled={!hasPreviousPage || isFetchingPreviousPage}
           >
             Previous
           </Button>
           <Button
             variant="outline"
             size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
+            onClick={() => fetchNextPage()}
+            disabled={!hasNextPage || isFetchingNextPage}
           >
             Next
           </Button>
