@@ -17,6 +17,7 @@ import {
   removeProductFromFavourite,
 } from "../../services/userService";
 import cacheQueue from "../../jobs/queues/cacheQueue";
+import { prisma } from "../../services/prismaClientService";
 
 interface UserIdRequest extends Request {
   userId?: number;
@@ -137,6 +138,85 @@ export const getAllProductsByCursorPagination = [
       prevCursor: lastCursor,
       nextCursor,
       hasNextPage,
+      products,
+    });
+  },
+];
+
+export const getAllProductsByOffsetPagination = [
+  query("page", "Page number is invalid.").isInt({ gt: 0 }).optional(),
+  query("limit", "Limit number is invalid.").isInt({ gt: 4 }).optional(),
+  async (req: UserIdRequest, res: Response, next: NextFunction) => {
+    // --- Validation (No changes, this is good) ---
+    const errors = validationResult(req).array({ onlyFirstError: true });
+    if (errors.length > 0) {
+      return next(createError(errors[0].msg, 400, errorCode.invalid));
+    }
+
+    // --- Setup and Authentication (No changes) ---
+    const userId = req.userId;
+    const user = await getUserById(userId!);
+    checkUserIfNotExist(user);
+
+    // --- Improved Pagination Logic ---
+    // 1. Use parseInt for safer type conversion
+    const page = parseInt(req.query.page as string, 10) || 1;
+    const limit = parseInt(req.query.limit as string, 10) || 5;
+    const skip = (page - 1) * limit;
+
+    // 2. Create a more stable cache key
+    const cacheKey = `products:page:${page}:limit:${limit}`;
+
+    // 3. Get paginated data and total count from cache or DB
+    const { products, totalProducts } = await getOrSetCache(
+      cacheKey,
+      async () => {
+        // Use a transaction to get both data and count in one DB roundtrip
+        const [products, total] = await prisma.$transaction([
+          prisma.product.findMany({
+            skip: skip,
+            take: limit, // Only fetch the exact number needed for the page
+            select: {
+              id: true,
+              name: true,
+              description: true,
+              price: true,
+              discount: true,
+              inventory: true,
+              status: true,
+              images: {
+                select: { id: true, path: true },
+                take: 1,
+              },
+            },
+            orderBy: { id: "desc" },
+          }),
+          prisma.product.count(), // Get the total count of all products
+        ]);
+        return { products: products, totalProducts: total };
+      }
+    );
+
+    // 4. Calculate pagination metadata based on the total count
+    const totalPages = Math.ceil(totalProducts / limit);
+    const currentPage = page;
+    const hasNextPage = currentPage < totalPages;
+    const hasPreviousPage = currentPage > 1;
+    const nextPage = hasNextPage ? currentPage + 1 : null;
+    const previousPage = hasPreviousPage ? currentPage - 1 : null;
+
+    // --- Final Response ---
+    res.status(200).json({
+      message: "Get all products by offset pagination.",
+      pagination: {
+        totalProducts,
+        totalPages,
+        currentPage,
+        hasNextPage,
+        hasPreviousPage,
+        nextPage,
+        previousPage,
+      },
       products,
     });
   },

@@ -79,7 +79,7 @@ const fetchInfiniteProducts = async ({
   let query = pageParam ? `?limit=6&cursor=${pageParam}` : "?limit=6";
   if (categories) query += `&category=${categories}`;
   if (types) query += `&type=${types}`;
-  const res = await api.get(`dashboard/products/${query}`);
+  const res = await api.get(`dashboard/products/infinite${query}`);
   return res.data;
 };
 
@@ -129,21 +129,22 @@ export const userProfileQuery = () => ({
 });
 
 // for admin
-const fetchInfiniteProductsForAdmin = async ({ pageParam = null }) => {
-  const query = pageParam ? `?limit=5&cursor=${pageParam}` : "?limit=5";
-  const res = await api.get(`dashboard/products/${query}`);
-
+const fetchProductsForAdmin = async (page: number, limit: number) => {
+  const res = await api.get(`dashboard/products?page=${page}&limit=${limit}`);
   return res.data;
 };
 
-export const productsInfiniteQueryForAdmin = () => ({
-  queryKey: ["products", "infinite"],
-  queryFn: fetchInfiniteProductsForAdmin,
+export const productsQueryForAdmin = ({
+  pageIndex,
+  pageSize,
+}: {
+  pageIndex: number;
+  pageSize: number;
+}) => ({
+  queryKey: ["products", "admin", { page: pageIndex + 1, limit: pageSize }],
+  queryFn: () => fetchProductsForAdmin(pageIndex + 1, pageSize),
   placeholderData: keepPreviousData,
-  initialPageParam: null, // start with no cursor
-  getNextPageParam: (pageParam, pages) => pageParam.nextCursor,
-  getPreviousPageParam: (pageParam, pages) => pageParam.prevCursor,
-  // maxPages: 10,
 });
+
 // useQuery for get data(read) // useQuery can use in component
 // useMutation for post, put,delete data(write)

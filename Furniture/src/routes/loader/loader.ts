@@ -6,8 +6,8 @@ import {
   postsQuery,
   productDetailQuery,
   productsInfiniteQuery,
-  productsInfiniteQueryForAdmin,
   productsQuery,
+  productsQueryForAdmin,
   queryClient,
   userProfileQuery,
 } from "@/api/query";
@@ -107,10 +107,10 @@ export const productsInfiniteLoader = async () => {
   return null;
 };
 
-export const productsInfiniteLoaderForAdmin = async () => {
-  await queryClient.prefetchInfiniteQuery(productsInfiniteQueryForAdmin());
-  return null;
-};
+// export const productsInfiniteLoaderForAdmin = async () => {
+//   await queryClient.prefetchInfiniteQuery(productsQueryForAdmin());
+//   return null;
+// };
 
 export const productDetailLoader = async ({ params }: LoaderFunctionArgs) => {
   if (!params.productId) {

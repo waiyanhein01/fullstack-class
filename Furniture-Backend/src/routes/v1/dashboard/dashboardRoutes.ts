@@ -19,6 +19,7 @@ import {
 import {
   favouriteProductToggle,
   getAllProductsByCursorPagination,
+  getAllProductsByOffsetPagination,
   getCategoryType,
   getProduct,
 } from "../../../controllers/dashboard/getProductController";
@@ -57,8 +58,9 @@ router.get("/posts/infinite", auth, getAllPostsByInfinitePagination);
 router.get("/posts/:id", auth, getPost);
 
 // Get Product route
+router.get("/products", auth, getAllProductsByOffsetPagination);
+router.get("/products/infinite", auth, getAllProductsByCursorPagination);
 router.get("/products/:id", auth, getProduct);
-router.get("/products", auth, getAllProductsByCursorPagination);
 
 // Favourite Product toggle route
 router.patch("/products/favourite-toggle", auth, favouriteProductToggle);

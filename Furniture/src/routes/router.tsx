@@ -120,7 +120,7 @@ const router = createBrowserRouter([
           {
             path: "products",
             element: <AdminProductsPage />,
-            loader: productsInfiniteLoaderForAdmin,
+            // loader: productsInfiniteLoaderForAdmin,
           },
           {
             path: "products/add-new-product",
