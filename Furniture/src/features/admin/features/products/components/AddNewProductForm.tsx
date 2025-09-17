@@ -21,6 +21,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useEffect, useState } from "react";
+import api from "@/api";
 
 const MAX_FILE_SIZE = 5000000;
 const MAX_FILES = 5;
@@ -47,10 +48,10 @@ const FormSchema = z.object({
   status: z.string({
     required_error: "Please select a status to display.",
   }),
-  categoryId: z.string({
+  category: z.string({
     required_error: "Please select a category.",
   }),
-  typeId: z.string({
+  type: z.string({
     required_error: "Please select a type.",
   }),
   description: z
@@ -126,8 +127,40 @@ const AddNewProductForm = () => {
     setValue("images", dataTransfer.files, { shouldValidate: true });
   };
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
-    console.log(data);
+  async function onSubmit(data: z.infer<typeof FormSchema>) {
+    try {
+      // 1. Build FormData
+      const formData = new FormData();
+
+      // 2. Append normal fields
+      formData.append("name", data.name);
+      formData.append("price", data.price);
+      formData.append("discount", data.discount);
+      formData.append("inventory", data.inventory);
+      formData.append("status", data.status);
+      formData.append("category", data.category);
+      formData.append("type", data.type);
+      formData.append("description", data.description);
+
+      // 3. Append images one by one
+      Array.from(data.images).forEach((file) => {
+        formData.append("images", file); // same field name for multiple files
+      });
+
+      // 4. Send via Axios
+      const response = await api.post("admin/products", formData, {
+        headers: {
+          // Let axios set Content-Type automatically; no need to add boundary
+          "Content-Type": "multipart/form-data",
+        },
+      });
+
+      console.log("Server response:", response.data);
+      // handle success (maybe show a toast or redirect)
+    } catch (error) {
+      console.error("Upload failed:", error);
+      // handle error (toast, etc.)
+    }
   }
 
   return (
@@ -318,10 +351,10 @@ const AddNewProductForm = () => {
 
           <FormField
             control={form.control}
-            name="categoryId"
+            name="category"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Status</FormLabel>
+                <FormLabel>Category</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
@@ -332,9 +365,9 @@ const AddNewProductForm = () => {
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="1">Wooden</SelectItem>
-                    <SelectItem value="2">Bamboo</SelectItem>
-                    <SelectItem value="3">Metal</SelectItem>
+                    <SelectItem value="wooden">Wooden</SelectItem>
+                    <SelectItem value="bamboo">Bamboo</SelectItem>
+                    <SelectItem value="metal">Metal</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />
@@ -344,25 +377,25 @@ const AddNewProductForm = () => {
 
           <FormField
             control={form.control}
-            name="typeId"
+            name="type"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Status</FormLabel>
+                <FormLabel>Type</FormLabel>
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select a status to display" />
+                      <SelectValue placeholder="Select a type to display" />
                     </SelectTrigger>
                   </FormControl>
                   <SelectContent>
-                    <SelectItem value="1">Seating</SelectItem>
-                    <SelectItem value="2">Lying</SelectItem>
-                    <SelectItem value="3">Entertainment</SelectItem>
-                    <SelectItem value="4">Tables</SelectItem>
-                    <SelectItem value="5">Storage</SelectItem>
+                    <SelectItem value="seating">Seating</SelectItem>
+                    <SelectItem value="lying">Lying</SelectItem>
+                    <SelectItem value="entertainment">Entertainment</SelectItem>
+                    <SelectItem value="tables">Tables</SelectItem>
+                    <SelectItem value="storage">Storage</SelectItem>
                   </SelectContent>
                 </Select>
                 <FormMessage />

@@ -15,8 +15,9 @@ import {
 
 import ImageQueue from "../../jobs/queues/imageQueue";
 import path from "node:path";
-import safeUnlink from "../../utils/safeUnlink";
+// import safeUnlink from "../../utils/safeUnlink";
 import cacheQueue from "../../jobs/queues/cacheQueue";
+import { unlink } from "fs/promises";
 
 interface UserIdRequest extends Request {
   userId?: number;
@@ -36,7 +37,7 @@ const removeFile = async (
         "/uploads/images",
         originalFile
       );
-      await safeUnlink(originalFilePath);
+      await unlink(originalFilePath);
     }
 
     for (const optimizedFile of optimizedFiles || []) {
@@ -47,7 +48,7 @@ const removeFile = async (
           "/uploads/optimized",
           optimizedFile
         );
-        await safeUnlink(optimizedFilePath);
+        await unlink(optimizedFilePath);
       }
     }
   } catch (error) {
@@ -96,7 +97,6 @@ export const createProduct = [
       type,
       tags,
     } = req.body;
-    const user = req.user;
     const image = req.files && req.files.length > 0;
     checkImageFromMulterSupport(image);
 

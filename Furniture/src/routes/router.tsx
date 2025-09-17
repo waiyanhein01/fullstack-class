@@ -55,6 +55,7 @@ import AdminPage from "@/features/admin/pages/AdminPage";
 import MainAdminLayout from "@/features/admin/components/MainAdminLayout";
 import AdminProductsPage from "@/features/admin/features/products/pages/AdminProductsPage";
 import AddNewProductPage from "@/features/admin/features/products/pages/AddNewProductPage";
+import { createProductAction } from "./action/adminAction";
 
 const router = createBrowserRouter([
   // dashboard routes
@@ -125,6 +126,7 @@ const router = createBrowserRouter([
           {
             path: "products/add-new-product",
             element: <AddNewProductPage />,
+            // action: createProductAction,
           },
         ],
       },
