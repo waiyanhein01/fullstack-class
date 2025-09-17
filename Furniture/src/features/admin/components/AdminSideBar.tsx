@@ -116,7 +116,6 @@ export function AdminSidebar({
   ...props
 }: React.ComponentProps<typeof Sidebar>) {
   const { data: user } = useSuspenseQuery(userProfileQuery());
-  console.log(user);
   return (
     <Sidebar collapsible="offcanvas" {...props}>
       <SidebarHeader>

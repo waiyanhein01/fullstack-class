@@ -65,8 +65,6 @@ export function DataTable() {
   const productsData = data?.products ?? [];
   const pageCount = data?.pagination?.totalPages ?? 0;
 
-  console.log(data);
-
   const table = useReactTable({
     data: productsData,
     columns: Columns,
@@ -199,7 +197,6 @@ export function DataTable() {
         </Table>
       </div>
 
-      {/* FIX: 6. Update the Pagination Controls UI */}
       <div className="flex items-center justify-between space-x-2 py-4">
         <div className="text-muted-foreground flex-1 text-sm">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}

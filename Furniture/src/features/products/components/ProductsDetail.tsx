@@ -62,7 +62,6 @@ const ProductsDetail = () => {
               plugins={[
                 Autoplay({
                   delay: 2000,
-                  stopOnInteraction: false,
                 }),
               ]}
               className="w-full overflow-hidden"

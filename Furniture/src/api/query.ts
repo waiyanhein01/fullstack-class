@@ -12,7 +12,9 @@ export const queryClient = new QueryClient({
 
 //api call
 const fetchProductsForHome = async (q: string) =>
-  await api.get(`dashboard/products?${q ?? ""}`).then((res) => res.data);
+  await api
+    .get(`dashboard/products/infinite?${q ?? ""}`)
+    .then((res) => res.data);
 
 //cache data in query
 export const productsQuery = (q: string) => ({

@@ -107,10 +107,15 @@ export const productsInfiniteLoader = async () => {
   return null;
 };
 
-// export const productsInfiniteLoaderForAdmin = async () => {
-//   await queryClient.prefetchInfiniteQuery(productsQueryForAdmin());
-//   return null;
-// };
+export const productsLoaderForAdmin = async () => {
+  await queryClient.prefetchQuery(
+    productsQueryForAdmin({
+      pageIndex: 0,
+      pageSize: 5,
+    }),
+  );
+  return null;
+};
 
 export const productDetailLoader = async ({ params }: LoaderFunctionArgs) => {
   if (!params.productId) {

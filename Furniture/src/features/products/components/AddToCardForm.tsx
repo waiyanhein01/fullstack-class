@@ -89,7 +89,7 @@ export function AddToCartForm({
             type="button"
             size={"icon"}
             variant="outline"
-            className="cursor-pointer rounded-r-none border-neutral-500"
+            className="cursor-pointer rounded-r-none border-r-0 border-neutral-500"
             disabled={Number(currentQuantity) === 1}
           >
             <Icons.MinusIcon className="" />
@@ -103,7 +103,7 @@ export function AddToCartForm({
                   <Input
                     min={1}
                     inputMode="numeric"
-                    className="pointer-events-none border border-neutral-500 text-center"
+                    className="pointer-events-none rounded-none border border-neutral-500 text-center"
                     {...field}
                   />
                 </FormControl>
@@ -117,7 +117,7 @@ export function AddToCartForm({
             type="button"
             size={"icon"}
             variant="outline"
-            className="cursor-pointer rounded-l-none border-neutral-500"
+            className="cursor-pointer rounded-l-none border-l-0 border-neutral-500"
           >
             <Icons.PlusIcon />
           </Button>
