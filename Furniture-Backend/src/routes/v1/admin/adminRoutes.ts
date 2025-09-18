@@ -1,6 +1,5 @@
 import express from "express";
 import {
-  adminAuthCheck,
   adminLogin,
   getAllUsers,
 } from "../../../controllers/admin/adminController";
@@ -24,7 +23,6 @@ const router = express.Router();
 router.post("/admin-login", adminLogin);
 router.get("/users", getAllUsers);
 router.post("/maintenance", setMaintenanceMode);
-router.get("/admin-auth-check", adminAuthCheck);
 
 //Posts CRUD route
 router.post("/posts", upload.single("image"), createPost);

@@ -112,11 +112,11 @@ const router = createBrowserRouter([
       {
         path: "admin",
         element: <MainAdminLayout />,
+        loader: adminAuthLoader,
         children: [
           {
             index: true,
             element: <AdminPage />,
-            loader: adminAuthLoader,
           },
           {
             path: "products",

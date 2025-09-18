@@ -28,12 +28,12 @@ export const loginLoader = async () => {
 
 export const adminAuthLoader = async () => {
   try {
-    const response = await api.get("admin/admin-auth-check");
-    console.log(response, "response");
-    if (response.status !== 200) {
+    const response = await api.get("dashboard/profile");
+    const userRole = response.data.user.role;
+    if (userRole === "USER" || userRole === "AUTHOR") {
       return redirect("/");
     }
-    return redirect("/admin");
+    return null;
   } catch (error) {
     console.log("Error login:", error);
   }
