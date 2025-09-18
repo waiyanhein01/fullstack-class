@@ -141,6 +141,16 @@ export const productDetailLoader = async ({ params }: LoaderFunctionArgs) => {
   return { productId: params.productId };
 };
 
+export const productEditLoader = async ({ params }: LoaderFunctionArgs) => {
+  if (!params.productId) {
+    throw new Error("No Product ID provided");
+  }
+  await queryClient.ensureQueryData(
+    productDetailQuery(Number(params.productId)),
+  );
+  return { productId: params.productId };
+};
+
 //noted ensureQueryData
 // ensureQueryData is used to make sure that the data is fetched before rendering the component
 // if the data is already in the cache, it will not fetch it again

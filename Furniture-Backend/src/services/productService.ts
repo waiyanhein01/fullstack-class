@@ -129,6 +129,21 @@ export const getProductWithRelatedData = async (id: number, userId: number) => {
           path: true,
         },
       },
+      category: {
+        select: {
+          name: true,
+        },
+      },
+      type: {
+        select: {
+          name: true,
+        },
+      },
+      tags: {
+        select: {
+          name: true,
+        },
+      },
       user: {
         where: {
           id: userId,

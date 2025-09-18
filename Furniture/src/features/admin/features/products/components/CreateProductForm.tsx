@@ -21,7 +21,6 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useEffect, useState } from "react";
-import api from "@/api";
 import { useSubmit } from "react-router";
 
 const MAX_FILE_SIZE = 5000000;
@@ -79,7 +78,7 @@ const FormSchema = z.object({
     }, "Only .jpg, .jpeg, .png and .webp formats are supported."),
 });
 
-const AddNewProductForm = () => {
+const CreateProductForm = () => {
   const submit = useSubmit();
   const [previews, setPreviews] = useState<string[]>([]);
 
@@ -388,20 +387,4 @@ const AddNewProductForm = () => {
   );
 };
 
-export default AddNewProductForm;
-// description: "Some description",
-// "images": [
-//     {
-//         "id": 34,
-//         "path": "sample-image.jpg"
-//     },
-//     {
-//         "id": 35,
-//         "path": "sample-image.jpg"
-//     }
-//     {
-//         "id": 36,
-//         "path": "sample-image.jpg"
-//     }
-
-// ],
+export default CreateProductForm;

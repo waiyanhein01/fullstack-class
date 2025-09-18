@@ -135,7 +135,7 @@ export function DataTable() {
           </DropdownMenuContent>
         </DropdownMenu>
 
-        <Link to="add-new-product" className="">
+        <Link to="create-product" className="">
           <Button className="btn-primary flex items-center">
             <PlusIcon className="size-4" />
             Add new product

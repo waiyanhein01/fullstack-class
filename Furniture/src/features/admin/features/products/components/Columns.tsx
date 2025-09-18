@@ -15,6 +15,7 @@ import {
 
 import { Badge } from "@/components/ui/badge";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
+import { Link } from "react-router";
 
 export type Products = {
   id: number;
@@ -204,7 +205,9 @@ export const Columns: ColumnDef<Products>[] = [
 
             <DropdownMenuSeparator />
 
-            <DropdownMenuItem>Edit Product</DropdownMenuItem>
+            <DropdownMenuItem>
+              <Link to={`edit-product/${product.id}`}>Edit Product</Link>
+            </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

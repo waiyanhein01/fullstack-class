@@ -1,3 +1,4 @@
+import { ActionFunctionArgs } from "react-router";
 export interface NavItems {
   title: string;
   href?: string;
@@ -85,3 +86,8 @@ export type Profile = {
   role: string;
   products: Product[];
 };
+
+export interface editProductActionProps {
+  request: ActionFunctionArgs;
+  productId: string;
+}

@@ -22,6 +22,7 @@ import {
   postDetailLoader,
   postsInfiniteLoader,
   productDetailLoader,
+  productEditLoader,
   productsInfiniteLoader,
   profileLoader,
   resetPasswordLoader,
@@ -54,8 +55,9 @@ import MainLayoutPage from "@/features/layout/pages/MainLayoutPage";
 import AdminPage from "@/features/admin/pages/AdminPage";
 import MainAdminLayout from "@/features/admin/components/MainAdminLayout";
 import AdminProductsPage from "@/features/admin/features/products/pages/AdminProductsPage";
-import AddNewProductPage from "@/features/admin/features/products/pages/AddNewProductPage";
-import { createProductAction } from "./action/adminAction";
+import CreateProductPage from "@/features/admin/features/products/pages/CreateProductPage";
+import { createProductAction, editProductAction } from "./action/adminAction";
+import EditProductPage from "@/features/admin/features/products/pages/EditProductPage";
 
 const router = createBrowserRouter([
   // dashboard routes
@@ -123,9 +125,15 @@ const router = createBrowserRouter([
             element: <AdminProductsPage />,
           },
           {
-            path: "products/add-new-product",
-            element: <AddNewProductPage />,
+            path: "products/create-product",
+            element: <CreateProductPage />,
             action: createProductAction,
+          },
+          {
+            path: "products/edit-product/:productId",
+            element: <EditProductPage />,
+            loader: productEditLoader,
+            action: editProductAction,
           },
         ],
       },
