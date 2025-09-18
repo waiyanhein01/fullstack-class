@@ -22,6 +22,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useEffect, useState } from "react";
 import api from "@/api";
+import { useSubmit } from "react-router";
 
 const MAX_FILE_SIZE = 5000000;
 const MAX_FILES = 5;
@@ -36,17 +37,14 @@ const FormSchema = z.object({
   name: z.string().min(2, {
     message: "Product name must be at least 2 characters.",
   }),
-  price: z.string().min(2, {
+  price: z.string().min(1, {
     message: "Price input is invalid.",
   }),
-  discount: z.string().min(2, {
+  discount: z.string().min(1, {
     message: "Discount input is invalid.",
   }),
-  inventory: z.string().min(2, {
+  inventory: z.string().min(1, {
     message: "Inventory input is invalid.",
-  }),
-  status: z.string({
-    required_error: "Please select a status to display.",
   }),
   category: z.string({
     required_error: "Please select a category.",
@@ -82,6 +80,7 @@ const FormSchema = z.object({
 });
 
 const AddNewProductForm = () => {
+  const submit = useSubmit();
   const [previews, setPreviews] = useState<string[]>([]);
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -90,6 +89,7 @@ const AddNewProductForm = () => {
       name: "",
       price: "",
       discount: "",
+      //   status: "",
       inventory: "",
       images: undefined,
     },
@@ -128,39 +128,26 @@ const AddNewProductForm = () => {
   };
 
   async function onSubmit(data: z.infer<typeof FormSchema>) {
-    try {
-      // 1. Build FormData
-      const formData = new FormData();
+    const formData = new FormData();
 
-      // 2. Append normal fields
-      formData.append("name", data.name);
-      formData.append("price", data.price);
-      formData.append("discount", data.discount);
-      formData.append("inventory", data.inventory);
-      formData.append("status", data.status);
-      formData.append("category", data.category);
-      formData.append("type", data.type);
-      formData.append("description", data.description);
+    formData.append("name", data.name);
+    formData.append("price", data.price);
+    formData.append("discount", data.discount);
+    formData.append("inventory", data.inventory);
+    formData.append("category", data.category);
+    formData.append("type", data.type);
+    formData.append("description", data.description);
 
-      // 3. Append images one by one
-      Array.from(data.images).forEach((file) => {
-        formData.append("images", file); // same field name for multiple files
-      });
+    // Append images one by one
+    Array.from(data.images).forEach((file) => {
+      formData.append("images", file); // same field name for multiple files
+    });
 
-      // 4. Send via Axios
-      const response = await api.post("admin/products", formData, {
-        headers: {
-          // Let axios set Content-Type automatically; no need to add boundary
-          "Content-Type": "multipart/form-data",
-        },
-      });
-
-      console.log("Server response:", response.data);
-      // handle success (maybe show a toast or redirect)
-    } catch (error) {
-      console.error("Upload failed:", error);
-      // handle error (toast, etc.)
-    }
+    submit(formData, {
+      method: "post",
+      action: ".",
+      encType: "multipart/form-data", // very important for files
+    });
   }
 
   return (
@@ -319,31 +306,6 @@ const AddNewProductForm = () => {
                     </label>
                   </div>
                 </FormControl>
-                <FormMessage />
-              </FormItem>
-            )}
-          />
-
-          <FormField
-            control={form.control}
-            name="status"
-            render={({ field }) => (
-              <FormItem>
-                <FormLabel>Status</FormLabel>
-                <Select
-                  onValueChange={field.onChange}
-                  defaultValue={field.value}
-                >
-                  <FormControl>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select a status to display" />
-                    </SelectTrigger>
-                  </FormControl>
-                  <SelectContent>
-                    <SelectItem value="ACTIVE">Active</SelectItem>
-                    <SelectItem value="INACTIVE">Inactive</SelectItem>
-                  </SelectContent>
-                </Select>
                 <FormMessage />
               </FormItem>
             )}

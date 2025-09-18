@@ -59,3 +59,25 @@ export const adminLogin = [
       .json({ message: "Login successfully.", adminId: admin!.id });
   },
 ];
+
+export const adminAuthCheck = async (
+  req: UserIdRequest,
+  res: Response,
+  next: NextFunction
+) => {
+  const user = req.user;
+  checkUserIfNotExist(user);
+
+  if (user!.role === "USER" || user!.role === "AUTHOR") {
+    res.status(401).json({
+      message: "You are not authenticated admin.",
+    });
+  }
+
+  res.status(200).json({
+    message: "You are authenticated admin.",
+    userId: user?.id,
+    userName: user?.firstName + " " + user?.lastName,
+    userImage: user?.image,
+  });
+};

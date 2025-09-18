@@ -1,4 +1,4 @@
-import { authApi } from "@/api";
+import api, { authApi } from "@/api";
 import {
   categoryTypeQuery,
   postDetailQuery,
@@ -21,6 +21,19 @@ export const loginLoader = async () => {
       return null;
     }
     return redirect("/");
+  } catch (error) {
+    console.log("Error login:", error);
+  }
+};
+
+export const adminAuthLoader = async () => {
+  try {
+    const response = await api.get("admin/admin-auth-check");
+    console.log(response, "response");
+    if (response.status !== 200) {
+      return redirect("/");
+    }
+    return redirect("/admin");
   } catch (error) {
     console.log("Error login:", error);
   }

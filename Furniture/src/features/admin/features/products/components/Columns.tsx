@@ -26,7 +26,7 @@ export type Products = {
   status: string;
   images: Image[];
 };
-const imgUrl = import.meta.env.VITE_API_URL;
+const imgUrl = import.meta.env.VITE_IMG_URL;
 
 export const Columns: ColumnDef<Products>[] = [
   {

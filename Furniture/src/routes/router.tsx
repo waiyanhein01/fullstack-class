@@ -16,13 +16,13 @@ import VerifyOtpPage from "@/features/auth/register/pages/VerifyOtpPage";
 import { createBrowserRouter, redirect } from "react-router";
 import {
   accountRegistrationLoader,
+  adminAuthLoader,
   // homeLoader,
   loginLoader,
   postDetailLoader,
   postsInfiniteLoader,
   productDetailLoader,
   productsInfiniteLoader,
-  productsInfiniteLoaderForAdmin,
   profileLoader,
   resetPasswordLoader,
   verifyForgotPasswordOtpLoader,
@@ -116,17 +116,16 @@ const router = createBrowserRouter([
           {
             index: true,
             element: <AdminPage />,
-            // action: adminLoginAction,
+            loader: adminAuthLoader,
           },
           {
             path: "products",
             element: <AdminProductsPage />,
-            // loader: productsInfiniteLoaderForAdmin,
           },
           {
             path: "products/add-new-product",
             element: <AddNewProductPage />,
-            // action: createProductAction,
+            action: createProductAction,
           },
         ],
       },
