@@ -1,5 +1,5 @@
 import { Request, Response, NextFunction } from "express";
-import { body, validationResult } from "express-validator";
+import { body, param, validationResult } from "express-validator";
 import { errorCode } from "../../../config/errorCode";
 import { createError } from "../../utils/errorUtil";
 import {
@@ -271,21 +271,23 @@ export const updateProduct = [
 ];
 
 export const deleteProduct = [
-  body("productId", "ProductId is required.").isInt({ gt: 0 }),
+  // validate id from URL param (route: /products/:id)
+  param("id", "ProductId is required.").isInt({ gt: 0 }),
   async (req: UserIdRequest, res: Response, next: NextFunction) => {
     const errors = validationResult(req).array({ onlyFirstError: true });
     if (errors.length > 0) {
       return next(createError(errors[0].msg, 400, errorCode.invalid));
     }
 
-    const { productId } = req.body;
+    // read id from params
+    const productId = req.params.id;
     // check product in database
     const product = await getProductById(+productId);
     checkProductIfNotExist(product);
 
     // remove old images
     const originalFiles = product!.images.map((img: any) => img.path);
-    const optimizedFiles = product!!.images.map(
+    const optimizedFiles = product!.images.map(
       (img: any) => img.path.split(".")[0] + ".webp"
     );
     await removeFile(originalFiles, optimizedFiles);

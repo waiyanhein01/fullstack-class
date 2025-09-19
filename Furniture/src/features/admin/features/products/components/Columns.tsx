@@ -12,10 +12,22 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
 
 import { Badge } from "@/components/ui/badge";
 import { ArrowUpDown, MoreHorizontal } from "lucide-react";
 import { Link } from "react-router";
+import { deleteProductAction } from "@/routes/action/adminAction";
 
 export type Products = {
   id: number;
@@ -206,8 +218,44 @@ export const Columns: ColumnDef<Products>[] = [
             <DropdownMenuSeparator />
 
             <DropdownMenuItem>
-              <Link to={`edit-product/${product.id}`}>Edit Product</Link>
+              <Link to={`edit-product/${product.id}`} className="w-full">
+                Edit
+              </Link>
             </DropdownMenuItem>
+            <AlertDialog>
+              <AlertDialogTrigger asChild>
+                <Button
+                  className="w-full text-xs"
+                  type="button"
+                  variant="destructive"
+                  size={"sm"}
+                >
+                  Delete
+                </Button>
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This action cannot be undone. This will permanently delete
+                    your product from our servers.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={() =>
+                      deleteProductAction({
+                        productId: product.id.toString(),
+                      })
+                    }
+                    className="btn-primary"
+                  >
+                    Continue
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </DropdownMenuContent>
         </DropdownMenu>
       );

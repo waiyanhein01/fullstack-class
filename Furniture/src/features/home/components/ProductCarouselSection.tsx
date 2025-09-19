@@ -36,10 +36,10 @@ const ProductCarouselSection = ({ products }: ProductProps) => {
               key={product.id}
               className="md:basis-1/2 lg:basis-1/3"
             >
-              <div className="flex justify-between gap-5">
+              <div className="flex gap-5">
                 <img
                   src={imgUrl + product?.images[0].path}
-                  className="size-28 rounded-md"
+                  className="size-28 rounded-md border object-contain object-center"
                   loading="lazy"
                   decoding="async"
                   alt={product.name}

@@ -22,7 +22,7 @@ export const createProductAction = async ({ request }: ActionFunctionArgs) => {
         },
       });
       // Invalidate products queries so UI updates automatically
-      await queryClient.invalidateQueries({ queryKey: ["products"] });
+      await queryClient.invalidateQueries({ queryKey: ["products", "admin"] });
       return redirect("/admin/products");
     }
     return response.data;
@@ -71,8 +71,40 @@ export const editProductAction = async ({ request }: ActionFunctionArgs) => {
           color: "#4caf50",
         },
       });
-      await queryClient.invalidateQueries({ queryKey: ["products"] });
+      await queryClient.invalidateQueries({ queryKey: ["products", "admin"] });
       return redirect("/admin/products");
+    }
+    return response.data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      return toast.error(error.response?.data.message, {
+        style: {
+          borderLeft: "10px solid #f44336",
+          background: "#ffffff",
+          color: "#f44336",
+        },
+      });
+    }
+  }
+};
+
+export const deleteProductAction = async ({
+  productId,
+}: {
+  productId: string;
+}) => {
+  try {
+    const response = await api.delete(`admin/products/${productId}`);
+    if (response.status === 200) {
+      toast.success(response.data.message, {
+        style: {
+          borderLeft: "10px solid #4caf50",
+          background: "#ffffff",
+          color: "#4caf50",
+        },
+      });
+
+      await queryClient.invalidateQueries({ queryKey: ["products", "admin"] });
     }
     return response.data;
   } catch (error) {

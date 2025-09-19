@@ -60,7 +60,6 @@ const EditProductForm = () => {
   const { data: productEditData } = useSuspenseQuery(
     productDetailQuery(Number(productId)),
   );
-  console.log(productEditData);
 
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
