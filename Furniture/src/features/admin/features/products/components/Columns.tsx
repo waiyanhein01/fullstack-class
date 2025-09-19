@@ -73,7 +73,7 @@ export const Columns: ColumnDef<Products>[] = [
 
           loading="lazy"
           decoding="async"
-          className="size-14 rounded-full object-cover object-center"
+          className="size-7 shrink-0 rounded-full object-cover object-center lg:size-10 xl:size-14"
         />
       );
     },

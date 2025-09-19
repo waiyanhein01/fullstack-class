@@ -20,7 +20,7 @@ import {
 } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { useLoaderData, useSubmit } from "react-router";
+import { useLoaderData, useNavigate, useSubmit } from "react-router";
 import { useSuspenseQuery } from "@tanstack/react-query";
 import { productDetailQuery } from "@/api/query";
 
@@ -55,6 +55,7 @@ const FormSchema = z.object({
 
 const EditProductForm = () => {
   const submit = useSubmit();
+  const nav = useNavigate();
   const { productId } = useLoaderData();
   const { data: productEditData } = useSuspenseQuery(
     productDetailQuery(Number(productId)),
@@ -91,6 +92,10 @@ const EditProductForm = () => {
       action: ".",
     });
   }
+
+  const handleBack = () => {
+    nav("/admin/products");
+  };
 
   return (
     <div className="w-full rounded-lg border p-5 lg:w-[500px]">
@@ -240,7 +245,14 @@ const EditProductForm = () => {
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <div className="flex gap-3">
+            <Button type="button" onClick={handleBack} variant="outline">
+              Back
+            </Button>
+            <Button className="btn-primary" type="submit">
+              Edit Product
+            </Button>
+          </div>
         </form>
       </Form>
     </div>

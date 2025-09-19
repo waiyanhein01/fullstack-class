@@ -2,6 +2,7 @@ import api from "@/api";
 import { AxiosError } from "axios";
 import { ActionFunctionArgs, redirect } from "react-router";
 import { toast } from "sonner";
+import { queryClient } from "@/api/query";
 
 export const createProductAction = async ({ request }: ActionFunctionArgs) => {
   const formData = await request.formData();
@@ -20,6 +21,8 @@ export const createProductAction = async ({ request }: ActionFunctionArgs) => {
           color: "#4caf50",
         },
       });
+      // Invalidate products queries so UI updates automatically
+      await queryClient.invalidateQueries({ queryKey: ["products"] });
       return redirect("/admin/products");
     }
     return response.data;
@@ -68,6 +71,7 @@ export const editProductAction = async ({ request }: ActionFunctionArgs) => {
           color: "#4caf50",
         },
       });
+      await queryClient.invalidateQueries({ queryKey: ["products"] });
       return redirect("/admin/products");
     }
     return response.data;

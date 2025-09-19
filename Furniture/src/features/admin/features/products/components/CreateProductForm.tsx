@@ -21,7 +21,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useEffect, useState } from "react";
-import { useSubmit } from "react-router";
+import { useNavigate, useSubmit } from "react-router";
 
 const MAX_FILE_SIZE = 5000000;
 const MAX_FILES = 5;
@@ -80,6 +80,7 @@ const FormSchema = z.object({
 
 const CreateProductForm = () => {
   const submit = useSubmit();
+  const nav = useNavigate();
   const [previews, setPreviews] = useState<string[]>([]);
 
   const form = useForm<z.infer<typeof FormSchema>>({
@@ -148,6 +149,10 @@ const CreateProductForm = () => {
       encType: "multipart/form-data", // very important for files
     });
   }
+
+  const handleBack = () => {
+    nav("/admin/products");
+  };
 
   return (
     <div className="w-full rounded-lg border p-5 lg:w-[500px]">
@@ -380,7 +385,14 @@ const CreateProductForm = () => {
               </FormItem>
             )}
           />
-          <Button type="submit">Submit</Button>
+          <div className="flex gap-3">
+            <Button type="button" onClick={handleBack} variant="outline">
+              Back
+            </Button>
+            <Button className="btn-primary" type="submit">
+              Create Product
+            </Button>
+          </div>
         </form>
       </Form>
     </div>
