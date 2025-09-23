@@ -1,34 +1,38 @@
 # Learning Next.js
 
-## Routing
+### Routing
 
-## Nested Routes
+- Nested Routes
+- Dynamic Routes
+- Nested Dynamic Routes
+- Catch all Segments
+- not-found
 
-## Dynamic Routes
+### File-colocation
 
-## Nested Dynamic Routes
+This is mean a folder have own page.tsx if you create other name this folder won't be run like (`product.tsx` instand of `page.tsx`).
 
-## Catch all Segments
+### Private Folder
 
-## not-found
+This is use for split code, ui logic and other component what you want. This folder is like that (\_lib or \_folder name)
 
-## File-colocation
+### Route Groups
 
-## Private Folder
+This is for group of routes (eg. (auth) and (dashboard)) if you don't want header and footer in auth routes you can create a routes with groups. Every single group must have `layout.tsx` and `page.tsx` if you want to cusomize layout of ui
 
-## Route Groups
+### Layout
 
-## Layout
+- Nested Layout
+- Multiple RootLayout
 
-## Nested Layout
+### Metadata
 
-## Multiple RootLayout
+- Routing Metadata
+- Title Metadata
 
-## Routing Metadata
-
-## Title Metadata
-
-## Navigation
+### Navigation
 
 - Link Component
-- Active Link
+- Active Links
+
+### Params and SearchParams
