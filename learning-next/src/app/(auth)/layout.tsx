@@ -16,6 +16,7 @@ const geistMono = Geist_Mono({
 });
 
 const nav = [
+  { href: "/", label: "Home" },
   { href: "/login", label: "Login" },
   { href: "/register", label: "Register" },
   { href: "/forgot-password", label: "Forgot Password" },
