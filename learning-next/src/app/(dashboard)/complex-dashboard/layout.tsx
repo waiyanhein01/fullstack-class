@@ -6,13 +6,16 @@ const layout = ({
   users,
   revenue,
   notification,
+  login,
 }: {
   children: React.ReactNode;
   users: React.ReactNode;
   revenue: React.ReactNode;
   notification: React.ReactNode;
+  login: React.ReactNode;
 }) => {
-  return (
+  const isLoggedIn = false;
+  return isLoggedIn ? (
     <div>
       <div className="">{children}</div>
       <div className="flex gap-4 mt-5">
@@ -23,6 +26,8 @@ const layout = ({
         <div className="flex flex-1">{notification}</div>
       </div>
     </div>
+  ) : (
+    <div>{login}</div>
   );
 };
 

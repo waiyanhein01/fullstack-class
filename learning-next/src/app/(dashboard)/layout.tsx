@@ -33,6 +33,7 @@ const nav = [
   { href: "/docs", label: "Documents" },
   { href: "/login", label: "Login" },
   { href: "/register", label: "Register" },
+  { href: "/complex-dashboard", label: "Complex Dashboard" },
 ];
 
 export default function DashboardLayout({

@@ -5,12 +5,9 @@ import React from "react";
 const Notification = () => {
   return (
     <Card>
-      <h1 className="">Notification</h1>
-      <Link
-        href="/complex-dashboard/archived"
-        className="text-blue-500 underline"
-      >
-        Archived
+      <h1 className="">Archived Notification</h1>
+      <Link href="/complex-dashboard" className="text-blue-500 underline">
+        Default
       </Link>
     </Card>
   );
