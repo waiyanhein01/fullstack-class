@@ -34,6 +34,7 @@ const nav = [
   { href: "/login", label: "Login" },
   { href: "/register", label: "Register" },
   { href: "/complex-dashboard", label: "Complex Dashboard" },
+  { href: "/f1", label: "Intercepting Routes F1" },
 ];
 
 export default function DashboardLayout({
