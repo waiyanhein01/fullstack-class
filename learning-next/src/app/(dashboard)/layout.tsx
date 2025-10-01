@@ -35,6 +35,7 @@ const nav = [
   { href: "/register", label: "Register" },
   { href: "/complex-dashboard", label: "Complex Dashboard" },
   { href: "/f1", label: "Intercepting Routes F1" },
+  { href: "/photo-feed", label: "Photo Feed" },
 ];
 
 export default function DashboardLayout({
