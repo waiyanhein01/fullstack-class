@@ -1,32 +1,125 @@
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
-import { fetchPosts } from "@/store/postsSlice";
-import { useEffect } from "react";
+import { createNewPost, fetchPosts } from "@/store/postsSlice";
+import { useEffect, useState } from "react";
+import { Button } from "@/components/ui/button";
+import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
+import { Loader2Icon } from "lucide-react";
+import { Input } from "@/components/ui/input";
 
 function Posts() {
   const dispatch = useAppDispatch();
   const { items, status, error } = useAppSelector((state) => state.posts);
 
+  const [newPosts, setNewPosts] = useState("");
+  const [editId, setEditId] = useState<string | null>(null);
+  const [editTitle, setEditTitle] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  console.log(isLoading);
+
   useEffect(() => {
-    dispatch(fetchPosts());
-  }, [dispatch]);
+    if (status === "idle") {
+      dispatch(fetchPosts());
+    }
+  }, [dispatch, status]);
+
+  const handleCreateNewPosts = async () => {
+    if (!newPosts.trim()) return;
+    setIsLoading(true);
+    try {
+      await dispatch(createNewPost({ title: newPosts }));
+      setNewPosts("");
+    } catch (error) {
+      alert("Failed to create new post: " + error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleEditPosts = (id: string) => {};
+  const handleDeletePosts = (id: string) => {};
 
   return (
     <div className="flex min-h-svh flex-col items-center justify-center">
-      <h1 className="mb-4">All Posts</h1>
+      <h1 className="mb-4 text-2xl">All Posts</h1>
+      <div className="flex gap-2 mb-4 w-full max-w-sm">
+        <Input
+          value={newPosts}
+          onChange={(e) => setNewPosts(e.target.value)}
+          placeholder="Add new post"
+        />
+        <Button
+          className={`flex gap-2 disabled:bg-accent-foreground ${isLoading ? "opacity-50 cursor-not-allowed" : ""}`}
+          disabled={isLoading}
+          onClick={handleCreateNewPosts}
+        >
+          Add {isLoading && <Loader2Icon className="animate-spin" />}
+        </Button>
+      </div>
       {status === "failed" && <p className="text-red-500">{error}</p>}
-      {status === "pending" && <p>Loading...</p>}
+      {status === "pending" && (
+        <p className="flex items-center gap-2 text-gray-500">
+          <Loader2Icon className="animate-spin" />
+          Loading...
+        </p>
+      )}
+
       {status === "succeeded" && (
-        <ul>
+        <>
           {items.map((post) => (
-            <li
-              key={post.id}
-              className="border border-gray-300 rounded-md p-4 w-full max-w-md mb-3"
-            >
-              <h2 className="text-xl font-bold">{post.title}</h2>
-              <p>Author: {post.author}</p>
-            </li>
+            <Card key={post.id} className="mx-auto w-full max-w-sm mb-4">
+              <CardHeader>
+                <CardTitle>
+                  {editId === post.id ? (
+                    <Input
+                      value={editTitle}
+                      onChange={(e) => setEditTitle(e.target.value)}
+                    />
+                  ) : (
+                    post.title
+                  )}
+                </CardTitle>
+              </CardHeader>
+
+              <CardFooter className="flex gap-2 w-full">
+                {editId === post.id ? (
+                  <>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => setEditId(null)}
+                    >
+                      Cancel
+                    </Button>
+                    <Button size="sm" onClick={() => handleEditPosts(post.id)}>
+                      Save
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      onClick={() => {
+                        setEditId(post.id);
+                        setEditTitle(post.title);
+                      }}
+                    >
+                      Edit
+                    </Button>
+
+                    <Button
+                      onClick={() => handleDeletePosts(post.id)}
+                      className="bg-red-500 hover:bg-red-600"
+                      size="sm"
+                    >
+                      Delete
+                    </Button>
+                  </>
+                )}
+              </CardFooter>
+            </Card>
           ))}
-        </ul>
+        </>
       )}
     </div>
   );

@@ -1,12 +1,13 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
+import type { RootState } from ".";
+import { createAppAsyncThunk } from "./withType";
 
 const BASE_API_URL = "http://localhost:4000/posts"
 
 interface Post {
-    id: number,
+    id: string,
     title: string,
-    author: string
 }
 
 interface PostsSliceState {
@@ -22,9 +23,22 @@ const initialState: PostsSliceState = {
 }
 
 // dispatch(fetchPosts()) // type "posts/fetchPosts"
-export const fetchPosts = createAsyncThunk("posts/fetchPosts", async () => {
+export const fetchPosts = createAppAsyncThunk("posts/fetchPosts", async () => {
     // call api
     const response = await axios.get(BASE_API_URL)
+    return response.data
+}, {
+    condition(arg, thunkApi) {
+        const postsStatus = selectPostsStatus(thunkApi.getState())
+        if (postsStatus !== "idle") {
+            return false
+        }
+    },
+})
+
+export const createNewPost = createAppAsyncThunk("posts/createNewPost", async (post: Omit<Post, "id">) => {
+    const response = await axios.post(BASE_API_URL, post)
+    await new Promise((resolve) => setTimeout(resolve, 4000))
     return response.data
 })
 
@@ -51,7 +65,15 @@ const PostsSlice = createSlice({
                 state.status = "failed"
                 state.error = action.error.message || "Failed to fetch posts"
             })
+            .addCase(createNewPost.fulfilled, (state, action) => {
+                state.items.push(action.payload)
+            })
+            .addCase(createNewPost.rejected, (state, action) => {
+                state.error = action.error.message || "Failed to create new post"
+            })
     }
 })
 
 export default PostsSlice.reducer
+
+export const selectPostsStatus = (state: RootState) => state.posts.status
