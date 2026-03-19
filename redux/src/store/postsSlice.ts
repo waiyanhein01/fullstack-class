@@ -1,4 +1,4 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import type { RootState } from ".";
 import { createAppAsyncThunk } from "./withType";
@@ -36,10 +36,23 @@ export const fetchPosts = createAppAsyncThunk("posts/fetchPosts", async () => {
     },
 })
 
+// Create Post
 export const createNewPost = createAppAsyncThunk("posts/createNewPost", async (post: Omit<Post, "id">) => {
     const response = await axios.post(BASE_API_URL, post)
     await new Promise((resolve) => setTimeout(resolve, 4000))
     return response.data
+})
+
+// Update Post
+export const updatePost = createAppAsyncThunk("posts/updatePost", async (post: Post) => {
+    const response = await axios.patch(`${BASE_API_URL}/${post.id}`, post)
+    return response.data
+})
+
+// Delete Post
+export const deletePost = createAppAsyncThunk("posts/deletePost", async (id: string) => {
+    await axios.delete(`${BASE_API_URL}/${id}`)
+    return id
 })
 
 // 1. "posts/fetchPosts/pending"
@@ -65,11 +78,34 @@ const PostsSlice = createSlice({
                 state.status = "failed"
                 state.error = action.error.message || "Failed to fetch posts"
             })
+            // for create post
             .addCase(createNewPost.fulfilled, (state, action) => {
                 state.items.push(action.payload)
             })
             .addCase(createNewPost.rejected, (state, action) => {
                 state.error = action.error.message || "Failed to create new post"
+            })
+
+            // for patch method
+            // .addCase(updatePost.fulfilled, (state, action: PayloadAction<Post>) => {
+            //     const { id, title } = action.payload
+            //     const existingPost = state.items.find(post => post.id === id)
+            //     if (existingPost) {
+            //         existingPost.title = title
+            //     }
+            // })
+
+            // for put method
+            .addCase(updatePost.fulfilled, (state, action: PayloadAction<Post>) => {
+                const index = state.items.findIndex(post => post.id === action.payload.id)
+                if (index !== -1) {
+                    state.items[index] = action.payload
+                }
+            })
+
+            // for delete
+            .addCase(deletePost.fulfilled, (state, action) => {
+                state.items = state.items.filter(post => post.id !== action.payload)
             })
     }
 })

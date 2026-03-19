@@ -1,5 +1,10 @@
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
-import { createNewPost, fetchPosts } from "@/store/postsSlice";
+import {
+  createNewPost,
+  deletePost,
+  fetchPosts,
+  updatePost,
+} from "@/store/postsSlice";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,19 +19,20 @@ function Posts() {
   const [editId, setEditId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState("");
   const [isLoading, setIsLoading] = useState(false);
-  console.log(isLoading);
 
+  // Fetch
   useEffect(() => {
     if (status === "idle") {
       dispatch(fetchPosts());
     }
   }, [dispatch, status]);
 
+  // Create
   const handleCreateNewPosts = async () => {
     if (!newPosts.trim()) return;
     setIsLoading(true);
     try {
-      await dispatch(createNewPost({ title: newPosts }));
+      await dispatch(createNewPost({ title: newPosts })).unwrap();
       setNewPosts("");
     } catch (error) {
       alert("Failed to create new post: " + error);
@@ -35,8 +41,26 @@ function Posts() {
     }
   };
 
-  const handleEditPosts = (id: string) => {};
-  const handleDeletePosts = (id: string) => {};
+  // Edit
+  const handleEditPosts = async (id: string) => {
+    if (!editTitle.trim()) return;
+    try {
+      await dispatch(updatePost({ id, title: editTitle })).unwrap();
+      setEditId(null);
+      setEditTitle("");
+    } catch (error) {
+      alert("Failed to update post: " + error);
+    }
+  };
+
+  // Delete
+  const handleDeletePosts = async (id: string) => {
+    try {
+      await dispatch(deletePost(id)).unwrap();
+    } catch (error) {
+      alert("Failed to delete post: " + error);
+    }
+  };
 
   return (
     <div className="flex min-h-svh flex-col items-center justify-center">
@@ -55,7 +79,9 @@ function Posts() {
           Add {isLoading && <Loader2Icon className="animate-spin" />}
         </Button>
       </div>
-      {status === "failed" && <p className="text-red-500">{error}</p>}
+
+      {error && <p className="text-red-500">{error}</p>}
+
       {status === "pending" && (
         <p className="flex items-center gap-2 text-gray-500">
           <Loader2Icon className="animate-spin" />

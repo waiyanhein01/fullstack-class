@@ -12,5 +12,6 @@
       "id": "a905",
       "title": "asdfasdf"
     }
-  ]
+  ],
+  "$schema": "./node_modules/json-server/schema.json"
 }
