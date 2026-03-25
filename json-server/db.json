@@ -2,15 +2,13 @@
   "posts": [
     {
       "id": "1",
-      "title": "First Post"
+      "title": "First Postasdasdf",
+      "userId": "user1"
     },
     {
       "id": "2",
-      "title": "Second Post"
-    },
-    {
-      "id": "a905",
-      "title": "asdfasdf"
+      "title": "Second Post",
+      "userId": "user2"
     }
   ],
   "$schema": "./node_modules/json-server/schema.json"

@@ -1,23 +1,21 @@
 import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import {
   createNewPost,
-  deletePost,
   fetchPosts,
-  updatePost,
+  selectPostsByUserId,
 } from "@/store/postsSlice";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Loader2Icon } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import PostCard from "./PostCard";
 
 function Posts() {
   const dispatch = useAppDispatch();
-  const { items, status, error } = useAppSelector((state) => state.posts);
-
+  const { status, error } = useAppSelector((state) => state.posts);
+  const posts = useAppSelector((state) => selectPostsByUserId(state, "user2"));
+  console.log(posts);
   const [newPosts, setNewPosts] = useState("");
-  const [editId, setEditId] = useState<string | null>(null);
-  const [editTitle, setEditTitle] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
   // Fetch
@@ -32,7 +30,9 @@ function Posts() {
     if (!newPosts.trim()) return;
     setIsLoading(true);
     try {
-      await dispatch(createNewPost({ title: newPosts })).unwrap();
+      await dispatch(
+        createNewPost({ title: newPosts, userId: "user2" }),
+      ).unwrap();
       setNewPosts("");
     } catch (error) {
       alert("Failed to create new post: " + error);
@@ -41,29 +41,8 @@ function Posts() {
     }
   };
 
-  // Edit
-  const handleEditPosts = async (id: string) => {
-    if (!editTitle.trim()) return;
-    try {
-      await dispatch(updatePost({ id, title: editTitle })).unwrap();
-      setEditId(null);
-      setEditTitle("");
-    } catch (error) {
-      alert("Failed to update post: " + error);
-    }
-  };
-
-  // Delete
-  const handleDeletePosts = async (id: string) => {
-    try {
-      await dispatch(deletePost(id)).unwrap();
-    } catch (error) {
-      alert("Failed to delete post: " + error);
-    }
-  };
-
   return (
-    <div className="flex min-h-svh flex-col items-center justify-center">
+    <div className="flex  flex-col items-center justify-center">
       <h1 className="mb-4 text-2xl">All Posts</h1>
       <div className="flex gap-2 mb-4 w-full max-w-sm">
         <Input
@@ -91,59 +70,8 @@ function Posts() {
 
       {status === "succeeded" && (
         <>
-          {items.map((post) => (
-            <Card key={post.id} className="mx-auto w-full max-w-sm mb-4">
-              <CardHeader>
-                <CardTitle>
-                  {editId === post.id ? (
-                    <Input
-                      value={editTitle}
-                      onChange={(e) => setEditTitle(e.target.value)}
-                    />
-                  ) : (
-                    post.title
-                  )}
-                </CardTitle>
-              </CardHeader>
-
-              <CardFooter className="flex gap-2 w-full">
-                {editId === post.id ? (
-                  <>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => setEditId(null)}
-                    >
-                      Cancel
-                    </Button>
-                    <Button size="sm" onClick={() => handleEditPosts(post.id)}>
-                      Save
-                    </Button>
-                  </>
-                ) : (
-                  <>
-                    <Button
-                      variant="outline"
-                      size="sm"
-                      onClick={() => {
-                        setEditId(post.id);
-                        setEditTitle(post.title);
-                      }}
-                    >
-                      Edit
-                    </Button>
-
-                    <Button
-                      onClick={() => handleDeletePosts(post.id)}
-                      className="bg-red-500 hover:bg-red-600"
-                      size="sm"
-                    >
-                      Delete
-                    </Button>
-                  </>
-                )}
-              </CardFooter>
-            </Card>
+          {posts.map((post) => (
+            <PostCard key={post.id} post={post} />
           ))}
         </>
       )}

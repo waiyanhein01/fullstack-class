@@ -1,4 +1,4 @@
-import { createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { createSelector, createSlice, type PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import type { RootState } from ".";
 import { createAppAsyncThunk } from "./withType";
@@ -8,6 +8,7 @@ const BASE_API_URL = "http://localhost:4000/posts"
 interface Post {
     id: string,
     title: string,
+    userId: string
 }
 
 interface PostsSliceState {
@@ -44,7 +45,7 @@ export const createNewPost = createAppAsyncThunk("posts/createNewPost", async (p
 })
 
 // Update Post
-export const updatePost = createAppAsyncThunk("posts/updatePost", async (post: Post) => {
+export const updatePost = createAppAsyncThunk("posts/updatePost", async (post: Partial<Post>) => {
     const response = await axios.patch(`${BASE_API_URL}/${post.id}`, post)
     return response.data
 })
@@ -113,3 +114,17 @@ const PostsSlice = createSlice({
 export default PostsSlice.reducer
 
 export const selectPostsStatus = (state: RootState) => state.posts.status
+export const selectAllPosts = (state: RootState) => state.posts.items
+
+// Wrong way(no caching)
+// export const selectPostsByUserId = (state: RootState, userId: string) => {
+//     const posts = selectAllPosts(state)
+//     return posts.filter((post) => post.userId === userId)
+// }
+
+// Right way (caching)
+export const selectPostsByUserId = createSelector(
+    selectAllPosts,
+    (state: RootState, userId: string) => userId,
+    (posts, userId) => posts.filter((post) => post.userId === userId)
+)
