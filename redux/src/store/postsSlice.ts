@@ -1,4 +1,4 @@
-import { createSelector, createSlice, type PayloadAction } from "@reduxjs/toolkit";
+import { createSelector, createSlice, createEntityAdapter, type EntityState, type PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 import type { RootState } from ".";
 import { createAppAsyncThunk } from "./withType";
@@ -11,17 +11,24 @@ interface Post {
     userId: string
 }
 
-interface PostsSliceState {
-    items: Post[],
+interface PostsSliceState extends EntityState<Post, string> {
+    // items: Post[],
     status: "idle" | "pending" | "succeeded" | "failed",
     error: string | null
 }
 
-const initialState: PostsSliceState = {
-    items: [],
+const postAdapter = createEntityAdapter<Post>()
+
+const initialState: PostsSliceState = postAdapter.getInitialState({
     status: "idle",
     error: null
-}
+})
+
+// const initialState: PostsSliceState = {
+//     items: [],
+//     status: "idle",
+//     error: null
+// }
 
 // dispatch(fetchPosts()) // type "posts/fetchPosts"
 export const fetchPosts = createAppAsyncThunk("posts/fetchPosts", async () => {
@@ -73,7 +80,8 @@ const PostsSlice = createSlice({
         })
             .addCase(fetchPosts.fulfilled, (state, action) => {
                 state.status = "succeeded"
-                state.items.push(...action.payload)
+                // state.items.push(...action.payload)
+                postAdapter.setAll(state, action.payload)
             })
             .addCase(fetchPosts.rejected, (state, action) => {
                 state.status = "failed"
@@ -126,5 +134,5 @@ export const selectAllPosts = (state: RootState) => state.posts.items
 export const selectPostsByUserId = createSelector(
     selectAllPosts,
     (state: RootState, userId: string) => userId,
-    (posts, userId) => posts.filter((post) => post.userId === userId)
+    (posts, userId) => posts.filter((post: Post) => post.userId === userId)
 )
