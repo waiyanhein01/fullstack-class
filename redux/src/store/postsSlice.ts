@@ -17,6 +17,7 @@ interface PostsSliceState extends EntityState<Post, string> {
     error: string | null
 }
 
+// Normalization
 const postAdapter = createEntityAdapter<Post>()
 
 const initialState: PostsSliceState = postAdapter.getInitialState({
@@ -89,32 +90,36 @@ const PostsSlice = createSlice({
             })
             // for create post
             .addCase(createNewPost.fulfilled, (state, action) => {
-                state.items.push(action.payload)
+                // state.items.push(action.payload)
+                postAdapter.addOne(state, action.payload)
             })
             .addCase(createNewPost.rejected, (state, action) => {
                 state.error = action.error.message || "Failed to create new post"
             })
 
             // for patch method
+            .addCase(updatePost.fulfilled, (state, action: PayloadAction<Post>) => {
+                const { id, title } = action.payload
+                // const existingPost = state.items.find(post => post.id === id)
+                // if (existingPost) {
+                //     existingPost.title = title
+                // }
+
+                postAdapter.updateOne(state, { id, changes: { title } })
+            })
+
+            // for put method
             // .addCase(updatePost.fulfilled, (state, action: PayloadAction<Post>) => {
-            //     const { id, title } = action.payload
-            //     const existingPost = state.items.find(post => post.id === id)
-            //     if (existingPost) {
-            //         existingPost.title = title
+            //     const index = state.items.findIndex(post => post.id === action.payload.id)
+            //     if (index !== -1) {
+            //         state.items[index] = action.payload
             //     }
             // })
 
-            // for put method
-            .addCase(updatePost.fulfilled, (state, action: PayloadAction<Post>) => {
-                const index = state.items.findIndex(post => post.id === action.payload.id)
-                if (index !== -1) {
-                    state.items[index] = action.payload
-                }
-            })
-
             // for delete
             .addCase(deletePost.fulfilled, (state, action) => {
-                state.items = state.items.filter(post => post.id !== action.payload)
+                // state.items = state.items.filter(post => post.id !== action.payload)
+                postAdapter.removeOne(state, action.payload)
             })
     }
 })
@@ -122,7 +127,9 @@ const PostsSlice = createSlice({
 export default PostsSlice.reducer
 
 export const selectPostsStatus = (state: RootState) => state.posts.status
-export const selectAllPosts = (state: RootState) => state.posts.items
+// export const selectAllPosts = (state: RootState) => state.posts.items
+export const { selectAll: selectAllPosts, selectById: selectPostById, selectIds: selectPostIds } = postAdapter.getSelectors((state: RootState) => state.posts)
+
 
 // Wrong way(no caching)
 // export const selectPostsByUserId = (state: RootState, userId: string) => {
