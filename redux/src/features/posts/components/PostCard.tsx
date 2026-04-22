@@ -1,8 +1,8 @@
 import { Button } from "@/components/ui/button";
 import { Card, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useAppDispatch } from "@/hooks/useRedux";
-import { deletePost, updatePost } from "@/store/postsSlice";
+import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
+import { deletePost, selectPostById, updatePost } from "@/store/postsSlice";
 import { useState } from "react";
 
 interface PostProps {
@@ -11,16 +11,21 @@ interface PostProps {
   userId: string;
 }
 
-const PostCard = ({ post }: { post: PostProps }) => {
+const PostCard = ({ postId }: { postId: string }) => {
   const [editId, setEditId] = useState<string | null>(null);
   const [editTitle, setEditTitle] = useState("");
 
   const dispatch = useAppDispatch();
 
+  const post: PostProps = useAppSelector((state) =>
+    selectPostById(state, postId),
+  );
+
   // Edit
   const handleEditPosts = async () => {
     if (!editTitle.trim()) return;
     try {
+      // use unwrap() to handle errors in the component
       await dispatch(updatePost({ id: post.id, title: editTitle })).unwrap();
       setEditId(null);
       setEditTitle("");

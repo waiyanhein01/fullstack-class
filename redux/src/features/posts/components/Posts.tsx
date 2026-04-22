@@ -2,7 +2,9 @@ import { useAppDispatch, useAppSelector } from "@/hooks/useRedux";
 import {
   createNewPost,
   fetchPosts,
-  selectPostsByUserId,
+  selectPostIds,
+  selectPostsError,
+  selectPostsStatus,
 } from "@/store/postsSlice";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
@@ -11,12 +13,15 @@ import { Input } from "@/components/ui/input";
 import PostCard from "./PostCard";
 
 function Posts() {
-  const dispatch = useAppDispatch();
-  const { status, error } = useAppSelector((state) => state.posts);
-  const posts = useAppSelector((state) => selectPostsByUserId(state, "user2"));
-  console.log(posts);
   const [newPosts, setNewPosts] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const dispatch = useAppDispatch();
+  // const { status, error } = useAppSelector((state) => state.posts);
+  // const posts = useAppSelector((state) => selectPostsByUserId(state, "user2"));
+  const postIds = useAppSelector(selectPostIds);
+
+  const status = useAppSelector(selectPostsStatus);
+  const error = useAppSelector(selectPostsError);
 
   // Fetch
   useEffect(() => {
@@ -70,8 +75,8 @@ function Posts() {
 
       {status === "succeeded" && (
         <>
-          {posts.map((post) => (
-            <PostCard key={post.id} post={post} />
+          {postIds.map((postId) => (
+            <PostCard key={postId} postId={postId} />
           ))}
         </>
       )}
